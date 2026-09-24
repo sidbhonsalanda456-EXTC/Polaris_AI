@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIH260061 — Autonomous Polar Energy Management System</title>
+  <script src="/static/tailwind.js"></script>
+  <script src="/static/chart.min.js"></script>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-white">
+
+  <!-- TOP APP BAR -->
+  <header class="border-b border-cyan-500/20 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50 px-6 py-2.5 shadow-lg">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-3">
+        <div class="relative flex items-center justify-center w-10 h-10 rounded-lg bg-cyan-950 border border-cyan-500/40 text-cyan-400 font-bold text-xl shadow-inner">
+          ❄️
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-extrabold tracking-wider text-base uppercase bg-gradient-to-r from-cyan-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">
+              Station Aurora-01
+            </h1>
+            <span class="text-xs px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 font-mono">
+              SIH260061
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-mono">Autonomous Microgrid • Part 1: Renewable vs Part 2: Non-Renewable</p>
+        </div>
+      </div>
+
+      <!-- Live Indicators & Controls -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        
+        <!-- Live Connection & Sim Time -->
+        <div class="flex items-center space-x-2 px-3 py-1 rounded-md bg-slate-950/70 border border-slate-800 text-xs font-mono">
+          <span id="conn-dot" class="pulse-dot pulse-green"></span>
+          <span id="conn-label" class="text-emerald-400">LIVE FEED</span>
+          <span class="text-slate-600">|</span>
+          <span id="sim-clock" class="text-cyan-300 font-semibold">2026-07-15 12:00</span>
+        </div>
+
+        <!-- Mode Selector -->
+        <div class="flex items-center bg-slate-950/80 rounded-md border border-slate-800 p-0.5 text-xs font-semibold">
+          <button id="mode-ai" onclick="setMode('AI_PPO')" class="px-2.5 py-1 rounded bg-cyan-600 text-white shadow-sm transition">
+            AI (PPO)
+          </button>
+          <button id="mode-baseline" onclick="setMode('BASELINE')" class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition">
+            Baseline
+          </button>
+          <button id="mode-manual" onclick="setMode('MANUAL')" class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition">
+            Manual
+          </button>
+        </div>
+
+        <!-- Speed Selector -->
+        <div class="flex items-center bg-slate-950/80 rounded-md border border-slate-800 p-0.5 text-xs font-mono">
+          <span class="text-slate-400 px-1">Speed:</span>
+          <button onclick="setSpeed(0.5)" class="speed-btn px-1.5 py-0.5 rounded text-slate-400 hover:text-white" data-speed="0.5">0.5x</button>
+          <button onclick="setSpeed(1.0)" class="speed-btn px-1.5 py-0.5 rounded bg-cyan-600 text-white" data-speed="1.0">1x</button>
+          <button onclick="setSpeed(2.0)" class="speed-btn px-1.5 py-0.5 rounded text-slate-400 hover:text-white" data-speed="2.0">2x</button>
+          <button onclick="setSpeed(5.0)" class="speed-btn px-1.5 py-0.5 rounded text-slate-400 hover:text-white" data-speed="5.0">5x</button>
+          <button onclick="setSpeed(10.0)" class="speed-btn px-1.5 py-0.5 rounded text-slate-400 hover:text-white" data-speed="10.0">10x</button>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex items-center space-x-1.5">
+          <button id="btn-play-pause" onclick="togglePlayPause()" class="px-3 py-1 rounded-md bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center space-x-1">
+            <span id="play-pause-icon">⏸</span>
+            <span id="play-pause-text">Pause</span>
+          </button>
+          <button onclick="resetSimulation()" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition" title="Reset Simulation">
+            🔄 Reset
+          </button>
+          <button id="btn-demo" onclick="toggleDemoMode()" class="px-3 py-1 rounded-md bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-extrabold tracking-wide shadow-md shadow-purple-900/30 transition flex items-center space-x-1">
+            <span>⚡</span>
+            <span id="demo-btn-label">START DEMO</span>
+          </button>
+          <a href="/static/polaris/index.html" target="_blank" class="px-3 py-1 rounded-md bg-cyan-700/80 hover:bg-cyan-600 text-white text-xs font-bold tracking-wide border border-cyan-400/40 transition flex items-center space-x-1 shadow-sm" title="Open Diya's POLARIS 19-Page Multi-Resource Station UI">
+            <span>🌐</span>
+            <span>POLARIS UI</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Active Demo Banner (Hidden when inactive) -->
+    <div id="demo-banner" class="hidden max-w-7xl mx-auto mt-2 px-4 py-1.5 rounded bg-purple-950/80 border border-purple-500/50 flex items-center justify-between text-xs font-mono animate-pulse">
+      <div class="flex items-center space-x-2">
+        <span class="text-purple-400 font-bold">● ACTIVE DEMO SEQUENCE:</span>
+        <span id="demo-phase-text" class="text-purple-200">Phase 1/6: Normal Conditions</span>
+      </div>
+      <div class="text-purple-300">
+        Elapsed: <span id="demo-timer" class="font-bold">0s</span> / 180s
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto w-full p-4 space-y-4 flex-1">
+
+    <!-- REAL-TIME DYNAMIC INPUT DATA STREAM PANEL -->
+    <section class="glass-panel p-3 border-cyan-500/40 bg-slate-900/70">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-2.5">
+        <div class="flex items-center space-x-2">
+          <span class="pulse-dot pulse-green"></span>
+          <span class="text-xs uppercase font-extrabold tracking-wider text-cyan-300">Live Dynamic Input Data Stream</span>
+          <span id="input-feed-source" class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">
+            Dynamic Continuous Polar Stream
+          </span>
+        </div>
+
+        <!-- Feed Mode Switcher -->
+        <div class="flex items-center space-x-1 bg-slate-950 p-1 rounded border border-slate-800 text-[11px] font-mono">
+          <span class="text-slate-400 text-[10px] px-1">Feed Source:</span>
+          <button id="feed-btn-real" onclick="setStreamFeedMode('REAL_WORLD_LIVE')" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition">
+            🌐 Live Real-World (McMurdo, Antarctica)
+          </button>
+          <button id="feed-btn-dyn" onclick="setStreamFeedMode('DYNAMIC_SYNTHETIC')" class="px-2 py-0.5 rounded bg-cyan-700 text-white transition">
+            ⚡ Dynamic Polar Feed
+          </button>
+          <button id="feed-btn-manual" onclick="setStreamFeedMode('MANUAL_STREAM')" class="px-2 py-0.5 rounded text-slate-400 hover:text-white transition">
+            🎛️ Interactive Sliders
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-Time Input Variables Stream Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 font-mono text-xs">
+        <div class="bg-slate-950/60 p-2 rounded border border-slate-800/80">
+          <div class="text-[10px] text-slate-400">Outside Temp (°C)</div>
+          <div id="in-temp" class="text-lg font-black text-blue-300">-25.0°C</div>
+        </div>
+        <div class="bg-slate-950/60 p-2 rounded border border-slate-800/80">
+          <div class="text-[10px] text-slate-400">Solar Irradiance</div>
+          <div id="in-solar" class="text-lg font-black text-amber-300">420.0 W/m²</div>
+        </div>
+        <div class="bg-slate-950/60 p-2 rounded border border-slate-800/80">
+          <div class="text-[10px] text-slate-400">Wind Velocity</div>
+          <div id="in-wind" class="text-lg font-black text-teal-300">9.2 m/s</div>
+        </div>
+        <div class="bg-slate-950/60 p-2 rounded border border-slate-800/80">
+          <div class="text-[10px] text-slate-400">Cloud Cover</div>
+          <div id="in-cloud" class="text-lg font-black text-slate-300">30%</div>
+        </div>
+        <div class="bg-slate-950/60 p-2 rounded border border-slate-800/80">
+          <div class="text-[10px] text-slate-400">Surface Pressure</div>
+          <div id="in-press" class="text-lg font-black text-purple-300">985.0 hPa</div>
+        </div>
+      </div>
+
+      <!-- Live Dynamic Input Controls (Sliders) -->
+      <div id="manual-sliders-drawer" class="mt-2.5 pt-2 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] font-mono">
+        <div>
+          <div class="flex justify-between text-slate-400">
+            <span>Dynamic Wind Speed:</span>
+            <span id="slider-wind-val" class="text-teal-300 font-bold">9.2 m/s</span>
+          </div>
+          <input type="range" id="slider-wind" min="0" max="35" step="0.5" value="9.2" oninput="onManualSliderChange()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-teal-400">
+        </div>
+        <div>
+          <div class="flex justify-between text-slate-400">
+            <span>Dynamic Solar Irradiance:</span>
+            <span id="slider-solar-val" class="text-amber-300 font-bold">420 W/m²</span>
+          </div>
+          <input type="range" id="slider-solar" min="0" max="800" step="10" value="420" oninput="onManualSliderChange()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400">
+        </div>
+        <div>
+          <div class="flex justify-between text-slate-400">
+            <span>Dynamic Polar Temp:</span>
+            <span id="slider-temp-val" class="text-blue-300 font-bold">-25.0°C</span>
+          </div>
+          <input type="range" id="slider-temp" min="-45" max="-5" step="0.5" value="-25.0" oninput="onManualSliderChange()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400">
+        </div>
+      </div>
+    </section>
+
+    <!-- TWO-PART ENERGY RESOURCES ARCHITECTURE -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      
+      <!-- ==================================================================== -->
+      <!-- PART 1: RENEWABLE ENERGY RESOURCES -->
+      <!-- ==================================================================== -->
+      <section class="glass-panel p-4 border-emerald-500/40 bg-emerald-950/20 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-emerald-500/30 pb-2 mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="text-xl">🌿</span>
+              <div>
+                <h2 class="text-xs uppercase font-extrabold tracking-wider text-emerald-400">
+                  Part 1: Renewable Energy Resources
+                </h2>
+                <p class="text-[10px] text-slate-400 font-mono">Zero-Emission Clean Generation & Storage Buffer</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <span id="p1-total-ren-kw" class="text-xl font-black text-emerald-400 glow-green font-mono">0.0</span>
+              <span class="text-[10px] text-slate-400 font-mono">kW Clean</span>
+            </div>
+          </div>
+
+          <!-- Renewable Resource Breakdown Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            
+            <!-- Solar Subsystem -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-emerald-500/20">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-[11px] font-bold text-amber-300">☀️ Solar PV Array (60kW)</span>
+                <span class="text-[10px] font-mono text-slate-400">Bifacial Albedo</span>
+              </div>
+              <div class="text-lg font-black text-amber-300 font-mono" id="p1-solar-kw">0.0 kW</div>
+              <div class="text-[10px] text-slate-400 flex justify-between mt-1 font-mono">
+                <span>Albedo Gain: +20%</span>
+                <span>Cold Bonus: +0.4%/°C</span>
+              </div>
+            </div>
+
+            <!-- Wind Subsystem -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-emerald-500/20">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-[11px] font-bold text-teal-300">💨 Wind Turbines (70kW)</span>
+                <span id="p1-wind-status" class="text-[10px] font-mono text-emerald-400">Active</span>
+              </div>
+              <div class="text-lg font-black text-teal-300 font-mono" id="p1-wind-kw">0.0 kW</div>
+              <div class="text-[10px] text-slate-400 flex justify-between mt-1 font-mono">
+                <span>Cut-in: 3 m/s</span>
+                <span>Cut-out: 25 m/s</span>
+              </div>
+            </div>
+
+            <!-- Clean Battery BESS Buffer -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-emerald-500/20">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-[11px] font-bold text-sky-300">🔋 LiFePO4 BESS (200kWh)</span>
+                <span id="p1-bat-soc" class="text-[11px] font-black text-sky-400 font-mono">70% SOC</span>
+              </div>
+              <div class="text-lg font-black text-sky-300 font-mono" id="p1-bat-flow">0.0 kW</div>
+              <div class="w-full bg-slate-800 rounded-full h-1.5 mt-1 overflow-hidden">
+                <div id="p1-bat-bar" class="bg-sky-400 h-1.5 rounded-full" style="width: 70%"></div>
+              </div>
+            </div>
+
+            <!-- Clean Penetration & Carbon Avoided -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-emerald-500/20 flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] text-slate-400 font-mono">Renewable Contribution</div>
+                <div id="p1-ren-share" class="text-lg font-black text-emerald-300 font-mono">0.0%</div>
+              </div>
+              <div class="text-[10px] text-emerald-400 font-mono mt-1">
+                CO₂ Offset: <span id="p1-co2-offset" class="font-bold">0.0 kg</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="text-[10px] text-slate-400 font-mono bg-slate-950/40 p-2 rounded flex justify-between">
+          <span>Installed Clean Capacity: 130 kW + 200 kWh</span>
+          <span class="text-emerald-400">Prioritized by PPO AI Agent</span>
+        </div>
+      </section>
+
+      <!-- ==================================================================== -->
+      <!-- PART 2: NON-RENEWABLE ENERGY RESOURCES -->
+      <!-- ==================================================================== -->
+      <section class="glass-panel p-4 border-amber-500/40 bg-amber-950/20 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-amber-500/30 pb-2 mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="text-xl">⛽</span>
+              <div>
+                <h2 class="text-xs uppercase font-extrabold tracking-wider text-amber-400">
+                  Part 2: Non-Renewable Energy Resources
+                </h2>
+                <p class="text-[10px] text-slate-400 font-mono">Fossil Combustion Reserve • Emergency Life Support Defense</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <span id="p2-total-fossil-kw" class="text-xl font-black text-amber-400 font-mono">0.0</span>
+              <span class="text-[10px] text-slate-400 font-mono">kW Fossil</span>
+            </div>
+          </div>
+
+          <!-- Non-Renewable Resource Breakdown Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            
+            <!-- Primary Emergency Diesel -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-amber-500/20">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-[11px] font-bold text-amber-300">⚡ Primary Diesel (50kW)</span>
+                <span id="p2-diesel-status" class="text-[10px] font-mono text-slate-400">STANDBY</span>
+              </div>
+              <div class="text-lg font-black text-amber-300 font-mono" id="p2-diesel-kw">0.0 kW</div>
+              <div class="text-[10px] text-slate-400 flex justify-between mt-1 font-mono">
+                <span>Burn Rate: 0.28 L/kWh</span>
+                <span>Capacity: 50 kW</span>
+              </div>
+            </div>
+
+            <!-- Auxiliary Fuel Generator -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-amber-500/20">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-[11px] font-bold text-orange-300">🔥 Aux Fuel Gen (25kW)</span>
+                <span id="p2-aux-status" class="text-[10px] font-mono text-slate-400">STANDBY</span>
+              </div>
+              <div class="text-lg font-black text-orange-300 font-mono" id="p2-aux-kw">0.0 kW</div>
+              <div class="text-[10px] text-slate-400 flex justify-between mt-1 font-mono">
+                <span>Extreme Cold Backup</span>
+                <span>Capacity: 25 kW</span>
+              </div>
+            </div>
+
+            <!-- Fuel Consumption & Tank Reserves -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-amber-500/20">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-[11px] font-bold text-slate-300">⛽ Fuel Reserves Tank</span>
+                <span id="p2-fuel-pct" class="text-[11px] font-bold text-amber-400 font-mono">100%</span>
+              </div>
+              <div class="text-lg font-black text-amber-300 font-mono" id="p2-fuel-rem">12,000 L</div>
+              <div class="text-[10px] text-slate-400 flex justify-between mt-1 font-mono">
+                <span>Burned: <span id="p2-fuel-burned">0.0</span> L</span>
+                <span>Rate: <span id="p2-burn-rate">0.0</span> L/h</span>
+              </div>
+            </div>
+
+            <!-- Emissions & Economic Cost -->
+            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-amber-500/20 flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] text-slate-400 font-mono">Fossil Carbon Emissions</div>
+                <div id="p2-carbon-emitted" class="text-lg font-black text-red-400 font-mono">0.0 kg CO₂</div>
+              </div>
+              <div class="text-[10px] text-slate-400 font-mono mt-1">
+                Direct Fuel Cost: <span id="p2-fuel-cost" class="font-bold text-amber-300">$0.00</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="text-[10px] text-slate-400 font-mono bg-slate-950/40 p-2 rounded flex justify-between">
+          <span>Installed Fossil Backup: 75 kW (Heavily Penalized in AI Reward)</span>
+          <span class="text-amber-400">Used only during emergencies</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- AI DECISION & EXPLAINABILITY ROW -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      
+      <!-- AI Decision Panel (2 cols) -->
+      <div class="lg:col-span-2 glass-panel p-4 flex flex-col justify-between border-purple-500/30">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-purple-400 text-lg">🤖</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-purple-300">AI Microgrid Dispatcher & Explainability Reasoner</h2>
+          </div>
+          <span id="ai-mode-pill" class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-500/30">
+            REINFORCEMENT LEARNING DISPATCH
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+          <!-- Decision Badge -->
+          <div class="md:col-span-1 bg-slate-950/70 p-3 rounded-lg border border-slate-800 flex flex-col justify-center items-center text-center">
+            <span class="text-[10px] text-slate-400 uppercase tracking-wider mb-1 font-mono">Selected Action</span>
+            <div id="ai-decision-badge" class="text-sm font-black px-3 py-1.5 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-500/40 glow-cyan">
+              MAINTAIN
+            </div>
+            <span id="ai-action-code" class="text-[10px] text-slate-500 font-mono mt-1">Action Code: 0</span>
+          </div>
+
+          <!-- Explainability Text -->
+          <div class="md:col-span-2 bg-slate-950/70 p-3 rounded-lg border border-slate-800 flex flex-col justify-center">
+            <div class="flex items-center space-x-1.5 text-xs text-slate-400 mb-1 font-mono">
+              <span>💡</span>
+              <span class="font-bold text-slate-300">Physics-Grounded Decision Rationale:</span>
+            </div>
+            <p id="ai-reason-text" class="text-xs text-slate-200 leading-relaxed font-sans">
+              Station in stable equilibrium. Renewable generation is sufficient for critical loads, holding battery reserves in standby.
+            </p>
+          </div>
+        </div>
+
+        <!-- Micro-telemetry inputs analyzed by AI -->
+        <div class="grid grid-cols-4 gap-2 text-[10px] font-mono text-slate-400 bg-slate-950/50 p-2 rounded">
+          <div>Supply Balance: <span id="ai-in-net" class="text-cyan-300">0.0 kW</span></div>
+          <div>Battery Reserve: <span id="ai-in-soc" class="text-sky-300">70.0%</span></div>
+          <div>Outside Temp: <span id="ai-in-temp" class="text-blue-300">-25°C</span></div>
+          <div>Load Shedding: <span id="ai-in-shed" class="text-amber-300">No</span></div>
+        </div>
+      </div>
+
+      <!-- Real-Time Alerts Feed (1 col) -->
+      <div class="glass-panel p-4 flex flex-col justify-between border-amber-500/30">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-amber-400">⚠️</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-amber-300">Dynamic Station Alerts</h2>
+          </div>
+          <span id="alert-count-pill" class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/30">
+            0 Active
+          </span>
+        </div>
+
+        <!-- Alert Items Scroll Box -->
+        <div id="alert-container" class="space-y-2 overflow-y-auto max-h-36 pr-1 font-mono text-xs">
+          <div class="p-2 rounded bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-[11px] flex items-center space-x-2">
+            <span>✓</span>
+            <span>All polar microgrid subsystems operating in safe equilibrium.</span>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+          <span class="text-slate-400 font-mono">Quick Injector:</span>
+          <div class="flex items-center space-x-1">
+            <button onclick="injectWeather('Blizzard', -35, 26, 0.0)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
+              🌪️ Blizzard
+            </button>
+            <button onclick="injectWeather('ColdSnap', -44, 12, 100)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
+              ❄️ -44°C
+            </button>
+            <button onclick="clearWeatherOverride()" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
+              ↺ Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- NAVIGATION TABS -->
+    <div class="flex items-center space-x-2 border-b border-slate-800 pb-1 text-sm font-semibold overflow-x-auto">
+      <button onclick="switchTab('tab-integration')" class="nav-tab px-4 py-2 rounded-t-lg border-b-2 border-transparent text-purple-300 hover:text-purple-100 transition flex items-center space-x-1.5" data-tab="tab-integration">
+        <span class="text-base">🎯</span>
+        <span class="font-extrabold tracking-wide uppercase text-xs bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 bg-clip-text text-transparent">Master Integration Hub</span>
+      </button>
+      <button onclick="switchTab('tab-live')" class="nav-tab px-4 py-2 rounded-t-lg border-b-2 border-cyan-400 text-cyan-300 bg-slate-900/80 transition" data-tab="tab-live">
+        📊 Live Operations & Charts
+      </button>
+      <button onclick="switchTab('tab-twin')" class="nav-tab px-4 py-2 rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition" data-tab="tab-twin">
+        🌐 Digital Twin Topology
+      </button>
+      <button onclick="switchTab('tab-benchmark')" class="nav-tab px-4 py-2 rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition" data-tab="tab-benchmark">
+        ⚖️ AI vs Baseline
+      </button>
+      <button onclick="switchTab('tab-train')" class="nav-tab px-4 py-2 rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition" data-tab="tab-train">
+        🧠 Continuous AI Training
+      </button>
+      <button onclick="switchTab('tab-summary')" class="nav-tab px-4 py-2 rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition" data-tab="tab-summary">
+        📋 Mission Report
+      </button>
+    </div>
+
+    <!-- TAB 1: LIVE OPERATIONS & 8 CHARTS -->
+    <div id="tab-live" class="tab-content space-y-4">
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Chart 1: Generation (Renewable vs Non-Renewable) -->
+        <div class="glass-panel p-3 border-emerald-500/20">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-emerald-400">1. Clean Solar vs Wind (kW)</h3>
+            <span class="text-[10px] text-slate-400 font-mono">Part 1</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-generation"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Consumption -->
+        <div class="glass-panel p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-slate-300">2. Station Loads (kW)</h3>
+            <span class="text-[10px] text-slate-400 font-mono">Crit vs Flex</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-consumption"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Battery State -->
+        <div class="glass-panel p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-slate-300">3. Battery Storage</h3>
+            <span class="text-[10px] text-slate-400 font-mono">SOC & Temp</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-battery"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Renewable Percentage -->
+        <div class="glass-panel p-3 border-emerald-500/20">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-emerald-400">4. Renewable Share (%)</h3>
+            <span class="text-[10px] text-slate-400 font-mono">Clean vs Fossil</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-renewable"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 5: Power Balance -->
+        <div class="glass-panel p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-slate-300">5. Power Balance</h3>
+            <span class="text-[10px] text-slate-400 font-mono">Surplus / Deficit</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-balance"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 6: Dynamic Weather Input Stream -->
+        <div class="glass-panel p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-slate-300">6. Dynamic Inputs</h3>
+            <span class="text-[10px] text-slate-400 font-mono">Temp & Wind</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-weather"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 7: AI Reward Trend -->
+        <div class="glass-panel p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-slate-300">7. AI Reward</h3>
+            <span class="text-[10px] text-slate-400 font-mono">Objective Score</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-reward"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 8: Generation vs Consumption -->
+        <div class="glass-panel p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-slate-300">8. Supply vs Demand</h3>
+            <span class="text-[10px] text-slate-400 font-mono">Grid Balance</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-overlay"></canvas>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- TAB 2: DIGITAL TWIN TOPOLOGY -->
+    <div id="tab-twin" class="tab-content hidden space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <!-- Interactive SVG Schematic (2 cols) -->
+        <div class="lg:col-span-2 glass-panel p-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+            <div>
+              <h2 class="text-xs uppercase font-extrabold tracking-wider text-cyan-300">
+                Two-Part Polar Microgrid Digital Twin Schematic
+              </h2>
+              <p class="text-[10px] text-slate-400 font-mono">Part 1 Clean Generation (Green) vs Part 2 Fossil Backup (Amber)</p>
+            </div>
+            <span class="text-[10px] font-mono text-emerald-400 font-bold">Auto-synced via WebSockets</span>
+          </div>
+
+          <!-- SVG Visualizer -->
+          <div class="bg-slate-950/80 rounded-lg p-3 flex justify-center items-center border border-slate-800 overflow-hidden">
+            <svg id="twin-svg" viewBox="0 0 720 400" class="w-full h-auto max-h-[440px]">
+              
+              <!-- Central Microgrid Bus -->
+              <rect x="340" y="30" width="40" height="340" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
+              <text x="360" y="200" fill="#38bdf8" font-size="11" font-family="monospace" font-weight="bold" text-anchor="middle" transform="rotate(-90 360 200)">POLAR MICROGRID BUS</text>
+
+              <!-- LEFT SIDE: PART 1 RENEWABLES & PART 2 NON-RENEWABLES -->
+              
+              <!-- PART 1: Solar Array -->
+              <g class="twin-node" id="node-solar" transform="translate(30, 40)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#34d399" stroke-width="1.8" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="11" font-weight="bold">☀️ [Part 1] Solar Array (60kW)</text>
+                <text x="15" y="42" fill="#34d399" font-size="11" font-family="monospace" id="svg-solar-val">0.0 kW • Clean</text>
+                <line x1="190" y1="28" x2="340" y2="80" stroke="#34d399" stroke-width="2" class="flow-line" />
+              </g>
+
+              <!-- PART 1: Wind Turbines -->
+              <g class="twin-node" id="node-wind" transform="translate(30, 110)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#34d399" stroke-width="1.8" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="11" font-weight="bold">💨 [Part 1] Wind Turbines (70kW)</text>
+                <text x="15" y="42" fill="#34d399" font-size="11" font-family="monospace" id="svg-wind-val">0.0 kW • Clean</text>
+                <line x1="190" y1="28" x2="340" y2="140" stroke="#34d399" stroke-width="2" class="flow-line" />
+              </g>
+
+              <!-- PART 1: Battery BESS -->
+              <g class="twin-node" id="node-battery" transform="translate(30, 180)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#38bdf8" stroke-width="1.8" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="11" font-weight="bold">🔋 [Part 1] LiFePO4 BESS (200kWh)</text>
+                <text x="15" y="42" fill="#38bdf8" font-size="11" font-family="monospace" id="svg-bat-val">SOC: 70% • 0.0 kW</text>
+                <line x1="190" y1="28" x2="340" y2="210" stroke="#38bdf8" stroke-width="2" id="svg-bat-line" />
+              </g>
+
+              <!-- PART 2: Primary Diesel Generator -->
+              <g class="twin-node" id="node-diesel" transform="translate(30, 250)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#fbbf24" stroke-width="1.8" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="11" font-weight="bold">⚡ [Part 2] Diesel Genset (50kW)</text>
+                <text x="15" y="42" fill="#fbbf24" font-size="11" font-family="monospace" id="svg-diesel-val">STANDBY • 0.0 kW</text>
+                <line x1="190" y1="28" x2="340" y2="280" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4" id="svg-diesel-line" />
+              </g>
+
+              <!-- PART 2: Aux Fuel Backup -->
+              <g class="twin-node" id="node-aux" transform="translate(30, 320)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#fb923c" stroke-width="1.8" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="11" font-weight="bold">🔥 [Part 2] Aux Fuel Gen (25kW)</text>
+                <text x="15" y="42" fill="#fb923c" font-size="11" font-family="monospace" id="svg-aux-val">STANDBY • 0.0 kW</text>
+                <line x1="190" y1="28" x2="340" y2="340" stroke="#fb923c" stroke-width="2" stroke-dasharray="4" id="svg-aux-line" />
+              </g>
+
+              <!-- RIGHT SIDE: STATION LOADS -->
+              <!-- Critical Life Support -->
+              <g class="twin-node" id="node-critical" transform="translate(500, 50)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#34d399" stroke-width="1.5" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="12" font-weight="bold">🛡️ Life Support Pods</text>
+                <text x="15" y="42" fill="#34d399" font-size="11" font-family="monospace" id="svg-crit-val">100% Met • 38 kW</text>
+                <line x1="380" y1="90" x2="500" y2="78" stroke="#34d399" stroke-width="2" class="flow-line" />
+              </g>
+
+              <!-- Heating Subsystem -->
+              <g class="twin-node" id="node-heating" transform="translate(500, 130)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#38bdf8" stroke-width="1.5" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="12" font-weight="bold">🔥 Habitat Heating</text>
+                <text x="15" y="42" fill="#38bdf8" font-size="11" font-family="monospace" id="svg-heat-val">16 kW • Amb: -25°C</text>
+                <line x1="380" y1="155" x2="500" y2="158" stroke="#38bdf8" stroke-width="2" class="flow-line" />
+              </g>
+
+              <!-- SATCOM & Servers -->
+              <g class="twin-node" id="node-servers" transform="translate(500, 210)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#38bdf8" stroke-width="1.5" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="12" font-weight="bold">📡 SATCOM & Core Servers</text>
+                <text x="15" y="42" fill="#38bdf8" font-size="11" font-family="monospace">16.0 kW • Online</text>
+                <line x1="380" y1="225" x2="500" y2="238" stroke="#38bdf8" stroke-width="2" class="flow-line" />
+              </g>
+
+              <!-- Scientific Labs & Flexible Equipment -->
+              <g class="twin-node" id="node-flexible" transform="translate(500, 290)">
+                <rect width="190" height="55" rx="6" fill="#131f38" stroke="#a78bfa" stroke-width="1.5" />
+                <text x="15" y="24" fill="#f1f5f9" font-size="12" font-weight="bold">🔬 Polar Science Labs</text>
+                <text x="15" y="42" fill="#a78bfa" font-size="11" font-family="monospace" id="svg-flex-val">25.0 kW • Normal</text>
+                <line x1="380" y1="295" x2="500" y2="318" stroke="#a78bfa" stroke-width="2" class="flow-line" id="svg-flex-line" />
+              </g>
+
+            </svg>
+          </div>
+        </div>
+
+        <!-- Eclipse Ditto JSON Inspector (1 col) -->
+        <div class="glass-panel p-4 flex flex-col justify-between">
+          <div class="border-b border-slate-800 pb-2 mb-2">
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-cyan-300">Eclipse Ditto JSON Payload</h2>
+            <p class="text-[10px] text-slate-400 font-mono">Two-part partitioned W3C Web of Things schema</p>
+          </div>
+          <pre id="ditto-json-view" class="bg-slate-950 p-3 rounded text-[10px] font-mono text-cyan-300 overflow-y-auto max-h-[390px] border border-slate-800 leading-relaxed"></pre>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 3: AI VS BASELINE BENCHMARK -->
+    <div id="tab-benchmark" class="tab-content hidden space-y-4">
+      <div class="glass-panel p-5">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+          <div>
+            <h2 class="text-sm uppercase font-extrabold tracking-wider text-emerald-400">
+              Rigorous Evaluation: AI (PPO) vs. Baseline Heuristic Controller
+            </h2>
+            <p class="text-xs text-slate-400">Evaluates both controllers on identical 144-step polar weather conditions and load fluctuations.</p>
+          </div>
+          <button onclick="runComparisonBenchmark()" class="px-4 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center space-x-1 shadow">
+            <span>▶</span>
+            <span>Run Fresh Benchmark</span>
+          </button>
+        </div>
+
+        <!-- Comparative Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 font-mono text-center">
+          <div class="glass-card p-3 border-emerald-500/30">
+            <span class="text-xs text-slate-400">Diesel Fuel Saved</span>
+            <div class="text-2xl font-black text-emerald-400 glow-green my-1">
+              <span id="bm-fuel-saved">0.0</span> L
+            </div>
+            <span class="text-[10px] text-slate-400">Direct fossil fuel reduction</span>
+          </div>
+
+          <div class="glass-card p-3 border-cyan-500/30">
+            <span class="text-xs text-slate-400">Carbon Offset</span>
+            <div class="text-2xl font-black text-cyan-400 glow-cyan my-1">
+              <span id="bm-co2-saved">0.0</span> kg CO₂
+            </div>
+            <span class="text-[10px] text-slate-400">2.68 kg CO₂ per liter saved</span>
+          </div>
+
+          <div class="glass-card p-3 border-purple-500/30">
+            <span class="text-xs text-slate-400">Renewable Gain</span>
+            <div class="text-2xl font-black text-purple-400 my-1">
+              +<span id="bm-renew-gain">0.0</span>%
+            </div>
+            <span class="text-[10px] text-slate-400">Higher clean energy dispatch</span>
+          </div>
+
+          <div class="glass-card p-3 border-sky-500/30">
+            <span class="text-xs text-slate-400">Reward Optimization</span>
+            <div class="text-2xl font-black text-sky-400 my-1">
+              +<span id="bm-reward-gain">0.0</span>
+            </div>
+            <span class="text-[10px] text-slate-400">Cumulative RL policy gain</span>
+          </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono border-collapse">
+            <thead>
+              <tr class="border-b border-slate-700 bg-slate-900/60 text-slate-300">
+                <th class="p-3">Metric</th>
+                <th class="p-3 text-cyan-400">AI Controller (PPO)</th>
+                <th class="p-3 text-slate-400">Baseline Controller</th>
+                <th class="p-3 text-emerald-400">AI Improvement</th>
+              </tr>
+            </thead>
+            <tbody id="benchmark-table-body" class="divide-y divide-slate-800">
+              <tr>
+                <td class="p-3 font-semibold text-slate-200">Diesel Fuel Consumed</td>
+                <td class="p-3 text-cyan-300 font-bold" id="bm-ai-fuel">-</td>
+                <td class="p-3 text-slate-300" id="bm-base-fuel">-</td>
+                <td class="p-3 text-emerald-400 font-bold" id="bm-diff-fuel">-</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-slate-200">Renewable Utilization</td>
+                <td class="p-3 text-cyan-300 font-bold" id="bm-ai-renew">-</td>
+                <td class="p-3 text-slate-300" id="bm-base-renew">-</td>
+                <td class="p-3 text-emerald-400 font-bold" id="bm-diff-renew">-</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-slate-200">Critical Load Availability</td>
+                <td class="p-3 text-cyan-300 font-bold" id="bm-ai-crit">-</td>
+                <td class="p-3 text-slate-300" id="bm-base-crit">-</td>
+                <td class="p-3 text-emerald-400 font-bold" id="bm-diff-crit">100% Maintained</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-slate-200">Power Shortage Events</td>
+                <td class="p-3 text-cyan-300 font-bold" id="bm-ai-short">-</td>
+                <td class="p-3 text-slate-300" id="bm-base-short">-</td>
+                <td class="p-3 text-emerald-400 font-bold" id="bm-diff-short">Zero Shortages</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-slate-200">Total Objective Reward</td>
+                <td class="p-3 text-cyan-300 font-bold" id="bm-ai-reward">-</td>
+                <td class="p-3 text-slate-300" id="bm-base-reward">-</td>
+                <td class="p-3 text-emerald-400 font-bold" id="bm-diff-reward">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 4: CONTINUOUS AI TRAINING -->
+    <div id="tab-train" class="tab-content hidden space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <!-- Controls & Metrics (1 col) -->
+        <div class="glass-panel p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-2 border-b border-slate-800 pb-2 mb-3">
+              <span class="text-purple-400 text-lg">🧠</span>
+              <h2 class="text-xs uppercase font-extrabold tracking-wider text-purple-300">Self-Training Control</h2>
+            </div>
+            
+            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+              Trains the PPO agent in the background using the Gymnasium environment. Demonstrates dynamic policy improvement and reward optimization.
+            </p>
+
+            <div class="space-y-3 font-mono text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Training State:</span>
+                <span id="tr-status" class="font-bold text-slate-300">IDLE</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Episode:</span>
+                <span id="tr-episode" class="font-bold text-cyan-400">0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Current Reward:</span>
+                <span id="tr-cur-reward" class="font-bold text-emerald-400">0.0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Running Avg Reward:</span>
+                <span id="tr-avg-reward" class="font-bold text-purple-400">0.0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Best Reward:</span>
+                <span id="tr-best-reward" class="font-bold text-sky-400">0.0</span>
+              </div>
+
+              <!-- Progress bar -->
+              <div class="pt-2">
+                <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                  <span>Progress:</span>
+                  <span id="tr-progress-pct">0.0%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                  <div id="tr-progress-bar" class="bg-purple-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="space-y-2 pt-4 border-t border-slate-800 mt-4">
+            <button id="btn-train-start" onclick="startTraining()" class="w-full py-2 rounded-md bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center justify-center space-x-1">
+              <span>⚡</span>
+              <span>Start 20-Episode Training</span>
+            </button>
+            <button id="btn-train-stop" onclick="stopTraining()" class="w-full py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition">
+              Stop Training
+            </button>
+            <button onclick="reloadModel()" class="w-full py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition">
+              Load / Deploy Saved Weights
+            </button>
+          </div>
+        </div>
+
+        <!-- Training Reward Chart (2 cols) -->
+        <div class="lg:col-span-2 glass-panel p-4 flex flex-col justify-between">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-purple-300">Live Training Learning Curve</h2>
+            <span class="text-[10px] text-slate-400 font-mono">Episode vs Reward</span>
+          </div>
+          <div class="h-72 w-full">
+            <canvas id="chart-training-progress"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 5: MISSION SUMMARY REPORT -->
+    <div id="tab-summary" class="tab-content hidden space-y-4">
+      <div class="glass-panel p-5">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+          <div>
+            <h2 class="text-sm uppercase font-extrabold tracking-wider text-cyan-300">
+              Automatic Polar Station Mission Summary
+            </h2>
+            <p class="text-xs text-slate-400">Computed strictly from real running simulation telemetry.</p>
+          </div>
+          <span class="text-xs font-mono text-slate-400">Generated: <span id="summary-timestamp">Just now</span></span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs mb-6">
+          <div class="glass-card p-4 space-y-2">
+            <div class="text-emerald-400 uppercase text-[11px] font-bold border-b border-slate-800 pb-1">🌿 Part 1: Renewable Energy</div>
+            <div class="flex justify-between"><span>Total Renewable Generated:</span><span id="sum-renew-kwh" class="font-bold text-emerald-400">0.0 kWh</span></div>
+            <div class="flex justify-between"><span>Clean Energy Share:</span><span id="sum-renew-pct" class="font-bold text-emerald-400">0.0%</span></div>
+            <div class="flex justify-between"><span>CO₂ Emissions Avoided:</span><span id="sum-co2-offset" class="font-bold text-emerald-300">0.0 kg</span></div>
+          </div>
+
+          <div class="glass-card p-4 space-y-2">
+            <div class="text-amber-400 uppercase text-[11px] font-bold border-b border-slate-800 pb-1">⛽ Part 2: Non-Renewable Energy</div>
+            <div class="flex justify-between"><span>Total Fossil Generated:</span><span id="sum-diesel-kwh" class="font-bold text-amber-400">0.0 kWh</span></div>
+            <div class="flex justify-between"><span>Total Fuel Burned:</span><span id="sum-fuel-liters" class="font-bold text-amber-400">0.0 L</span></div>
+            <div class="flex justify-between"><span>Remaining Reserves:</span><span id="sum-fuel-rem" class="font-bold text-amber-300">12,000 L</span></div>
+            <div class="flex justify-between"><span>Direct Fuel Cost:</span><span id="sum-fuel-cost" class="font-bold text-red-400">$0.00</span></div>
+          </div>
+
+          <div class="glass-card p-4 space-y-2">
+            <div class="text-cyan-400 uppercase text-[11px] font-bold border-b border-slate-800 pb-1">🛡️ Station Health & Resilience</div>
+            <div class="flex justify-between"><span>Total Demand Consumed:</span><span id="sum-total-cons" class="font-bold text-cyan-300">0.0 kWh</span></div>
+            <div class="flex justify-between"><span>Critical Availability:</span><span id="sum-crit-avail" class="font-bold text-emerald-400">100%</span></div>
+            <div class="flex justify-between"><span>Critical Shortage Events:</span><span id="sum-shortages" class="font-bold text-emerald-400">0</span></div>
+            <div class="flex justify-between"><span>Operational Uptime:</span><span class="font-bold text-emerald-400">100.0%</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 6: MASTER SYSTEM INTEGRATION HUB (THE MASTER STROKE) -->
+    <div id="tab-integration" class="tab-content hidden space-y-5">
+      
+      <!-- HERO BANNER -->
+      <div class="glass-panel p-5 border-purple-500/50 bg-gradient-to-r from-purple-950/40 via-slate-900/80 to-cyan-950/40 relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl font-black select-none pointer-events-none text-purple-300">
+          STATION
+        </div>
+        <div class="relative z-10 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2 mb-1">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-purple-900/90 text-purple-300 border border-purple-500/40 font-mono">
+                SIH260061 • Unified Master Architecture
+              </span>
+              <span class="pulse-dot pulse-green"></span>
+              <span class="text-xs font-mono text-emerald-400 font-bold" id="integ-overall-status">ALL 4 TRACKS SYNCHRONIZED</span>
+            </div>
+            <h2 class="text-xl md:text-2xl font-black uppercase tracking-wide bg-gradient-to-r from-purple-300 via-pink-200 to-cyan-300 bg-clip-text text-transparent">
+              Unified Multi-Discipline Engineering Architecture
+            </h2>
+            <p class="text-xs text-slate-300 max-w-3xl mt-1 leading-relaxed">
+              Seamlessly harmonizing the work of the <span class="text-cyan-300 font-semibold">AI/RL Team</span>, the <span class="text-teal-300 font-semibold">IoT & Telemetry Team</span>, the <span class="text-amber-300 font-semibold">Simulation Dynamics Team</span>, and the <span class="text-purple-300 font-semibold">Digital Twin Systems Architect</span> into a single, high-performance cyber-physical station controller.
+            </p>
+          </div>
+
+          <!-- Quick Telemetry HUD -->
+          <div class="flex items-center space-x-3 bg-slate-950/80 p-3 rounded-lg border border-purple-500/30 font-mono text-xs shadow-inner">
+            <div>
+              <div class="text-[10px] text-slate-400 uppercase">E2E Pipeline Latency</div>
+              <div id="integ-total-latency" class="text-lg font-black text-cyan-300">3.8 ms</div>
+            </div>
+            <div class="h-8 w-[1px] bg-slate-800"></div>
+            <div>
+              <div class="text-[10px] text-slate-400 uppercase">Throughput Freq</div>
+              <div id="integ-freq" class="text-lg font-black text-emerald-400">260 Hz</div>
+            </div>
+            <div class="h-8 w-[1px] bg-slate-800"></div>
+            <div>
+              <div class="text-[10px] text-slate-400 uppercase">Sync State</div>
+              <div class="text-lg font-black text-purple-300">LOCKSTEP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL END-TO-END DATAFLOW PIPELINE -->
+      <div class="glass-panel p-5 border-cyan-500/30">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-cyan-400 font-bold">⚡</span>
+            <h3 class="text-xs uppercase font-extrabold tracking-wider text-cyan-300">
+              Interactive End-to-End Cyber-Physical Dataflow
+            </h3>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400">Real-Time Microsecond Signal Propagation</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 relative">
+          
+          <!-- Node 1: Dynamic Telemetry Ingestion -->
+          <div class="bg-slate-950/90 p-3.5 rounded-lg border border-teal-500/40 relative group hover:border-teal-400 transition shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold text-teal-300">1. Data Ingestion</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-950 text-teal-300 font-mono" id="integ-step1-ms">0.8 ms</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mb-2">Live Polar Weather, Solar & Wind Sensors</div>
+            <div class="bg-slate-900 p-2 rounded text-[10px] font-mono text-teal-200 border border-slate-800">
+              <div>Src: <span id="integ-data-src" class="text-teal-400 font-bold">Live Stream</span></div>
+              <div>Packet: <span class="text-slate-300">10-field Float32</span></div>
+              <div>Topic: <span class="text-slate-400">station/telemetry</span></div>
+            </div>
+            <div class="mt-2 text-[10px] font-mono text-emerald-400 flex items-center space-x-1">
+              <span>●</span> <span>Continuous Ingest</span>
+            </div>
+          </div>
+
+          <!-- Node 2: Observation Space Assembly -->
+          <div class="bg-slate-950/90 p-3.5 rounded-lg border border-cyan-500/40 relative group hover:border-cyan-400 transition shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold text-cyan-300">2. Env State Obs</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 font-mono" id="integ-step2-ms">0.5 ms</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mb-2">Normalized Cyber-Physical Vector</div>
+            <div class="bg-slate-900 p-2 rounded text-[10px] font-mono text-cyan-200 border border-slate-800">
+              <div>Tensor: <span class="text-cyan-400 font-bold">12-dim Float32</span></div>
+              <div>Bounds: <span class="text-slate-300">[-1.0, +1.0] MinMax</span></div>
+              <div>Env: <span class="text-slate-400">PolarStationEnv</span></div>
+            </div>
+            <div class="mt-2 text-[10px] font-mono text-emerald-400 flex items-center space-x-1">
+              <span>●</span> <span>Normalized Ready</span>
+            </div>
+          </div>
+
+          <!-- Node 3: PPO Neural Network Inference -->
+          <div class="bg-slate-950/90 p-3.5 rounded-lg border border-purple-500/40 relative group hover:border-purple-400 transition shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold text-purple-300">3. AI PPO Engine</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-950 text-purple-300 font-mono" id="integ-step3-ms">1.2 ms</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mb-2">Actor-Critic Policy Network</div>
+            <div class="bg-slate-900 p-2 rounded text-[10px] font-mono text-purple-200 border border-slate-800">
+              <div>Network: <span class="text-purple-400 font-bold">MLP 64x64</span></div>
+              <div>Action: <span id="integ-ai-act" class="text-cyan-300 font-bold">Action 0</span></div>
+              <div>Heuristic: <span class="text-emerald-400">Active Safeguard</span></div>
+            </div>
+            <div class="mt-2 text-[10px] font-mono text-purple-300 flex items-center space-x-1">
+              <span>●</span> <span id="integ-ai-state">PPO Forward Pass</span>
+            </div>
+          </div>
+
+          <!-- Node 4: Microgrid Physics Dispatch -->
+          <div class="bg-slate-950/90 p-3.5 rounded-lg border border-amber-500/40 relative group hover:border-amber-400 transition shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold text-amber-300">4. Station Physics</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 font-mono" id="integ-step4-ms">1.5 ms</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mb-2">Part 1 vs Part 2 Power Balance</div>
+            <div class="bg-slate-900 p-2 rounded text-[10px] font-mono text-amber-200 border border-slate-800">
+              <div>Renewable: <span id="integ-ren-flow" class="text-emerald-400 font-bold">0 kW</span></div>
+              <div>Fossil: <span id="integ-gen-flow" class="text-amber-400 font-bold">0 kW</span></div>
+              <div>Thermal: <span class="text-slate-300">Q=UAΔT Dynamic</span></div>
+            </div>
+            <div class="mt-2 text-[10px] font-mono text-emerald-400 flex items-center space-x-1">
+              <span>●</span> <span>Kirchhoff Stable</span>
+            </div>
+          </div>
+
+          <!-- Node 5: Digital Twin & UI WebSocket Broadcast -->
+          <div class="bg-slate-950/90 p-3.5 rounded-lg border border-blue-500/40 relative group hover:border-blue-400 transition shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold text-blue-300">5. Digital Twin & UI</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-950 text-blue-300 font-mono" id="integ-step5-ms">0.9 ms</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mb-2">Eclipse Ditto WoT & WebSocket Hub</div>
+            <div class="bg-slate-900 p-2 rounded text-[10px] font-mono text-blue-200 border border-slate-800">
+              <div>Ditto ID: <span class="text-blue-400 font-bold">aurora-01</span></div>
+              <div>Health: <span id="integ-twin-health" class="text-emerald-400 font-bold">100 / 100</span></div>
+              <div>Sync: <span class="text-slate-300">WebSocket JSON</span></div>
+            </div>
+            <div class="mt-2 text-[10px] font-mono text-blue-300 flex items-center space-x-1">
+              <span>●</span> <span>Bi-directional Sync</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- THE TEAM TRACKS: FULL INTER-DISCIPLINARY COOPERATION -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Track 1: Aashika & Hitesh (AI / ML & RL) -->
+        <div class="glass-panel p-4 border-purple-500/30 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-purple-500/20 pb-2 mb-3">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-purple-950/80 border border-purple-500/40 flex items-center justify-center text-lg">
+                  🧠
+                </div>
+                <div>
+                  <h4 class="text-xs uppercase font-extrabold tracking-wider text-purple-300">
+                    Aashika • AI/ML & 24h Forecasting
+                  </h4>
+                  <p class="text-[10px] text-slate-400 font-mono">Random Forest Models + PyTorch PPO Policy</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-500/40">
+                ACTIVE INFER
+              </span>
+            </div>
+
+            <div class="space-y-2 text-xs font-mono">
+              <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800">
+                <span class="text-[10px] text-purple-400 uppercase font-bold">Models & Algorithms:</span>
+                <p class="text-slate-300 text-[11px] mt-0.5">
+                  Trained Random Forest models (<code class="text-purple-300">solar_model.pkl</code>, <code class="text-teal-300">wind_model.pkl</code>, <code class="text-amber-300">demand_model.pkl</code>) generating 24h forecasts coupled to PPO Actor-Critic dispatcher.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">ML Regressors:</span>
+                  <div class="text-purple-300 font-bold">RandomForest x3</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Forecast Horizon:</span>
+                  <div class="text-purple-300 font-bold">24 Hours Ahead</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Inference Latency:</span>
+                  <div id="integ-card-ai-ms" class="text-cyan-300 font-bold">1.2 ms</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Heuristic Guard:</span>
+                  <div class="text-emerald-400 font-bold">Fail-Safe Active</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Subsystem: <code class="text-purple-300">team_modules/ai_aashika & ai/model.py</code></span>
+            <span class="text-emerald-400">✓ Integrated</span>
+          </div>
+        </div>
+
+        <!-- Track 2: Prachi (IoT & Backend) -->
+        <div class="glass-panel p-4 border-teal-500/30 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-teal-500/20 pb-2 mb-3">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-teal-950/80 border border-teal-500/40 flex items-center justify-center text-lg">
+                  📡
+                </div>
+                <div>
+                  <h4 class="text-xs uppercase font-extrabold tracking-wider text-teal-300">
+                    Prachi • IoT & Backend Layer
+                  </h4>
+                  <p class="text-[10px] text-slate-400 font-mono">Sensor Ingestion, Validation & REST Relay</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-teal-950 text-teal-300 border border-teal-500/40">
+                LIVE INGEST
+              </span>
+            </div>
+
+            <div class="space-y-2 text-xs font-mono">
+              <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800">
+                <span class="text-[10px] text-teal-400 uppercase font-bold">Architecture & Storage:</span>
+                <p class="text-slate-300 text-[11px] mt-0.5">
+                  FastAPI-powered single source of truth storing valid readings in SQLite database. Endpoints <code class="text-teal-300">/sensor/data</code>, <code class="text-teal-300">/energy/current</code>, <code class="text-teal-300">/battery/status</code> relaying data between AI, Optimizer, and UI.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Live API Source:</span>
+                  <div class="text-teal-300 font-bold">Open-Meteo Antarctic</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Broker Protocol:</span>
+                  <div class="text-teal-300 font-bold">FastAPI + MQTT Broker</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Database Engine:</span>
+                  <div class="text-teal-300 font-bold">SQLite Timeseries</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Ingest Latency:</span>
+                  <div id="integ-card-data-ms" class="text-cyan-300 font-bold">0.8 ms</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Subsystem: <code class="text-teal-300">team_modules/backend_prachi & backend/</code></span>
+            <span class="text-emerald-400">✓ Integrated</span>
+          </div>
+        </div>
+
+        <!-- Track 3: Bhoomika (Energy Optimization) -->
+        <div class="glass-panel p-4 border-amber-500/30 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-amber-500/20 pb-2 mb-3">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-amber-950/80 border border-amber-500/40 flex items-center justify-center text-lg">
+                  ⚙️
+                </div>
+                <div>
+                  <h4 class="text-xs uppercase font-extrabold tracking-wider text-amber-300">
+                    Bhoomika • Energy Optimization (LP)
+                  </h4>
+                  <p class="text-[10px] text-slate-400 font-mono">12-Resource Microgrid & Deferrable Load Scheduler</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-500/40">
+                LP SOLVER
+              </span>
+            </div>
+
+            <div class="space-y-2 text-xs font-mono">
+              <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800">
+                <span class="text-[10px] text-amber-400 uppercase font-bold">Priority Dispatch Hierarchy:</span>
+                <p class="text-slate-300 text-[11px] mt-0.5">
+                  Solar &rarr; Wind &rarr; Hydro &rarr; Geothermal &rarr; Marine &rarr; Biomass &rarr; Solar Thermal &rarr; H2 Fuel Cell &rarr; Battery &rarr; Diesel Gen &rarr; CHP. Automatically shifts load on failures and precharges battery before blizzards.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Modeled Resources:</span>
+                  <div class="text-emerald-400 font-bold">12 Active Resources</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Battery BESS:</span>
+                  <div class="text-amber-400 font-bold">2000 kWh Capacity</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Optimization:</span>
+                  <div class="text-amber-300 font-bold">Linear Programming (LP)</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Critical Unmet:</span>
+                  <div class="text-emerald-400 font-bold">0.0% (100% Met)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Subsystem: <code class="text-amber-300">team_modules/optimizer_bhoomika</code></span>
+            <span class="text-emerald-400">✓ Integrated</span>
+          </div>
+        </div>
+
+        <!-- Track 4: Diya & Hitesh (UI & Digital Twin) -->
+        <div class="glass-panel p-4 border-blue-500/30 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-blue-500/20 pb-2 mb-3">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-950/80 border border-blue-500/40 flex items-center justify-center text-lg">
+                  🌐
+                </div>
+                <div>
+                  <h4 class="text-xs uppercase font-extrabold tracking-wider text-blue-300">
+                    Diya & Hitesh • UI & Digital Twin
+                  </h4>
+                  <p class="text-[10px] text-slate-400 font-mono">POLARIS 19-Page Fleet UI & Eclipse-Ditto WoT</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-500/40">
+                19 PAGES
+              </span>
+            </div>
+
+            <div class="space-y-2 text-xs font-mono">
+              <div class="bg-slate-950/60 p-2.5 rounded border border-slate-800">
+                <span class="text-[10px] text-blue-400 uppercase font-bold">POLARIS Station Management Suite:</span>
+                <p class="text-slate-300 text-[11px] mt-0.5">
+                  19 dedicated pages covering Admin Control, Disaster Management, Fleet View, and all 12 individual resource monitors (Hydro, Geothermal, Hydrogen, Biomass, Marine, Solar Thermal, etc.) with live state reflection.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Twin ID:</span>
+                  <div class="text-blue-300 font-bold">station:aurora-01</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Control Pages:</span>
+                  <div class="text-blue-300 font-bold">19 Dedicated Views</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Health Index:</span>
+                  <div id="integ-card-twin-health" class="text-emerald-400 font-bold">100% Nominal</div>
+                </div>
+                <div class="bg-slate-950/50 p-2 rounded border border-slate-800/80">
+                  <span class="text-slate-400">Access Link:</span>
+                  <div><a href="/static/polaris/index.html" target="_blank" class="text-cyan-400 underline font-bold hover:text-cyan-300">Open POLARIS &rarr;</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Subsystem: <code class="text-blue-300">team_modules/ui_diya & digital_twin/</code></span>
+            <span class="text-emerald-400">✓ Integrated</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LIVE SYSTEM INTEGRATION TERMINAL LOG -->
+      <div class="glass-panel p-4 border-slate-800 bg-slate-950/90 font-mono text-xs">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-cyan-400">💻</span>
+            <span class="text-xs uppercase font-extrabold tracking-wider text-slate-300">Live Integration Handshake Terminal</span>
+          </div>
+          <span class="text-[10px] text-emerald-400 font-bold">All 4 Pipelines Interlocked</span>
+        </div>
+        <div id="integ-terminal-box" class="h-28 overflow-y-auto space-y-1 text-[11px] text-slate-400 pr-1">
+          <div><span class="text-purple-400">[INIT]</span> Initializing cyber-physical microgrid coordinator...</div>
+          <div><span class="text-teal-400">[DATA]</span> Dynamic polar telemetry feed connected via Open-Meteo & stochastic generator.</div>
+          <div><span class="text-purple-400">[AI-RL]</span> PyTorch PPO policy loaded into memory; action space Discrete(6) registered.</div>
+          <div><span class="text-amber-400">[PHYS]</span> Virtual environment online: Part 1 Renewable (PV+Wind+BESS) & Part 2 Fossil Generator.</div>
+          <div><span class="text-blue-400">[TWIN]</span> Eclipse Ditto digital twin synchronized; WebSocket streaming at nominal tick.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- APP LOGIC -->
+  <script src="/static/app.js"></script>
+</body>
+</html>

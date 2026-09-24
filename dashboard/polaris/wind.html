@@ -1,0 +1,3763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLARIS | Wind Energy</title>
+
+
+<style>
+
+/* =========================================================
+   POLARIS WIND ENERGY
+   SILVER + MINT + WHITE
+   NO BLUE
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+
+:root{
+
+    --bg:#070a09;
+    --bg2:#0d1210;
+
+    --card:#111714;
+    --card2:#17201b;
+
+    --silver:#dfe9e4;
+    --silver2:#aebeb7;
+
+    --mint:#7dffbd;
+    --mint2:#b8ffda;
+
+    --ice:#edf7f2;
+
+    --green:#54e89b;
+
+    --warning:#ffc66d;
+    --danger:#ff795f;
+
+    --white:#f6faf8;
+    --text:#d5ded9;
+    --muted:#82918a;
+
+    --border:rgba(190,225,210,.16);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+
+    margin:0;
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(125,255,189,.08),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(223,233,228,.06),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 50% 90%,
+            rgba(84,232,155,.05),
+            transparent 30%
+        ),
+
+        var(--bg);
+
+    color:var(--white);
+
+    overflow-x:hidden;
+
+}
+
+
+/* =========================================================
+   MOVING ATMOSPHERE
+========================================================= */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:-20%;
+
+    pointer-events:none;
+
+    z-index:-1;
+
+    background:
+
+        radial-gradient(
+            ellipse at 20% 30%,
+            rgba(125,255,189,.08),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            ellipse at 80% 50%,
+            rgba(223,233,228,.06),
+            transparent 30%
+        );
+
+    animation:
+        atmosphere 14s
+        ease-in-out
+        infinite alternate;
+
+}
+
+
+@keyframes atmosphere{
+
+    from{
+
+        transform:
+            translateX(-2%)
+            scale(1);
+
+    }
+
+    to{
+
+        transform:
+            translateX(3%)
+            scale(1.08);
+
+    }
+
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+
+    height:72px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 6%;
+
+    background:
+        rgba(7,10,9,.88);
+
+    backdrop-filter:
+        blur(20px);
+
+    border-bottom:
+        1px solid
+        rgba(190,225,210,.10);
+
+    z-index:1000;
+
+}
+
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:21px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+}
+
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--silver),
+            var(--mint)
+        );
+
+    color:#07100c;
+
+    box-shadow:
+
+        0 0 25px
+        rgba(125,255,189,.20);
+
+}
+
+
+.logo span{
+
+    color:var(--mint);
+
+}
+
+
+/* =========================================================
+   THREE DASH MENU
+========================================================= */
+
+.menu-btn{
+
+    width:45px;
+    height:45px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.03);
+
+    color:white;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+.menu-btn:hover{
+
+    background:
+        rgba(125,255,189,.10);
+
+    border-color:
+        var(--mint);
+
+    box-shadow:
+
+        0 0 25px
+        rgba(125,255,189,.18);
+
+    transform:
+        rotate(5deg);
+
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.72);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:1500;
+
+}
+
+
+.overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu{
+
+    position:fixed;
+
+    top:0;
+
+    right:-350px;
+
+    width:330px;
+
+    height:100vh;
+
+    padding:
+        90px
+        25px
+        30px;
+
+    background:
+
+        linear-gradient(
+            160deg,
+            #101815,
+            #060908
+        );
+
+    border-left:
+        1px solid
+        rgba(190,225,210,.18);
+
+    transition:
+        .4s
+        cubic-bezier(.77,0,.18,1);
+
+    z-index:1600;
+
+}
+
+
+.side-menu.active{
+
+    right:0;
+
+}
+
+
+.close-menu{
+
+    position:absolute;
+
+    top:24px;
+    right:25px;
+
+    border:0;
+
+    background:none;
+
+    color:white;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+}
+
+
+.menu-title{
+
+    margin-bottom:25px;
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:14px;
+
+    color:var(--muted);
+
+    letter-spacing:2px;
+
+}
+
+
+.side-menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:
+        15px
+        16px;
+
+    margin:8px 0;
+
+    border-radius:12px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+
+.side-menu a:hover{
+
+    color:white;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(125,255,189,.11),
+            rgba(255,255,255,.03)
+        );
+
+    transform:
+        translateX(7px);
+
+    box-shadow:
+
+        inset 3px 0
+        var(--mint);
+
+}
+
+
+/* =========================================================
+   PAGE NAV
+========================================================= */
+
+.page-nav{
+
+    position:sticky;
+
+    top:72px;
+
+    z-index:900;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px;
+
+    background:
+        rgba(7,10,9,.78);
+
+    backdrop-filter:
+        blur(16px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+
+    overflow-x:auto;
+
+}
+
+
+.page-nav a{
+
+    white-space:nowrap;
+
+    padding:
+        9px
+        15px;
+
+    border-radius:20px;
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+.page-nav a:hover,
+.page-nav a.active{
+
+    color:white;
+
+    background:
+        rgba(125,255,189,.09);
+
+    box-shadow:
+
+        0 0 20px
+        rgba(125,255,189,.08);
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    position:relative;
+
+    min-height:700px;
+
+    padding:
+        145px
+        7%
+        80px;
+
+    display:flex;
+
+    align-items:center;
+
+    overflow:hidden;
+
+}
+
+
+/* WIND BACKGROUND */
+
+.wind-bg{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:-2;
+
+    overflow:hidden;
+
+}
+
+
+.wind-line{
+
+    position:absolute;
+
+    width:450px;
+
+    height:2px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(223,233,228,.35),
+            rgba(125,255,189,.75),
+            transparent
+        );
+
+    border-radius:50%;
+
+    filter:
+        blur(.3px);
+
+    animation:
+        windMove
+        var(--duration)
+        linear
+        infinite;
+
+    opacity:
+        var(--opacity);
+
+}
+
+
+.wind-line:nth-child(1){
+
+    top:18%;
+
+    left:-500px;
+
+    --duration:5s;
+    --opacity:.7;
+
+}
+
+
+.wind-line:nth-child(2){
+
+    top:29%;
+
+    left:-600px;
+
+    --duration:7s;
+    --opacity:.4;
+
+}
+
+
+.wind-line:nth-child(3){
+
+    top:42%;
+
+    left:-500px;
+
+    --duration:4.5s;
+    --opacity:.6;
+
+}
+
+
+.wind-line:nth-child(4){
+
+    top:57%;
+
+    left:-700px;
+
+    --duration:8s;
+    --opacity:.35;
+
+}
+
+
+.wind-line:nth-child(5){
+
+    top:69%;
+
+    left:-500px;
+
+    --duration:6s;
+    --opacity:.55;
+
+}
+
+
+.wind-line:nth-child(6){
+
+    top:82%;
+
+    left:-650px;
+
+    --duration:9s;
+    --opacity:.3;
+
+}
+
+
+@keyframes windMove{
+
+    from{
+
+        transform:
+            translateX(0)
+            skewX(-12deg);
+
+    }
+
+    to{
+
+        transform:
+            translateX(180vw)
+            skewX(-12deg);
+
+    }
+
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.hero-content{
+
+    width:55%;
+
+    position:relative;
+
+    z-index:4;
+
+}
+
+
+.eyebrow{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:
+        8px
+        14px;
+
+    border:
+        1px solid
+        rgba(125,255,189,.24);
+
+    border-radius:30px;
+
+    background:
+        rgba(125,255,189,.05);
+
+    color:var(--mint);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:22px;
+
+}
+
+
+.status-dot{
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:
+        var(--mint);
+
+    box-shadow:
+        0 0 12px
+        var(--mint);
+
+    animation:
+        pulse 1.5s
+        infinite;
+
+}
+
+
+@keyframes pulse{
+
+    50%{
+
+        opacity:.4;
+
+        transform:
+            scale(.7);
+
+    }
+
+}
+
+
+.hero h1{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(48px,7vw,84px);
+
+    line-height:.96;
+
+    letter-spacing:-4px;
+
+    margin-bottom:25px;
+
+}
+
+
+.gradient-text{
+
+    background:
+
+        linear-gradient(
+            90deg,
+            var(--silver),
+            var(--mint2),
+            var(--mint)
+        );
+
+    -webkit-background-clip:text;
+
+    background-clip:text;
+
+    color:transparent;
+
+}
+
+
+.hero p{
+
+    max-width:680px;
+
+    color:var(--text);
+
+    font-size:17px;
+
+    line-height:1.8;
+
+}
+
+
+/* =========================================================
+   TURBINE HERO VISUAL
+========================================================= */
+
+.turbine-scene{
+
+    position:absolute;
+
+    right:5%;
+
+    bottom:0;
+
+    width:45%;
+
+    height:580px;
+
+    z-index:2;
+
+}
+
+
+/* glow behind turbine */
+
+.turbine-glow{
+
+    position:absolute;
+
+    width:430px;
+
+    height:430px;
+
+    right:8%;
+
+    top:12%;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(125,255,189,.13),
+            transparent 65%
+        );
+
+    animation:
+        glowPulse 4s
+        ease-in-out
+        infinite alternate;
+
+}
+
+
+@keyframes glowPulse{
+
+    from{
+
+        transform:
+            scale(.9);
+
+        opacity:.55;
+
+    }
+
+    to{
+
+        transform:
+            scale(1.1);
+
+        opacity:1;
+
+    }
+
+}
+
+
+/* tower */
+
+.turbine-tower{
+
+    position:absolute;
+
+    bottom:0;
+
+    right:43%;
+
+    width:18px;
+
+    height:400px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #68756f,
+            #f0f6f2,
+            #59665f
+        );
+
+    clip-path:
+        polygon(
+            42% 0,
+            58% 0,
+            100% 100%,
+            0 100%
+        );
+
+    box-shadow:
+
+        0 0 18px
+        rgba(223,233,228,.15);
+
+}
+
+
+/* turbine hub */
+
+.turbine-hub{
+
+    position:absolute;
+
+    right:calc(43% - 16px);
+
+    top:145px;
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+            circle at 35% 30%,
+            #ffffff,
+            #aebeb7 50%,
+            #53615a
+        );
+
+    border:
+        3px solid
+        rgba(255,255,255,.7);
+
+    box-shadow:
+
+        0 0 25px
+        rgba(125,255,189,.25);
+
+    z-index:4;
+
+}
+
+
+/* blades */
+
+.blades{
+
+    position:absolute;
+
+    right:calc(43% - 140px);
+
+    top:80px;
+
+    width:290px;
+
+    height:290px;
+
+    animation:
+        rotateBlades
+        7s
+        linear
+        infinite;
+
+}
+
+
+@keyframes rotateBlades{
+
+    from{
+
+        transform:
+            rotate(0deg);
+
+    }
+
+    to{
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+.blade{
+
+    position:absolute;
+
+    width:135px;
+
+    height:28px;
+
+    left:50%;
+
+    top:50%;
+
+    transform-origin:
+        0 50%;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #eaf3ee,
+            #84948c
+        );
+
+    border-radius:
+        100%
+        20%
+        20%
+        100%;
+
+    clip-path:
+        polygon(
+            0 25%,
+            100% 0,
+            83% 100%,
+            0 75%
+        );
+
+    box-shadow:
+
+        0 0 15px
+        rgba(223,233,228,.14);
+
+}
+
+
+.blade:nth-child(1){
+
+    transform:
+        translateY(-50%)
+        rotate(0deg);
+
+}
+
+
+.blade:nth-child(2){
+
+    transform:
+        translateY(-50%)
+        rotate(120deg);
+
+}
+
+
+.blade:nth-child(3){
+
+    transform:
+        translateY(-50%)
+        rotate(240deg);
+
+}
+
+
+/* =========================================================
+   HERO METRICS
+========================================================= */
+
+.metrics{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:14px;
+
+    margin-top:40px;
+
+}
+
+
+.metric{
+
+    padding:19px;
+
+    border:
+        1px solid
+        rgba(190,225,210,.13);
+
+    background:
+        rgba(15,21,18,.72);
+
+    backdrop-filter:
+        blur(15px);
+
+    border-radius:17px;
+
+    transition:.35s;
+
+}
+
+
+.metric:hover{
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        rgba(125,255,189,.42);
+
+    box-shadow:
+
+        0 20px 50px
+        rgba(84,232,155,.10);
+
+}
+
+
+.metric-label{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-bottom:8px;
+
+}
+
+
+.metric-value{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:25px;
+
+    font-weight:700;
+
+}
+
+
+.metric-value.mint{
+
+    color:var(--mint);
+
+}
+
+
+.metric-value.silver{
+
+    color:var(--silver);
+
+}
+
+
+/* =========================================================
+   GENERAL SECTIONS
+========================================================= */
+
+.section{
+
+    padding:
+        90px
+        7%;
+
+}
+
+
+.section-heading{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    gap:30px;
+
+    margin-bottom:35px;
+
+}
+
+
+.section-heading h2{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(30px,4vw,48px);
+
+    letter-spacing:-2px;
+
+}
+
+
+.section-heading p{
+
+    max-width:520px;
+
+    color:var(--muted);
+
+    line-height:1.7;
+
+}
+
+
+.kicker{
+
+    color:var(--mint);
+
+    font-size:12px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+    margin-bottom:10px;
+
+}
+
+
+/* =========================================================
+   WIND PARAMETERS
+========================================================= */
+
+.parameter-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:17px;
+
+}
+
+
+.parameter-card{
+
+    padding:25px;
+
+    min-height:190px;
+
+    border-radius:22px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(23,32,27,.90),
+            rgba(10,14,12,.92)
+        );
+
+    border:
+        1px solid
+        rgba(190,225,210,.13);
+
+    transition:.4s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+.parameter-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:120px;
+    height:120px;
+
+    right:-45px;
+    bottom:-45px;
+
+    border-radius:50%;
+
+    background:
+        rgba(125,255,189,.08);
+
+    transition:.4s;
+
+}
+
+
+.parameter-card:hover{
+
+    transform:
+        translateY(-9px);
+
+    border-color:
+        rgba(125,255,189,.45);
+
+    box-shadow:
+
+        0 25px 60px
+        rgba(84,232,155,.10);
+
+}
+
+
+.parameter-card:hover::after{
+
+    transform:
+        scale(1.8);
+
+}
+
+
+.parameter-icon{
+
+    font-size:27px;
+
+    margin-bottom:18px;
+
+}
+
+
+.parameter-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:18px;
+
+    margin-bottom:8px;
+
+}
+
+
+.parameter-value{
+
+    font-size:27px;
+
+    font-weight:800;
+
+    color:var(--mint);
+
+}
+
+
+.parameter-card p{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    line-height:1.5;
+
+    margin-top:6px;
+
+}
+
+
+/* =========================================================
+   WIND SPEED VISUALIZER
+========================================================= */
+
+.speed-section{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1.4fr;
+
+    gap:22px;
+
+}
+
+
+.speed-card{
+
+    min-height:410px;
+
+    padding:30px;
+
+    border-radius:28px;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(125,255,189,.08),
+            transparent 55%
+        ),
+
+        rgba(14,20,17,.82);
+
+    border:
+        1px solid
+        rgba(190,225,210,.15);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+.speed-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:25px;
+
+    margin-bottom:8px;
+
+}
+
+
+.speed-card > p{
+
+    color:var(--muted);
+
+    font-size:13px;
+
+}
+
+
+/* speed dial */
+
+.wind-dial{
+
+    width:245px;
+
+    height:245px;
+
+    margin:
+        45px
+        auto
+        0;
+
+    border-radius:50%;
+
+    display:grid;
+
+    place-items:center;
+
+    position:relative;
+
+    background:
+
+        conic-gradient(
+            var(--mint) 0deg,
+            var(--mint) 235deg,
+            rgba(255,255,255,.06) 235deg,
+            rgba(255,255,255,.06) 360deg
+        );
+
+    box-shadow:
+
+        0 0 50px
+        rgba(125,255,189,.12);
+
+}
+
+
+.wind-dial::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:15px;
+
+    border-radius:50%;
+
+    background:
+        #0b100d;
+
+}
+
+
+.speed-number{
+
+    position:relative;
+
+    z-index:2;
+
+    text-align:center;
+
+}
+
+
+.speed-number strong{
+
+    display:block;
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:45px;
+
+    color:var(--mint);
+
+}
+
+
+.speed-number span{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+
+/* =========================================================
+   OPERATING ZONE
+========================================================= */
+
+.zone-card{
+
+    padding:30px;
+
+    border-radius:28px;
+
+    background:
+        rgba(14,20,17,.82);
+
+    border:
+        1px solid
+        rgba(190,225,210,.15);
+
+}
+
+
+.zone-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:25px;
+
+    margin-bottom:8px;
+
+}
+
+
+.zone-card > p{
+
+    color:var(--muted);
+
+    font-size:13px;
+
+    line-height:1.6;
+
+    margin-bottom:28px;
+
+}
+
+
+.zone{
+
+    position:relative;
+
+    height:24px;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    display:flex;
+
+}
+
+
+.zone-low{
+
+    width:12%;
+
+    background:
+        rgba(255,255,255,.14);
+
+}
+
+
+.zone-rated{
+
+    width:48%;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #75dca7,
+            var(--mint)
+        );
+
+}
+
+
+.zone-high{
+
+    width:40%;
+
+    background:
+        rgba(255,121,95,.45);
+
+}
+
+
+.zone-labels{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:12px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+
+.zone-marker{
+
+    margin-top:30px;
+
+    padding:17px;
+
+    border-radius:16px;
+
+    background:
+        rgba(125,255,189,.06);
+
+    border:
+        1px solid
+        rgba(125,255,189,.16);
+
+}
+
+
+.zone-marker strong{
+
+    color:var(--mint);
+
+}
+
+
+.zone-marker p{
+
+    color:var(--text);
+
+    font-size:12px;
+
+    line-height:1.6;
+
+    margin-top:5px;
+
+}
+
+
+/* =========================================================
+   ENERGY GENERATION
+========================================================= */
+
+.chart-card{
+
+    padding:30px;
+
+    border-radius:28px;
+
+    background:
+        rgba(14,20,17,.82);
+
+    border:
+        1px solid
+        rgba(190,225,210,.14);
+
+}
+
+
+.chart-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:25px;
+
+}
+
+
+.chart-subtitle{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    margin-top:5px;
+
+    margin-bottom:28px;
+
+}
+
+
+.chart{
+
+    height:270px;
+
+    display:flex;
+
+    align-items:end;
+
+    gap:9px;
+
+    padding:
+        20px
+        5px
+        0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
+}
+
+
+.bar{
+
+    flex:1;
+
+    min-width:10px;
+
+    height:var(--height);
+
+    border-radius:
+        8px
+        8px
+        2px
+        2px;
+
+    background:
+
+        linear-gradient(
+            to top,
+            #51615a,
+            #aebeb7,
+            var(--mint)
+        );
+
+    box-shadow:
+
+        0 0 16px
+        rgba(125,255,189,.12);
+
+    transition:.4s;
+
+    position:relative;
+
+}
+
+
+.bar:hover{
+
+    filter:
+        brightness(1.3);
+
+    transform:
+        scaleX(1.15);
+
+    box-shadow:
+
+        0 0 25px
+        rgba(125,255,189,.25);
+
+}
+
+
+.bar span{
+
+    position:absolute;
+
+    bottom:-25px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    color:var(--muted);
+
+    font-size:10px;
+
+}
+
+
+/* =========================================================
+   AI WIND FORECAST
+========================================================= */
+
+.forecast-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+
+.forecast-box{
+
+    padding:20px;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    transition:.3s;
+
+}
+
+
+.forecast-box:hover{
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        rgba(125,255,189,.3);
+
+}
+
+
+.forecast-box span{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    margin-bottom:8px;
+
+}
+
+
+.forecast-box strong{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:22px;
+
+    color:var(--mint);
+
+}
+
+
+/* =========================================================
+   STORM ALERT
+========================================================= */
+
+.alert{
+
+    margin-top:25px;
+
+    padding:24px;
+
+    border-radius:22px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(255,121,95,.08),
+            rgba(255,200,109,.04)
+        );
+
+    border:
+        1px solid
+        rgba(255,121,95,.16);
+
+}
+
+
+.alert-icon{
+
+    width:50px;
+
+    height:50px;
+
+    display:grid;
+
+    place-items:center;
+
+    flex-shrink:0;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,121,95,.10);
+
+    color:
+        var(--danger);
+
+    font-size:22px;
+
+}
+
+
+.alert h4{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    margin-bottom:5px;
+
+}
+
+
+.alert p{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+
+/* =========================================================
+   WIND FACTS
+========================================================= */
+
+.fact-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+
+}
+
+
+.fact-card{
+
+    padding:25px;
+
+    border-radius:22px;
+
+    background:
+        rgba(14,20,17,.75);
+
+    border:
+        1px solid
+        rgba(190,225,210,.12);
+
+    transition:.35s;
+
+}
+
+
+.fact-card:hover{
+
+    transform:
+        translateY(-8px)
+        rotateX(2deg);
+
+    border-color:
+        rgba(125,255,189,.4);
+
+}
+
+
+.fact-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    margin-bottom:10px;
+
+}
+
+
+.fact-card p{
+
+    color:var(--muted);
+
+    font-size:13px;
+
+    line-height:1.7;
+
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta{
+
+    margin-top:60px;
+
+    text-align:center;
+
+    padding:
+        60px
+        20px;
+
+    border-radius:30px;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(125,255,189,.10),
+            transparent 65%
+        );
+
+    border:
+        1px solid
+        rgba(190,225,210,.12);
+
+}
+
+
+.cta h2{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(30px,5vw,50px);
+
+    margin-bottom:15px;
+
+}
+
+
+.cta p{
+
+    max-width:600px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    line-height:1.7;
+
+}
+
+
+.cta-button{
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    padding:
+        13px
+        23px;
+
+    border-radius:13px;
+
+    color:#07100c;
+
+    text-decoration:none;
+
+    font-weight:800;
+
+    font-size:13px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--silver),
+            var(--mint)
+        );
+
+    box-shadow:
+
+        0 10px 35px
+        rgba(125,255,189,.15);
+
+    transition:.3s;
+
+}
+
+
+.cta-button:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.03);
+
+    box-shadow:
+
+        0 15px 45px
+        rgba(125,255,189,.25);
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:
+        40px
+        7%;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.06);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+
+.footer-logo{
+
+    color:
+        var(--mint);
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-weight:700;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .hero-content{
+
+        width:100%;
+
+    }
+
+
+    .turbine-scene{
+
+        opacity:.30;
+
+        width:70%;
+
+        right:-15%;
+
+    }
+
+
+    .parameter-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .speed-section{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .fact-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .navbar{
+
+        padding:
+            0 20px;
+
+    }
+
+
+    .hero{
+
+        padding:
+            130px
+            20px
+            70px;
+
+        min-height:
+            720px;
+
+    }
+
+
+    .hero h1{
+
+        letter-spacing:-2px;
+
+    }
+
+
+    .metrics{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .turbine-scene{
+
+        width:100%;
+
+        right:-35%;
+
+        opacity:.20;
+
+    }
+
+
+    .parameter-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .forecast-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .fact-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .section{
+
+        padding:
+            65px
+            20px;
+
+    }
+
+
+    .section-heading{
+
+        display:block;
+
+    }
+
+
+    .section-heading p{
+
+        margin-top:15px;
+
+    }
+
+
+    .page-nav{
+
+        justify-content:flex-start;
+
+    }
+
+
+    footer{
+
+        flex-direction:column;
+
+    }
+
+
+    .side-menu{
+
+        width:85%;
+
+    }
+
+
+    .alert{
+
+        align-items:flex-start;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ≋
+        </div>
+
+        POLAR<span>IS</span>
+
+    </div>
+
+
+    <!-- THREE DASH MENU -->
+
+    <button
+        class="menu-btn"
+        onclick="openMenu()">
+
+        ☰
+
+    </button>
+
+</nav>
+
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+    class="overlay"
+    id="overlay"
+    onclick="closeMenu()">
+</div>
+
+
+<div
+    class="side-menu"
+    id="sideMenu">
+
+
+    <button
+        class="close-menu"
+        onclick="closeMenu()">
+
+        ×
+
+    </button>
+
+
+    <div class="menu-title">
+
+        POLARIS CONTROL CENTER
+
+    </div>
+
+
+    <a href="index.html">
+        ⌂ &nbsp; Home
+    </a>
+
+
+    <a href="renewable.html">
+        ⚡ &nbsp; Renewable Energy
+    </a>
+
+
+    <a href="nonrenewable.html">
+        ◈ &nbsp; Backup & Energy Support
+    </a>
+
+
+    <a href="admin.html">
+        ◉ &nbsp; Admin Dashboard
+    </a>
+
+
+    <a href="disaster.html">
+        ⚠ &nbsp; Disaster Management
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     PAGE NAVIGATION
+===================================================== -->
+
+<div class="page-nav">
+
+
+    <a
+        href="#overview"
+        class="active">
+
+        Overview
+
+    </a>
+
+
+    <a href="#parameters">
+
+        Wind Parameters
+
+    </a>
+
+
+    <a href="#speed">
+
+        Wind Conditions
+
+    </a>
+
+
+    <a href="#analytics">
+
+        Generation
+
+    </a>
+
+
+    <a href="#forecast">
+
+        AI Forecast
+
+    </a>
+
+
+    <a href="renewable.html">
+
+        ← Renewable
+
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="overview">
+
+
+    <!-- ANIMATED WIND -->
+
+    <div class="wind-bg">
+
+
+        <div class="wind-line"></div>
+
+        <div class="wind-line"></div>
+
+        <div class="wind-line"></div>
+
+        <div class="wind-line"></div>
+
+        <div class="wind-line"></div>
+
+        <div class="wind-line"></div>
+
+    </div>
+
+
+
+    <div class="hero-content">
+
+
+        <div class="eyebrow">
+
+            <span class="status-dot"></span>
+
+            WIND ENERGY • ONLINE
+
+        </div>
+
+
+        <h1>
+
+            Power from
+            <span class="gradient-text">
+
+                Polar Winds.
+
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            POLARIS captures the powerful winds around
+            the research station and converts their
+            kinetic energy into clean electricity.
+            The system continuously monitors wind speed
+            and automatically responds when conditions
+            change.
+
+        </p>
+
+
+
+        <!-- METRICS -->
+
+        <div class="metrics">
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+
+                    INSTALLED CAPACITY
+
+                </div>
+
+                <div
+                    class="metric-value silver">
+
+                    300 kW
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+
+                    CURRENT OUTPUT
+
+                </div>
+
+                <div
+                    class="metric-value mint">
+
+                    <span id="windOutput">
+                        214
+                    </span> kW
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+
+                    WIND SPEED
+
+                </div>
+
+                <div
+                    class="metric-value mint">
+
+                    <span id="heroWindSpeed">
+                        9.8
+                    </span> m/s
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TURBINE VISUAL
+    ================================================= -->
+
+    <div class="turbine-scene">
+
+
+        <div class="turbine-glow"></div>
+
+
+        <div class="blades">
+
+            <div class="blade"></div>
+
+            <div class="blade"></div>
+
+            <div class="blade"></div>
+
+        </div>
+
+
+        <div class="turbine-hub"></div>
+
+
+        <div class="turbine-tower"></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WIND PARAMETERS
+===================================================== -->
+
+<section
+    class="section"
+    id="parameters">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                WIND TURBINE PARAMETERS
+
+            </div>
+
+
+            <h2>
+
+                How the Wind System Works
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            The turbine has defined operating limits.
+            POLARIS uses these values to determine when
+            wind generation should start, reach rated
+            output or stop for protection.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="parameter-grid">
+
+
+        <!-- CUT IN -->
+
+        <div class="parameter-card">
+
+
+            <div class="parameter-icon">
+
+                🌬️
+
+            </div>
+
+
+            <h3>
+
+                Cut-In Speed
+
+            </h3>
+
+
+            <div class="parameter-value">
+
+                3 m/s
+
+            </div>
+
+
+            <p>
+
+                Minimum wind speed required for the
+                turbine to begin generating.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- RATED -->
+
+        <div class="parameter-card">
+
+
+            <div class="parameter-icon">
+
+                ⚙️
+
+            </div>
+
+
+            <h3>
+
+                Rated Speed
+
+            </h3>
+
+
+            <div class="parameter-value">
+
+                12 m/s
+
+            </div>
+
+
+            <p>
+
+                Wind speed at which the turbine reaches
+                its rated 300 kW output.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- CUT OUT -->
+
+        <div class="parameter-card">
+
+
+            <div class="parameter-icon">
+
+                🛑
+
+            </div>
+
+
+            <h3>
+
+                Cut-Out Speed
+
+            </h3>
+
+
+            <div class="parameter-value">
+
+                25 m/s
+
+            </div>
+
+
+            <p>
+
+                Above this level, the turbine stops to
+                protect the system.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- CAPACITY -->
+
+        <div class="parameter-card">
+
+
+            <div class="parameter-icon">
+
+                ⚡
+
+            </div>
+
+
+            <h3>
+
+                Installed Capacity
+
+            </h3>
+
+
+            <div class="parameter-value">
+
+                300 kW
+
+            </div>
+
+
+            <p>
+
+                Maximum modeled wind generation capacity
+                in the POLARIS system.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WIND SPEED
+===================================================== -->
+
+<section
+    class="section"
+    id="speed">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                LIVE CONDITIONS
+
+            </div>
+
+
+            <h2>
+
+                Wind Conditions
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            Wind speed determines how effectively the
+            turbine can operate. The live-style indicator
+            below demonstrates the current condition.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="speed-section">
+
+
+        <!-- DIAL -->
+
+        <div class="speed-card">
+
+
+            <h3>
+
+                Current Wind Speed
+
+            </h3>
+
+
+            <p>
+
+                Sensor simulation
+
+            </p>
+
+
+            <div class="wind-dial">
+
+
+                <div class="speed-number">
+
+                    <strong id="windSpeed">
+
+                        9.8
+
+                    </strong>
+
+                    <span>
+
+                        METRES / SECOND
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- OPERATING ZONE -->
+
+        <div class="zone-card">
+
+
+            <h3>
+
+                Turbine Operating Zone
+
+            </h3>
+
+
+            <p>
+
+                Wind generation increases as wind speed
+                approaches the rated operating range.
+                Extremely high winds trigger the safety
+                cut-out condition.
+
+            </p>
+
+
+            <div class="zone">
+
+
+                <div class="zone-low"></div>
+
+                <div class="zone-rated"></div>
+
+                <div class="zone-high"></div>
+
+            </div>
+
+
+            <div class="zone-labels">
+
+                <span>
+
+                    0 m/s
+
+                </span>
+
+
+                <span>
+
+                    3 m/s
+
+                </span>
+
+
+                <span>
+
+                    12 m/s
+
+                </span>
+
+
+                <span>
+
+                    25 m/s
+
+                </span>
+
+            </div>
+
+
+            <div class="zone-marker">
+
+
+                <strong>
+
+                    CURRENT CONDITION: GOOD
+
+                </strong>
+
+
+                <p>
+
+                    Current wind conditions are within
+                    the productive operating range.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     GENERATION ANALYTICS
+===================================================== -->
+
+<section
+    class="section"
+    id="analytics">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                PERFORMANCE ANALYTICS
+
+            </div>
+
+
+            <h2>
+
+                Wind Generation
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            Example 24-hour wind generation profile
+            showing how output can change as wind
+            conditions vary.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="chart-card">
+
+
+        <h3>
+
+            24-Hour Wind Output
+
+        </h3>
+
+
+        <div class="chart-subtitle">
+
+            Wind generation • kW
+
+        </div>
+
+
+        <div class="chart">
+
+
+            <div
+                class="bar"
+                style="--height:72%">
+
+                <span>00</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:80%">
+
+                <span>02</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:68%">
+
+                <span>04</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:60%">
+
+                <span>06</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:70%">
+
+                <span>08</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:76%">
+
+                <span>10</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:84%">
+
+                <span>12</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:91%">
+
+                <span>14</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:75%">
+
+                <span>16</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:62%">
+
+                <span>18</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:55%">
+
+                <span>20</span>
+
+            </div>
+
+
+            <div
+                class="bar"
+                style="--height:67%">
+
+                <span>22</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI FORECAST
+===================================================== -->
+
+<section
+    class="section"
+    id="forecast">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                ARTIFICIAL INTELLIGENCE
+
+            </div>
+
+
+            <h2>
+
+                AI Wind Forecast
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            The AI layer can use predicted wind conditions
+            to help the optimizer prepare storage and
+            maintain reliable station power.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="forecast-grid">
+
+
+        <div class="forecast-box">
+
+            <span>
+
+                NEXT HOUR
+
+            </span>
+
+            <strong>
+
+                +8%
+
+            </strong>
+
+        </div>
+
+
+        <div class="forecast-box">
+
+            <span>
+
+                WIND CONFIDENCE
+
+            </span>
+
+            <strong>
+
+                87%
+
+            </strong>
+
+        </div>
+
+
+        <div class="forecast-box">
+
+            <span>
+
+                GENERATION RISK
+
+            </span>
+
+            <strong>
+
+                LOW
+
+            </strong>
+
+        </div>
+
+
+        <div class="forecast-box">
+
+            <span>
+
+                AI STATUS
+
+            </span>
+
+            <strong>
+
+                ACTIVE
+
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- STORM CONDITION -->
+
+    <div class="alert">
+
+
+        <div class="alert-icon">
+
+            ⚠
+
+        </div>
+
+
+        <div>
+
+            <h4>
+
+                Storm Response
+
+            </h4>
+
+
+            <p>
+
+                In the modeled storm scenario, wind output
+                can be reduced to 15%. POLARIS automatically
+                compensates using available renewable
+                sources, battery storage and backup systems.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         FACTS
+    ================================================= -->
+
+    <div
+        class="fact-grid"
+        style="margin-top:25px;">
+
+
+        <div class="fact-card">
+
+
+            <h3>
+
+                🌬️ Renewable Priority
+
+            </h3>
+
+
+            <p>
+
+                Wind is the second priority renewable
+                source after Solar in the POLARIS energy
+                optimization sequence.
+
+            </p>
+
+        </div>
+
+
+        <div class="fact-card">
+
+
+            <h3>
+
+                🔄 Automatic Switching
+
+            </h3>
+
+
+            <p>
+
+                If wind becomes unavailable, AUTO MODE
+                can shift the station toward other available
+                renewable sources and storage.
+
+            </p>
+
+        </div>
+
+
+        <div class="fact-card">
+
+
+            <h3>
+
+                🛡️ Safety First
+
+            </h3>
+
+
+            <p>
+
+                When wind exceeds the modeled cut-out
+                limit, the turbine stops and the optimizer
+                protects station energy supply through
+                alternative sources.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CTA -->
+
+    <div class="cta">
+
+
+        <h2>
+
+            Let the Wind
+            <span class="gradient-text">
+
+                Work for You.
+
+            </span>
+
+        </h2>
+
+
+        <p>
+
+            Wind generation becomes more powerful when
+            combined with AI forecasting, energy storage
+            and autonomous optimization.
+
+        </p>
+
+
+        <a
+            href="renewable.html"
+            class="cta-button">
+
+            ← BACK TO RENEWABLE ENERGY
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <div class="footer-logo">
+
+        POLARIS ENERGY SYSTEM
+
+    </div>
+
+
+    <div>
+
+        AI-Driven Smart Energy Management
+        • Polar Research Station
+
+    </div>
+
+
+    <div>
+
+        Wind Module • v1.0
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   SIDE MENU
+===================================================== */
+
+function openMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList
+        .add("active");
+
+
+    document
+        .getElementById("overlay")
+        .classList
+        .add("active");
+
+}
+
+
+function closeMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList
+        .remove("active");
+
+
+    document
+        .getElementById("overlay")
+        .classList
+        .remove("active");
+
+}
+
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+
+            closeMenu();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   LIVE WIND SIMULATION & AI TELEMETRY
+===================================================== */
+
+async function updateWind(){
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+        const weather = d.weather || {};
+        const ai = d.ai_forecast || {};
+
+        let numericSpeed = parseFloat(d.wind_speed_m_s ?? weather.wind_speed ?? 9.5);
+        let speed = numericSpeed.toFixed(1);
+
+        let output = Math.round(d.wind_power_kw ?? (ai.predicted_wind_kw ?? 128));
+
+        const elSpeed = document.getElementById("windSpeed");
+        if (elSpeed) elSpeed.textContent = speed;
+
+        const elHeroSpeed = document.getElementById("heroWindSpeed");
+        if (elHeroSpeed) elHeroSpeed.textContent = speed;
+
+        const elOut = document.getElementById("windOutput");
+        if (elOut) elOut.textContent = output;
+
+    } catch (e) {
+        console.warn("Wind telemetry notice:", e);
+    }
+}
+
+updateWind();
+
+setInterval(
+    updateWind,
+    2000
+);
+
+
+
+/* =====================================================
+   ACTIVE NAV
+===================================================== */
+
+const sections =
+    document.querySelectorAll(
+        "section[id]"
+    );
+
+
+const navLinks =
+    document.querySelectorAll(
+        ".page-nav a"
+    );
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        let current = "";
+
+
+        sections.forEach(
+            section => {
+
+                const sectionTop =
+                    section.offsetTop - 180;
+
+
+                if(
+                    window.scrollY >=
+                    sectionTop
+                ){
+
+                    current =
+                        section.getAttribute(
+                            "id"
+                        );
+
+                }
+
+            }
+        );
+
+
+        navLinks.forEach(
+            link => {
+
+                link.classList.remove(
+                    "active"
+                );
+
+
+                if(
+                    link.getAttribute(
+                        "href"
+                    )
+                    ===
+                    "#" + current
+                ){
+
+                    link.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

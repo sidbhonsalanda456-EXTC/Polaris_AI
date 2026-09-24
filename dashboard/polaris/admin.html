@@ -1,0 +1,4558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>POLARIS | Admin Control Center</title>
+
+<style>
+:root{
+--bg:#090e14;
+--panel:#111923;
+--panel2:#17222d;
+--line:#2a3946;
+--text:#f5f7fa;
+--muted:#aab6c2;
+--accent:#ff604d;
+--accent2:#ff9b5f;
+--good:#43e0a1;
+--warn:#ffd166;
+--bad:#ff5364;
+--cyan:#62d8ff
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+margin:0;
+background:
+radial-gradient(circle at 5% 0%,#27151a,transparent 27%),
+radial-gradient(circle at 95% 15%,#10232d,transparent 25%),
+linear-gradient(145deg,#080c11,#0e151d 55%,#080b10);
+color:var(--text);
+font:17px/1.55 Inter,Segoe UI,Arial,sans-serif
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.hidden{display:none!important}
+
+/* ================= LOGIN ================= */
+
+#login{
+min-height:100vh;
+display:grid;
+place-items:center;
+padding:30px
+}
+
+.login-card{
+width:min(540px,100%);
+background:#101820;
+border:1px solid #30404d;
+border-radius:28px;
+padding:44px;
+box-shadow:0 30px 80px #0008;
+position:relative
+}
+
+.login-card:before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:4px;
+background:linear-gradient(
+90deg,
+var(--accent),
+var(--accent2),
+var(--cyan)
+)
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:14px;
+font-size:30px;
+font-weight:900;
+letter-spacing:3px
+}
+
+.orbit{
+width:35px;
+height:35px;
+border:2px solid var(--accent);
+border-radius:50%;
+position:relative;
+box-shadow:0 0 25px #ff604d55
+}
+
+.orbit:after{
+content:"";
+position:absolute;
+width:9px;
+height:9px;
+border-radius:50%;
+background:var(--accent);
+top:11px;
+left:11px
+}
+
+.eyebrow{
+font-size:14px;
+letter-spacing:2px;
+color:var(--accent2);
+font-weight:900
+}
+
+.login-card h1{
+font-size:44px;
+line-height:1.05;
+margin:30px 0 10px
+}
+
+.login-card p{
+color:var(--muted);
+font-size:18px
+}
+
+.field{
+margin:22px 0
+}
+
+.field label,
+.label{
+display:block;
+font-size:14px;
+text-transform:uppercase;
+letter-spacing:1.2px;
+font-weight:900;
+margin-bottom:7px;
+color:#d8e0e7
+}
+
+.field input{
+width:100%;
+padding:15px;
+background:#0a1016;
+color:#fff;
+border:1px solid #344452;
+border-radius:12px;
+outline:0
+}
+
+.field input:focus{
+border-color:var(--accent);
+box-shadow:0 0 0 3px #ff604d18
+}
+
+.actions{
+display:flex;
+gap:12px;
+margin-top:25px
+}
+
+.btn{
+border:1px solid #344452;
+background:#18232d;
+color:#fff;
+border-radius:12px;
+padding:12px 17px;
+font-weight:850;
+transition:.2s
+}
+
+.btn:hover{
+transform:translateY(-2px);
+border-color:var(--accent);
+box-shadow:0 12px 30px #0005
+}
+
+.primary{
+background:linear-gradient(
+135deg,
+var(--accent),
+var(--accent2)
+);
+color:#190c08;
+border-color:transparent
+}
+
+.goodbtn{
+color:var(--good);
+border-color:#43e0a155;
+background:#43e0a110
+}
+
+.error{
+height:24px;
+color:#ff8793
+}
+
+.hint{
+font-size:14px;
+color:#778592;
+margin-top:17px
+}
+
+/* ================= APPLICATION ================= */
+
+.top{
+height:78px;
+position:sticky;
+top:0;
+z-index:50;
+background:#080d12ee;
+backdrop-filter:blur(14px);
+border-bottom:1px solid #24323e;
+padding:0 4%;
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.top .logo{
+font-size:23px
+}
+
+.top-actions{
+display:flex;
+align-items:center;
+gap:10px
+}
+
+.conn{
+padding:6px 11px;
+border:1px solid #344452;
+border-radius:999px;
+font-size:13px;
+color:var(--muted)
+}
+
+.conn.live{
+color:var(--good);
+border-color:#43e0a155
+}
+
+.hamb{
+display:none;
+width:44px;
+height:40px;
+background:#131d26;
+border:1px solid #344452;
+border-radius:10px
+}
+
+.hamb i{
+display:block;
+width:21px;
+height:2px;
+background:#fff;
+margin:4px auto
+}
+
+.layout{
+display:grid;
+grid-template-columns:280px 1fr;
+min-height:calc(100vh - 78px)
+}
+
+aside{
+background:#0c1218;
+border-right:1px solid #22313c;
+padding:25px 15px;
+position:sticky;
+top:78px;
+height:calc(100vh - 78px)
+}
+
+.side-title{
+font-size:13px;
+color:#71808d;
+font-weight:900;
+letter-spacing:2px;
+padding:8px 13px 15px
+}
+
+.nav{
+width:100%;
+text-align:left;
+border:1px solid transparent;
+background:transparent;
+color:#aeb9c3;
+border-radius:12px;
+padding:14px;
+font-size:16px;
+font-weight:800;
+margin:3px 0;
+transition:.2s
+}
+
+.nav:hover{
+background:#151f28;
+color:#fff;
+border-color:#2c3a46;
+transform:translateX(3px)
+}
+
+.nav.active{
+color:#ff907e;
+background:#ff604d12;
+border-color:#ff604d45
+}
+
+.side-bottom{
+border-top:1px solid #22313c;
+margin-top:25px;
+padding-top:18px
+}
+
+.main{
+padding:42px 4.5% 70px;
+max-width:1750px;
+width:100%
+}
+
+.hero{
+display:flex;
+justify-content:space-between;
+gap:25px;
+align-items:end;
+margin-bottom:32px
+}
+
+.hero h1{
+font-size:clamp(44px,5vw,68px);
+line-height:1;
+margin:8px 0 12px
+}
+
+.hero p{
+max-width:820px;
+color:var(--muted);
+font-size:18px;
+margin:0
+}
+
+.admin-status-strip{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:14px;
+background:rgba(14,23,31,0.9);
+border:1px solid #24323e;
+border-radius:14px;
+padding:14px 18px;
+margin:0 0 28px;
+box-shadow:0 8px 24px rgba(0,0,0,0.25);
+}
+
+.admin-status-item{
+display:flex;
+flex-direction:column;
+gap:4px;
+border-left:3px solid var(--accent);
+padding-left:12px;
+}
+
+.admin-status-tag{
+font-size:10px;
+font-weight:900;
+letter-spacing:1.5px;
+color:var(--muted);
+text-transform:uppercase;
+}
+
+.admin-status-item strong{
+font-size:14px;
+color:#fff;
+font-family:'Space Grotesk',sans-serif;
+font-weight:700;
+}
+
+.admin-status-item small{
+font-size:11px;
+color:#8da2b3;
+}
+
+.section{
+display:none
+}
+
+.section.active{
+display:block
+}
+
+/* ================= COMMON ================= */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:15px;
+margin-bottom:23px
+}
+
+.card,
+.panel{
+background:linear-gradient(
+145deg,
+#131d26,
+#0f161e
+);
+border:1px solid #293844;
+border-radius:19px
+}
+
+.card{
+padding:21px;
+position:relative;
+transition:.23s
+}
+
+.card:hover{
+transform:translateY(-6px);
+border-color:var(--accent);
+box-shadow:0 20px 40px #0005
+}
+
+.card:hover:after{
+content:attr(data-tip);
+position:absolute;
+left:15px;
+top:calc(100% + 9px);
+width:270px;
+background:#080d12;
+border:1px solid #3c4a56;
+border-radius:11px;
+padding:13px;
+font-size:14px;
+color:#dfe7ed;
+z-index:20;
+box-shadow:0 18px 40px #0008
+}
+
+.stat-label{
+font-size:13px;
+color:#82909d;
+font-weight:900;
+letter-spacing:1.2px
+}
+
+.stat-value{
+font-size:37px;
+font-weight:950;
+margin:5px 0
+}
+
+.stat-note{
+font-size:14px;
+color:var(--muted)
+}
+
+.panel{
+padding:24px;
+margin-bottom:21px
+}
+
+.head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:18px;
+margin-bottom:19px
+}
+
+.head h2{
+font-size:28px;
+margin:0
+}
+
+.head p{
+margin:3px 0 0;
+color:var(--muted);
+font-size:15px
+}
+
+.badge{
+padding:6px 11px;
+border:1px solid #344452;
+border-radius:999px;
+font-size:13px;
+font-weight:900;
+white-space:nowrap
+}
+
+.badge.good{
+color:var(--good);
+border-color:#43e0a155;
+background:#43e0a110
+}
+
+.badge.warn{
+color:var(--warn);
+border-color:#ffd16655;
+background:#ffd16610
+}
+
+.badge.bad{
+color:var(--bad);
+border-color:#ff536455;
+background:#ff536410
+}
+
+.two{
+display:grid;
+grid-template-columns:1.25fr .75fr;
+gap:21px
+}
+
+.three{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:17px
+}
+
+.control{
+background:#0d151c;
+border:1px solid #293844;
+border-radius:15px;
+padding:19px;
+transition:.2s
+}
+
+.control:hover{
+transform:translateY(-4px);
+border-color:#475764
+}
+
+.control h3{
+font-size:21px;
+margin:0 0 5px
+}
+
+.control p{
+font-size:14px;
+color:var(--muted);
+margin:0 0 15px
+}
+
+.row,
+.info{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:11px 0
+}
+
+.info{
+border-bottom:1px solid #26343f;
+font-size:15px
+}
+
+.info span:first-child{
+color:#8d9aa5
+}
+
+.row label{
+font-size:15px;
+font-weight:750;
+color:#cbd4dc
+}
+
+select,
+input[type=number],
+input[type=text],
+input[type=datetime-local]{
+background:#091016;
+border:1px solid #344452;
+color:#fff;
+border-radius:9px;
+padding:9px 11px;
+width:155px
+}
+
+input[type=range]{
+width:100%;
+accent-color:var(--accent)
+}
+
+/* ================= TOGGLE ================= */
+
+.toggle{
+width:54px;
+height:30px;
+display:inline-block;
+position:relative
+}
+
+.toggle input{
+display:none
+}
+
+.slider{
+position:absolute;
+inset:0;
+background:#27343e;
+border:1px solid #3c4a56;
+border-radius:99px
+}
+
+.slider:before{
+content:"";
+position:absolute;
+width:22px;
+height:22px;
+left:3px;
+top:3px;
+background:#b8c2ca;
+border-radius:50%;
+transition:.2s
+}
+
+.toggle input:checked+.slider{
+background:#43e0a125;
+border-color:#43e0a177
+}
+
+.toggle input:checked+.slider:before{
+transform:translateX(24px);
+background:var(--good)
+}
+
+/* ================= RESOURCE TABLE ================= */
+
+.table-wrap{
+overflow:auto
+}
+
+.resource{
+width:100%;
+border-collapse:separate;
+border-spacing:0 8px;
+min-width:950px
+}
+
+.resource th{
+text-align:left;
+color:#7e8b97;
+font-size:12px;
+letter-spacing:1px;
+padding:9px 11px
+}
+
+.resource td{
+background:#0d151c;
+border-top:1px solid #293844;
+border-bottom:1px solid #293844;
+padding:13px 11px;
+font-size:14px
+}
+
+.resource td:first-child{
+border-left:1px solid #293844;
+border-radius:11px 0 0 11px
+}
+
+.resource td:last-child{
+border-right:1px solid #293844;
+border-radius:0 11px 11px 0
+}
+
+.resource tr:hover td{
+background:#151f28;
+border-color:#43515d
+}
+
+.rname{
+font-weight:900;
+font-size:16px
+}
+
+.sub{
+font-size:12px;
+color:#74818d
+}
+
+.mini{
+padding:4px 8px;
+border-radius:99px;
+font-size:11px;
+font-weight:900
+}
+
+.on{
+color:var(--good);
+background:#43e0a110
+}
+
+.off{
+color:var(--bad);
+background:#ff536410
+}
+
+/* ================= BATTERY ================= */
+
+.big{
+font-size:64px;
+font-weight:950;
+line-height:1
+}
+
+.bar{
+height:12px;
+background:#222f39;
+border-radius:99px;
+overflow:hidden;
+margin:20px 0
+}
+
+.bar i{
+display:block;
+height:100%;
+background:linear-gradient(
+90deg,
+var(--accent),
+var(--accent2)
+);
+transition:.3s
+}
+
+/* ================= MACHINE ================= */
+
+.machine-grid,
+.disaster-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px
+}
+
+.machine,
+.disaster{
+background:#0d151c;
+border:1px solid #293844;
+border-radius:16px;
+padding:19px;
+transition:.22s
+}
+
+.machine:hover,
+.disaster:hover{
+transform:translateY(-5px);
+border-color:var(--accent2);
+box-shadow:0 18px 35px #0005
+}
+
+.machine-top{
+display:flex;
+justify-content:space-between;
+gap:12px
+}
+
+.machine h3,
+.disaster h3{
+font-size:20px;
+margin:0
+}
+
+.machine p,
+.disaster p{
+color:var(--muted);
+font-size:14px
+}
+
+.ring{
+width:54px;
+height:54px;
+border-radius:50%;
+display:grid;
+place-items:center;
+background:
+conic-gradient(
+var(--good) calc(var(--h)*1%),
+#27343e 0
+);
+font-size:13px;
+font-weight:900
+}
+
+.notice{
+padding:13px 15px;
+background:#0d151c;
+border:1px solid #293844;
+border-left:4px solid var(--accent);
+border-radius:11px;
+margin:9px 0
+}
+
+.notice strong{
+display:block;
+font-size:15px
+}
+
+.notice small{
+color:#7c8995;
+font-size:13px
+}
+
+.disaster.active{
+border-color:var(--bad);
+box-shadow:0 0 30px #ff536414
+}
+
+.disaster .impact{
+font-size:14px;
+color:#d1d9df;
+min-height:62px
+}
+
+/* ================= DATA ================= */
+
+.search{
+display:flex;
+gap:10px;
+margin-bottom:16px
+}
+
+.search input{
+width:auto;
+flex:1
+}
+
+.data-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:16px
+}
+
+.data-box{
+background:#0b1218;
+border:1px solid #293844;
+border-radius:15px;
+padding:17px
+}
+
+.data-box h3{
+margin:0 0 10px;
+font-size:19px
+}
+
+.json{
+font:13px/1.45 Consolas,monospace;
+color:#abb8c3;
+white-space:pre-wrap;
+max-height:330px;
+overflow:auto
+}
+
+.footer{
+border-top:1px solid #22313c;
+padding-top:23px;
+margin-top:30px;
+color:#687682;
+font-size:13px;
+display:flex;
+justify-content:space-between
+}
+
+.toast{
+position:fixed;
+right:22px;
+bottom:22px;
+z-index:100;
+background:#101820;
+border:1px solid #3b4955;
+border-radius:12px;
+padding:14px 17px;
+font-weight:800;
+box-shadow:0 20px 50px #0008;
+transform:translateY(100px);
+opacity:0;
+transition:.3s
+}
+
+.toast.show{
+transform:none;
+opacity:1
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1200px){
+
+.stats{
+grid-template-columns:repeat(3,1fr)
+}
+
+.three,
+.machine-grid,
+.disaster-grid{
+grid-template-columns:repeat(2,1fr)
+}
+
+.two{
+grid-template-columns:1fr
+}
+
+.layout{
+grid-template-columns:230px 1fr
+}
+
+}
+
+@media(max-width:850px){
+
+.layout{
+display:block
+}
+
+aside{
+position:fixed;
+left:-300px;
+top:78px;
+width:280px;
+z-index:45;
+height:calc(100vh - 78px);
+transition:.25s
+}
+
+aside.open{
+left:0
+}
+
+.hamb{
+display:block
+}
+
+.main{
+padding:30px 5%
+}
+
+.three,
+.machine-grid,
+.disaster-grid,
+.data-grid{
+grid-template-columns:1fr
+}
+
+.stats{
+grid-template-columns:repeat(2,1fr)
+}
+
+.hero{
+display:block
+}
+
+}
+
+@media(max-width:560px){
+
+body{
+font-size:16px
+}
+
+.top{
+padding:0 18px
+}
+
+.conn{
+display:none
+}
+
+.stats{
+grid-template-columns:1fr
+}
+
+.panel{
+padding:18px
+}
+
+.hero h1{
+font-size:42px
+}
+
+.actions{
+flex-direction:column
+}
+
+.login-card{
+padding:28px
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+LOGIN
+========================================================= -->
+
+<div id="login">
+
+<div class="login-card">
+
+<div class="logo">
+<div class="orbit"></div>
+POLARIS
+</div>
+
+<div class="eyebrow" style="margin-top:30px">
+AUTHORIZED CONTROL ACCESS
+</div>
+
+<h1>Admin Control Center</h1>
+
+<p>
+Central control for station energy, machine health,
+storage, loads and disaster response.
+</p>
+
+<div class="field">
+<label>Admin ID</label>
+<input
+id="user"
+type="text"
+placeholder="Enter admin ID">
+</div>
+
+<div class="field">
+<label>Password</label>
+<input
+id="pass"
+type="password"
+placeholder="Enter password"
+onkeydown="if(event.key==='Enter')login()">
+</div>
+
+<div id="err" class="error"></div>
+
+<div class="actions">
+
+<button
+class="btn primary"
+onclick="login()">
+ENTER CONTROL CENTER →
+</button>
+
+<button
+class="btn"
+onclick="home()">
+← BACK TO MAIN PAGE
+</button>
+
+</div>
+
+<div class="hint" style="border: 1px dashed rgba(255,209,102,0.4); padding: 10px; border-radius: 8px; background: rgba(255,209,102,0.06); margin-top: 15px;">
+<div style="color: #ffd166; font-weight: bold; font-size: 11px; margin-bottom: 3px; letter-spacing: 1px;">DEMO AUTHENTICATION // PROTOTYPE ONLY</div>
+Credentials: <b>admin@123</b> / <b>123</b>
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+APPLICATION
+========================================================= -->
+
+<div id="app" class="hidden">
+
+<header class="top">
+
+<div class="logo">
+<div class="orbit"></div>
+POLARIS
+</div>
+
+<div class="top-actions">
+
+<span
+class="conn"
+id="conn">
+DEMO / LOCAL CONTROL
+</span>
+
+<button
+class="btn"
+onclick="home()">
+← HOME
+</button>
+
+<button
+class="hamb"
+onclick="toggleSide()">
+<i></i>
+<i></i>
+<i></i>
+</button>
+
+</div>
+</header>
+
+
+<div class="layout">
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside id="side">
+
+<div class="side-title">
+CONTROL MODULES
+</div>
+
+<button
+class="nav active"
+onclick="tab('overview',this)">
+◈ Command Overview
+</button>
+
+<button
+class="nav"
+onclick="tab('energy',this)">
+⚡ Energy Source Control
+</button>
+
+<button
+class="nav"
+onclick="tab('battery',this)">
+▣ Battery & Storage
+</button>
+
+<button
+class="nav"
+onclick="tab('machines',this)">
+⚙ Machine Health & Maintenance
+</button>
+
+<button
+class="nav"
+onclick="tab('loads',this)">
+▤ Loads & Demand
+</button>
+
+<button
+class="nav"
+onclick="tab('disaster',this)">
+⚠ Disaster Control
+</button>
+
+<button
+class="nav"
+onclick="tab('data',this)">
+▦ All Station Data
+</button>
+
+<div class="side-bottom">
+
+<button
+class="nav"
+onclick="sync(true)">
+↻ Sync Backend
+</button>
+
+<button
+class="nav"
+onclick="resetDemo()">
+↺ Reset Demo State
+</button>
+
+<button
+class="nav"
+onclick="logout()">
+⇥ Logout
+</button>
+
+</div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+<div class="hero">
+
+<div>
+
+<div class="eyebrow">
+POLARIS // MASTER STATION CONTROL
+</div>
+
+<h1>
+Admin Command Center
+</h1>
+
+<p>
+Control the values shown across the POLARIS frontend.
+In demo mode changes persist in this browser.
+When the backend is connected, these controls can
+write to the API.
+</p>
+
+</div>
+
+<button
+class="btn primary"
+onclick="home()">
+← BACK TO MAIN PAGE
+</button>
+
+</div>
+
+<!-- DYNAMIC ADMIN NOTIFICATION & STATUS BAR -->
+<div class="admin-status-strip" id="adminStatusBar">
+    <div class="admin-status-item">
+        <span class="admin-status-tag">STATION</span>
+        <strong id="adminStationName">NCPOR BHARATI</strong>
+        <small id="adminStationLoc">East Antarctica (-69.41°S, 76.19°E)</small>
+    </div>
+    <div class="admin-status-item">
+        <span class="admin-status-tag">WEATHER</span>
+        <strong id="adminWeatherCond">--°C • Connecting...</strong>
+        <small id="adminWeatherSub">Wind: -- m/s • Solar: -- W/m²</small>
+    </div>
+    <div class="admin-status-item">
+        <span class="admin-status-tag">AI DISPATCH</span>
+        <strong id="adminAiMode" style="color: #42ffb5;">AI_PPO OPTIMIZING</strong>
+        <small id="adminAiStrategy">Clean Priority: Wind → Solar → Battery</small>
+    </div>
+    <div class="admin-status-item">
+        <span class="admin-status-tag">ACTIVE SCENARIO</span>
+        <strong id="adminScenarioBadge" style="color: #00e5ff;">NORMAL BASELINE</strong>
+        <small id="adminSyncTime">Sync: Just now</small>
+    </div>
+</div>
+
+
+<!-- =====================================================
+OVERVIEW
+===================================================== -->
+
+<section
+id="overview"
+class="section active">
+
+<div class="stats">
+
+<div
+class="card"
+data-tip="Overall station health calculated from source availability, machine condition and critical-load readiness.">
+
+<div class="stat-label">
+STATION HEALTH
+</div>
+
+<div
+class="stat-value"
+id="health">
+98.7%
+</div>
+
+<div class="stat-note">
+System condition
+</div>
+
+</div>
+
+
+<div
+class="card"
+data-tip="Total current electrical demand. This value can later come directly from the backend.">
+
+<div class="stat-label">
+CURRENT DEMAND
+</div>
+
+<div
+class="stat-value"
+id="demand">
+68 kW
+</div>
+
+<div class="stat-note">
+Station load
+</div>
+
+</div>
+
+
+<div
+class="card"
+data-tip="Battery state of charge. Admin can control this value from the Battery module.">
+
+<div class="stat-label">
+BATTERY SOC
+</div>
+
+<div
+class="stat-value"
+id="soc">
+70%
+</div>
+
+<div class="stat-note">
+Storage reserve
+</div>
+
+</div>
+
+
+<div
+class="card"
+data-tip="Renewable share of current station supply.">
+
+<div class="stat-label">
+RENEWABLE SHARE
+</div>
+
+<div
+class="stat-value"
+id="share">
+74%
+</div>
+
+<div class="stat-note">
+Clean supply
+</div>
+
+</div>
+
+
+<div
+class="card"
+data-tip="Current source displayed on the homepage. AUTO follows optimizer/backend; MANUAL uses administrator selection.">
+
+<div class="stat-label">
+ACTIVE SOURCE
+</div>
+
+<div
+class="stat-value"
+style="font-size:25px"
+id="active">
+Solar PV
+</div>
+
+<div
+class="stat-note"
+id="mode">
+AUTO MODE
+</div>
+
+</div>
+
+</div>
+
+
+<div class="two">
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Station Command Summary
+</h2>
+
+<p>
+Hover the cards above for explanations.
+</p>
+
+</div>
+
+<span
+class="badge good">
+ALL SYSTEMS STABLE
+</span>
+
+</div>
+
+
+<div class="info">
+<span>
+Energy control mode
+</span>
+
+<b id="mode2">
+AUTO
+</b>
+
+</div>
+
+
+<div class="info">
+<span>
+Online energy resources
+</span>
+
+<b id="online">
+0 / 12
+</b>
+
+</div>
+
+
+<div class="info">
+<span>
+Machines needing attention
+</span>
+
+<b id="attention">
+0
+</b>
+
+</div>
+
+
+<div class="info">
+<span>
+Critical load
+</span>
+
+<b>
+55 kW
+</b>
+
+</div>
+
+
+<div class="info">
+<span>
+Effective demand
+</span>
+
+<b id="effective">
+90 kW
+</b>
+
+</div>
+
+
+<div class="info">
+<span>
+Last admin action
+</span>
+
+<b id="last">
+None
+</b>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Live Control
+</h2>
+
+<p>
+Changes are saved instantly.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Master AUTO Mode
+</h3>
+
+<p>
+When ON, the active source follows the backend /
+optimizer. When OFF, the admin can manually select
+a source.
+</p>
+
+<div class="row">
+
+<label>
+Automatic source selection
+</label>
+
+<label class="toggle">
+
+<input
+id="auto"
+type="checkbox"
+checked
+onchange="setAuto(this.checked)">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+
+<div class="row">
+
+<label>
+Manual source
+</label>
+
+<select
+id="manual"
+onchange="setManual(this.value)">
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Recent Control Events
+</h2>
+
+<p>
+Every admin change is recorded locally.
+</p>
+
+</div>
+
+</div>
+
+<div id="events"></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+ENERGY
+===================================================== -->
+
+<section
+id="energy"
+class="section">
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Energy Source Control
+</h2>
+
+<p>
+Enable/disable sources, set output,
+condition and maintenance state.
+</p>
+
+</div>
+
+<button
+class="btn primary"
+onclick="saveAll()">
+SAVE ALL CHANGES
+</button>
+
+</div>
+
+
+<div class="table-wrap">
+
+<table class="resource">
+
+<thead>
+
+<tr>
+
+<th>
+RESOURCE
+</th>
+
+<th>
+ONLINE
+</th>
+
+<th>
+OUTPUT kW
+</th>
+
+<th>
+CAPACITY
+</th>
+
+<th>
+CONDITION
+</th>
+
+<th>
+MAINTENANCE
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="resources"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Active Energy Source
+</h2>
+
+<p>
+This is the source displayed on the homepage.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="three">
+
+
+<div class="control">
+
+<h3>
+Automatic
+</h3>
+
+<p>
+Backend optimizer decides the source.
+</p>
+
+<button
+class="btn goodbtn"
+onclick="setAuto(true)">
+USE AUTO MODE
+</button>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Manual Override
+</h3>
+
+<p>
+Force an online source.
+</p>
+
+<select
+id="manual2"
+onchange="setManual(this.value)">
+</select>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Current Display
+</h3>
+
+<p>
+Homepage source.
+</p>
+
+<div
+style="font-size:30px;font-weight:900"
+id="displaySource">
+Solar PV
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+BATTERY
+===================================================== -->
+
+<section
+id="battery"
+class="section">
+
+<div class="two">
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Battery State of Charge
+</h2>
+
+<p>
+2000 kWh battery control.
+</p>
+
+</div>
+
+</div>
+
+
+<div
+class="big"
+id="bigSoc">
+70%
+</div>
+
+
+<div class="bar">
+
+<i
+id="bar"
+style="width:70%">
+</i>
+
+</div>
+
+
+<input
+id="socRange"
+type="range"
+min="0"
+max="100"
+value="70"
+oninput="changeSoc(this.value)">
+
+
+<div class="row">
+<span>Minimum safety floor</span>
+<b>20%</b>
+</div>
+
+<div class="row">
+<span>Maximum SOC</span>
+<b>100%</b>
+</div>
+
+<div class="row">
+<span>SOH</span>
+<b>80%</b>
+</div>
+
+<div class="row">
+<span>Effective capacity</span>
+<b>1600 kWh</b>
+</div>
+
+<button
+class="btn primary"
+onclick="saveBattery()">
+SAVE BATTERY STATE
+</button>
+
+</div>
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Battery Operating State
+</h2>
+
+<p>
+Control how the battery is represented.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="control">
+
+<div class="row">
+
+<label>
+State
+</label>
+
+<select id="batState">
+
+<option>
+IDLE
+</option>
+
+<option>
+CHARGING
+</option>
+
+<option>
+DISCHARGING
+</option>
+
+</select>
+
+</div>
+
+
+<div class="row">
+
+<label>
+Battery enabled
+</label>
+
+<label class="toggle">
+
+<input
+id="batEnabled"
+type="checkbox"
+checked
+onchange="saveBattery()">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div class="notice">
+
+<strong>
+AI Pre-charge window: 4 hours
+</strong>
+
+<small>
+When AI predicts a shortage or disaster,
+surplus renewable energy can be stored.
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+MACHINE HEALTH
+===================================================== -->
+
+<section
+id="machines"
+class="section">
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Machine Health & Maintenance
+</h2>
+
+<p>
+Monitor whether solar, wind, hydro, fuel and
+other equipment is working correctly.
+</p>
+
+</div>
+
+<span class="badge good">
+MONITORING
+</span>
+
+</div>
+
+
+<div
+class="machine-grid"
+id="machineGrid">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+LOADS
+===================================================== -->
+
+<section
+id="loads"
+class="section">
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Loads & Demand Control
+</h2>
+
+<p>
+Control demo demand and station loads.
+Critical loads remain protected by the optimizer.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="three">
+
+
+<div class="control">
+
+<h3>
+Heating
+</h3>
+
+<p>
+Critical load • 40 kW
+</p>
+
+<div class="row">
+
+<label>
+Enabled
+</label>
+
+<label class="toggle">
+
+<input
+id="heating"
+type="checkbox"
+checked
+onchange="saveLoads()">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Communication
+</h3>
+
+<p>
+Critical load • 10 kW
+</p>
+
+<div class="row">
+
+<label>
+Enabled
+</label>
+
+<label class="toggle">
+
+<input
+id="comm"
+type="checkbox"
+checked
+onchange="saveLoads()">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Medical
+</h3>
+
+<p>
+Critical load • 5 kW
+</p>
+
+<div class="row">
+
+<label>
+Enabled
+</label>
+
+<label class="toggle">
+
+<input
+id="medical"
+type="checkbox"
+checked
+onchange="saveLoads()">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Laboratory
+</h3>
+
+<p>
+Non-critical • 25 kW
+</p>
+
+<div class="row">
+
+<label>
+Enabled
+</label>
+
+<label class="toggle">
+
+<input
+id="lab"
+type="checkbox"
+checked
+onchange="saveLoads()">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Water Heating
+</h3>
+
+<p>
+Non-critical / deferrable • 20 kW
+</p>
+
+<div class="row">
+
+<label>
+Enabled
+</label>
+
+<label class="toggle">
+
+<input
+id="water"
+type="checkbox"
+checked
+onchange="saveLoads()">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div class="control">
+
+<h3>
+Total Demand
+</h3>
+
+<p>
+Admin-controlled prototype value.
+</p>
+
+<div
+style="font-size:30px;font-weight:900"
+id="demandVal">
+68 kW
+</div>
+
+<input
+id="demandRange"
+type="range"
+min="0"
+max="150"
+value="68"
+oninput="changeDemand(this.value)">
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Demand Reduction
+</h2>
+
+<p>
+Passive solar/building efficiency reduces demand by 10%.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="row">
+
+<label>
+Passive efficiency enabled
+</label>
+
+<label class="toggle">
+
+<input
+id="passive"
+type="checkbox"
+checked
+onchange="saveLoads()">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+
+<div class="info">
+
+<span>
+Base demand
+</span>
+
+<b>
+100 kW
+</b>
+
+</div>
+
+
+<div class="info">
+
+<span>
+Effective demand
+</span>
+
+<b id="passiveResult">
+90 kW
+</b>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+DISASTER
+===================================================== -->
+
+<section
+id="disaster"
+class="section">
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Disaster Management Control
+</h2>
+
+<p>
+Simulate or clear disaster scenarios.
+</p>
+
+</div>
+
+<span
+class="badge good"
+id="disasterBadge">
+NO ACTIVE THREAT
+</span>
+
+</div>
+
+
+<div class="disaster-grid">
+
+
+<div
+class="disaster"
+id="flood">
+
+<h3>
+🌊 Flood
+</h3>
+
+<p>
+04:00–04:59 scenario
+</p>
+
+<div class="impact">
+
+Hydropower is derated to 10%.
+The system shifts toward other available
+sources and storage.
+
+</div>
+
+<button
+class="btn"
+onclick="disaster('Flood')">
+ACTIVATE FLOOD
+</button>
+
+</div>
+
+
+<div
+class="disaster"
+id="storm">
+
+<h3>
+🌪 Storm
+</h3>
+
+<p>
+15:00–15:59 scenario
+</p>
+
+<div class="impact">
+
+Wind is reduced to 15% and solar to 40%.
+Battery preparation can preserve critical supply.
+
+</div>
+
+<button
+class="btn"
+onclick="disaster('Storm')">
+ACTIVATE STORM
+</button>
+
+</div>
+
+
+<div
+class="disaster"
+id="tsunami">
+
+<h3>
+🌊 Tsunami
+</h3>
+
+<p>
+08:00–08:59 scenario
+</p>
+
+<div class="impact">
+
+Marine energy turns OFF and wind falls to 15%.
+Stored energy is preserved.
+
+</div>
+
+<button
+class="btn"
+onclick="disaster('Tsunami')">
+ACTIVATE TSUNAMI
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+Emergency Rules
+</h2>
+
+<p>
+Rules that the backend/optimizer can consume.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="notice">
+
+<strong>
+Source failure → automatic shift
+</strong>
+
+<small>
+If a source fails, the optimizer chooses
+the best available source.
+</small>
+
+</div>
+
+
+<div class="notice">
+
+<strong>
+Generator failure → renewable + battery
+</strong>
+
+<small>
+Backup failure should immediately be visible.
+</small>
+
+</div>
+
+
+<div class="notice">
+
+<strong>
+Battery SOC below 25%
+</strong>
+
+<small>
+Show a high-priority warning and preserve reserve.
+</small>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+ALL DATA
+===================================================== -->
+
+<section
+id="data"
+class="section">
+
+<div class="panel">
+
+<div class="head">
+
+<div>
+
+<h2>
+All Station Data
+</h2>
+
+<p>
+Raw state and backend snapshots for debugging
+and API integration.
+</p>
+
+</div>
+
+<button
+class="btn primary"
+onclick="sync()">
+↻ REFRESH BACKEND
+</button>
+
+</div>
+
+
+<div class="search">
+
+<input
+id="search"
+type="text"
+placeholder="Search data: battery, solar, generator..."
+oninput="renderData()">
+
+<button
+class="btn"
+onclick="copyJSON()">
+COPY JSON
+</button>
+
+</div>
+
+
+<div
+class="data-grid"
+id="dataGrid">
+</div>
+
+</div>
+
+</section>
+
+
+<div class="footer">
+
+<span>
+POLARIS • SMART ENERGY MANAGEMENT
+</span>
+
+<span>
+AI × IoT × OPTIMIZATION × POLAR RESEARCH
+</span>
+
+</div>
+
+</main>
+
+</div>
+
+</div>
+
+
+<div
+class="toast"
+id="toast">
+</div>
+
+
+<script>
+
+/* =========================================================
+MASTER POLARIS STATE
+========================================================= */
+
+const API="";
+
+const key="polarisAdminState";
+
+
+const D={
+
+auto:true,
+
+manual:"Solar PV",
+
+soc:70,
+
+batteryEnabled:true,
+
+batteryState:"IDLE",
+
+demand:68,
+
+passive:true,
+
+loads:{
+heating:true,
+comm:true,
+medical:true,
+lab:true,
+water:true
+},
+
+disasters:{
+Flood:false,
+Storm:false,
+Tsunami:false
+},
+
+resources:[
+
+{
+id:"solar",
+name:"Solar PV",
+icon:"☀️",
+capacity:300,
+output:174,
+online:true,
+health:98,
+condition:"GOOD",
+maintenance:"OPERATIONAL"
+},
+
+{
+id:"wind",
+name:"Wind",
+icon:"≋",
+capacity:300,
+output:128,
+online:true,
+health:97,
+condition:"GOOD",
+maintenance:"OPERATIONAL"
+},
+
+{
+id:"hydro",
+name:"Hydropower",
+icon:"💧",
+capacity:200,
+output:90,
+online:true,
+health:96,
+condition:"GOOD",
+maintenance:"OPERATIONAL"
+},
+
+{
+id:"geothermal",
+name:"Geothermal",
+icon:"♨️",
+capacity:100,
+output:95,
+online:true,
+health:99,
+condition:"GOOD",
+maintenance:"OPERATIONAL"
+},
+
+{
+id:"marine",
+name:"Marine Energy",
+icon:"≈",
+capacity:50,
+output:20,
+online:true,
+health:94,
+condition:"GOOD",
+maintenance:"OPERATIONAL"
+},
+
+{
+id:"biomass",
+name:"Biomass / Biogas",
+icon:"♨",
+capacity:60,
+output:55,
+online:true,
+health:95,
+condition:"GOOD",
+maintenance:"OPERATIONAL"
+},
+
+{
+id:"solarthermal",
+name:"Solar Thermal",
+icon:"◉",
+capacity:30,
+output:18,
+online:true,
+health:96,
+condition:"GOOD",
+maintenance:"OPERATIONAL"
+},
+
+{
+id:"hydrogen",
+name:"Hydrogen + Fuel Cell",
+icon:"H₂",
+capacity:50,
+output:0,
+online:true,
+health:93,
+condition:"GOOD",
+maintenance:"STANDBY"
+},
+
+{
+id:"battery",
+name:"Battery Storage",
+icon:"🔋",
+capacity:100,
+output:0,
+online:true,
+health:90,
+condition:"GOOD",
+maintenance:"READY"
+},
+
+{
+id:"generator",
+name:"Diesel / Fuel Generator",
+icon:"⚙️",
+capacity:100,
+output:0,
+online:true,
+health:91,
+condition:"GOOD",
+maintenance:"STANDBY"
+},
+
+{
+id:"chp",
+name:"CHP / Cogeneration",
+icon:"♨️",
+capacity:60,
+output:0,
+online:true,
+health:88,
+condition:"GOOD",
+maintenance:"STANDBY"
+},
+
+{
+id:"passive",
+name:"Passive Solar / Efficiency",
+icon:"⌂",
+capacity:10,
+output:10,
+online:true,
+health:99,
+condition:"GOOD",
+maintenance:"ACTIVE"
+}
+
+],
+
+events:[]
+
+};
+
+
+let S=load();
+
+let backend={};
+
+
+/* =========================================================
+LOCAL STORAGE
+========================================================= */
+
+function load(){
+
+try{
+
+return JSON.parse(
+localStorage.getItem(key)
+)||structuredClone(D);
+
+}catch(e){
+
+return structuredClone(D);
+
+}
+
+}
+
+
+function save(){
+
+localStorage.setItem(
+key,
+JSON.stringify(S)
+);
+
+}
+
+
+/* =========================================================
+TOAST
+========================================================= */
+
+function toast(message){
+
+const t=document.getElementById("toast");
+
+t.textContent=message;
+
+t.classList.add("show");
+
+clearTimeout(window.toastTimer);
+
+window.toastTimer=setTimeout(
+()=>{
+t.classList.remove("show")
+},
+2500
+);
+
+}
+
+
+/* =========================================================
+EVENT LOG
+========================================================= */
+
+function event(message){
+
+S.events.unshift({
+
+time:new Date().toLocaleTimeString(),
+
+message:message
+
+});
+
+S.events=S.events.slice(0,12);
+
+save();
+
+renderEvents();
+
+renderOverview();
+
+toast(message);
+
+}
+
+
+/* =========================================================
+LOGIN
+========================================================= */
+
+function login(){
+
+const u=document.getElementById("user").value.trim();
+
+const p=document.getElementById("pass").value;
+
+
+if(
+u==="admin@123" &&
+p==="123"
+){
+
+sessionStorage.setItem(
+"polarisLogin",
+"1"
+);
+
+document
+.getElementById("login")
+.classList.add("hidden");
+
+document
+.getElementById("app")
+.classList.remove("hidden");
+
+render();
+
+sync();
+
+}else{
+
+document.getElementById("err")
+.textContent=
+"Incorrect admin ID or password.";
+
+}
+
+}
+
+
+function logout(){
+
+sessionStorage.removeItem(
+"polarisLogin"
+);
+
+location.reload();
+
+}
+
+
+function home(){
+
+location.href="index.html";
+
+}
+
+
+/* =========================================================
+SIDEBAR
+========================================================= */
+
+function toggleSide(){
+
+document
+.getElementById("side")
+.classList.toggle("open");
+
+}
+
+
+function tab(id,b){
+
+document
+.querySelectorAll(".section")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+document
+.getElementById(id)
+.classList.add("active");
+
+
+document
+.querySelectorAll(".nav")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+if(b)b.classList.add("active");
+
+
+document
+.getElementById("side")
+.classList.remove("open");
+
+render();
+
+}
+
+
+/* =========================================================
+ACTIVE SOURCE
+========================================================= */
+
+function active(){
+
+/* MANUAL MODE */
+
+if(!S.auto){
+
+let r=S.resources.find(
+x=>x.name===S.manual
+);
+
+return r && r.online
+?r.name
+:"No source available";
+
+}
+
+
+/* AUTO MODE */
+
+let r=S.resources.find(
+
+x=>
+x.online &&
+!["battery","passive"].includes(x.id) &&
+x.output>0
+
+);
+
+return r
+?r.name
+:(S.batteryEnabled
+?"Battery"
+:"No source available");
+
+}
+
+
+/* =========================================================
+AUTO / MANUAL CONTROL
+========================================================= */
+
+function setAuto(v){
+
+S.auto=v;
+
+save();
+
+event(
+v
+?
+"AUTO MODE enabled — source follows backend/optimizer"
+:
+"AUTO MODE disabled — manual override enabled"
+);
+
+fetch('/api/simulation/mode', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({mode: v ? 'AI_PPO' : 'MANUAL'})
+}).catch(()=>{});
+
+}
+
+
+function setManual(v){
+
+S.manual=v;
+
+S.auto=false;
+
+save();
+
+event(
+"Manual source set to "+v
+);
+
+fetch('/api/simulation/mode', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({mode: 'MANUAL'})
+}).catch(()=>{});
+
+}
+
+
+/* =========================================================
+RESOURCE FINDER
+========================================================= */
+
+function resource(id){
+
+return S.resources.find(
+x=>x.id===id
+);
+
+}
+
+
+/* =========================================================
+RESOURCE ON/OFF
+========================================================= */
+
+function toggleRes(id,v){
+
+let r=resource(id);
+
+if(!r)return;
+
+r.online=v;
+
+
+if(
+!v &&
+S.manual===r.name
+){
+
+S.auto=true;
+
+}
+
+
+save();
+
+event(
+r.name+
+(v
+?" enabled"
+:" disabled")
+);
+
+
+apiWrite(
+
+"/admin/resources/"+id,
+
+"PUT",
+
+{
+online:r.online,
+output_kw:r.output,
+capacity_kw:r.capacity,
+condition:r.condition,
+maintenance:r.maintenance
+}
+
+);
+
+}
+
+
+/* =========================================================
+RESOURCE OUTPUT
+========================================================= */
+
+function output(id,v){
+
+let r=resource(id);
+
+if(!r)return;
+
+r.output=Math.max(
+
+0,
+
+Math.min(
++v||0,
+r.capacity
+)
+
+);
+
+save();
+
+render();
+
+}
+
+
+/* =========================================================
+RESOURCE CONDITION
+========================================================= */
+
+function condition(id,v){
+
+let r=resource(id);
+
+if(!r)return;
+
+r.condition=v;
+
+
+if(v==="GOOD")
+r.health=95;
+
+else if(v==="ATTENTION")
+r.health=70;
+
+else
+r.health=25;
+
+
+save();
+
+event(
+r.name+
+" condition: "+
+v
+);
+
+
+apiWrite(
+
+"/admin/resources/"+id,
+
+"PUT",
+
+{
+online:r.online,
+output_kw:r.output,
+capacity_kw:r.capacity,
+condition:v,
+maintenance:r.maintenance
+}
+
+);
+
+}
+
+
+/* =========================================================
+MAINTENANCE
+========================================================= */
+
+function maintenance(id,v){
+
+let r=resource(id);
+
+if(!r)return;
+
+r.maintenance=v;
+
+save();
+
+event(
+r.name+
+" maintenance: "+
+v
+);
+
+apiWrite(
+"/admin/resources/"+id,
+"PUT",
+{
+online:r.online,
+output_kw:r.output,
+capacity_kw:r.capacity,
+condition:r.condition,
+maintenance:v
+}
+);
+
+}
+
+
+/* =========================================================
+RESOURCE TABLE
+========================================================= */
+
+function renderResources(){
+
+document.getElementById(
+"resources"
+).innerHTML=
+
+S.resources.map(r=>`
+
+<tr>
+
+<td>
+
+<div class="rname">
+${r.icon} ${r.name}
+</div>
+
+<div class="sub">
+${r.id==="passive"
+?"Demand reduction"
+:"Energy resource"}
+</div>
+
+</td>
+
+
+<td>
+
+<label class="toggle">
+
+<input
+type="checkbox"
+${r.online?"checked":""}
+onchange="toggleRes('${r.id}',this.checked)">
+
+<span class="slider"></span>
+
+</label>
+
+</td>
+
+
+<td>
+
+<input
+type="number"
+min="0"
+max="${r.capacity}"
+value="${r.output}"
+onchange="output('${r.id}',this.value)">
+
+</td>
+
+
+<td>
+${r.capacity} kW
+</td>
+
+
+<td>
+
+<select
+onchange="condition('${r.id}',this.value)">
+
+<option
+${r.condition==="GOOD"?"selected":""}>
+GOOD
+</option>
+
+<option
+${r.condition==="ATTENTION"?"selected":""}>
+ATTENTION
+</option>
+
+<option
+${r.condition==="FAULT"?"selected":""}>
+FAULT
+</option>
+
+</select>
+
+</td>
+
+
+<td>
+
+<select
+onchange="maintenance('${r.id}',this.value)">
+
+<option
+${r.maintenance==="OPERATIONAL"?"selected":""}>
+OPERATIONAL
+</option>
+
+<option
+${r.maintenance==="READY"?"selected":""}>
+READY
+</option>
+
+<option
+${r.maintenance==="STANDBY"?"selected":""}>
+STANDBY
+</option>
+
+<option
+${r.maintenance==="MAINTENANCE"?"selected":""}>
+MAINTENANCE
+</option>
+
+</select>
+
+</td>
+
+</tr>
+
+`).join("");
+
+
+let opts=
+
+S.resources
+.filter(r=>r.online)
+.map(
+r=>`<option>${r.name}</option>`
+)
+.join("");
+
+
+["manual","manual2"].forEach(id=>{
+
+document.getElementById(id).innerHTML=opts;
+
+document.getElementById(id).value=S.manual;
+
+});
+
+}
+
+
+/* =========================================================
+BATTERY
+========================================================= */
+
+function changeSoc(v){
+
+S.soc=+v;
+
+save();
+
+renderOverview();
+
+}
+
+
+function saveBattery(){
+
+S.batteryEnabled=
+document
+.getElementById("batEnabled")
+.checked;
+
+S.batteryState=
+document
+.getElementById("batState")
+.value;
+
+
+resource("battery").online=
+S.batteryEnabled;
+
+save();
+
+event(
+"Battery updated: "+
+S.soc+
+"% SOC / "+
+S.batteryState
+);
+
+
+apiWrite(
+
+"/admin/config",
+
+"PUT",
+
+{
+battery_soc:S.soc,
+battery_enabled:S.batteryEnabled,
+battery_state:S.batteryState
+}
+
+);
+
+}
+
+
+/* =========================================================
+DEMAND
+========================================================= */
+
+function changeDemand(v){
+
+S.demand=+v;
+
+save();
+
+renderOverview();
+
+}
+
+
+/* =========================================================
+LOADS
+========================================================= */
+
+function saveLoads(){
+
+S.loads={
+
+heating:
+document.getElementById("heating").checked,
+
+comm:
+document.getElementById("comm").checked,
+
+medical:
+document.getElementById("medical").checked,
+
+lab:
+document.getElementById("lab").checked,
+
+water:
+document.getElementById("water").checked
+
+};
+
+S.passive=
+document.getElementById("passive").checked;
+
+save();
+
+event(
+"Load and demand configuration updated"
+);
+
+}
+
+
+/* =========================================================
+DISASTERS
+========================================================= */
+
+function disaster(n){
+
+S.disasters[n]=!S.disasters[n];
+
+
+if(S.disasters[n]){
+
+if(n==="Flood"){
+
+resource("hydro").output=20;
+
+}
+
+
+if(n==="Storm"){
+
+resource("wind").output=45;
+
+resource("solar").output=120;
+
+}
+
+
+if(n==="Tsunami"){
+
+resource("marine").online=false;
+
+resource("wind").output=45;
+
+}
+
+event(
+n+
+" scenario ACTIVATED"
+);
+
+fetch('/api/showcase/scenario', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({scenario: n.toLowerCase()})
+}).catch(()=>{});
+
+}else{
+
+event(
+n+
+" scenario CLEARED"
+);
+
+fetch('/api/showcase/scenario', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({scenario: 'normal'})
+}).catch(()=>{});
+
+}
+
+
+save();
+
+render();
+
+}
+
+
+/* =========================================================
+OVERVIEW CALCULATIONS
+========================================================= */
+
+function renderOverview(){
+
+let health=
+
+Math.round(
+
+S.resources.reduce(
+(a,r)=>a+r.health,
+0
+)
+/S.resources.length
+*10
+
+)/10;
+
+
+let ids=[
+"solar",
+"wind",
+"hydro",
+"geothermal",
+"marine",
+"biomass",
+"solarthermal"
+];
+
+
+let out=
+
+S.resources
+
+.filter(
+r=>
+ids.includes(r.id)&&
+r.online
+)
+
+.reduce(
+(a,r)=>a+r.output,
+0
+);
+
+
+let share=
+
+Math.min(
+
+100,
+
+Math.round(
+out/
+Math.max(S.demand,1)
+*100
+)
+
+);
+
+
+let a=active();
+
+
+document.getElementById(
+"health"
+).textContent=
+health+"%";
+
+
+document.getElementById(
+"demand"
+).textContent=
+S.demand+" kW";
+
+
+document.getElementById(
+"soc"
+).textContent=
+S.soc+"%";
+
+
+document.getElementById(
+"share"
+).textContent=
+share+"%";
+
+
+document.getElementById(
+"active"
+).textContent=
+a;
+
+
+document.getElementById(
+"mode"
+).textContent=
+S.auto
+?
+"AUTO MODE"
+:
+"MANUAL OVERRIDE";
+
+
+document.getElementById(
+"mode2"
+).textContent=
+S.auto
+?
+"AUTO"
+:
+"MANUAL";
+
+
+document.getElementById(
+"online"
+).textContent=
+S.resources.filter(
+r=>r.online
+).length+
+" / 12";
+
+
+document.getElementById(
+"attention"
+).textContent=
+
+S.resources.filter(
+
+r=>
+r.condition!=="GOOD" ||
+r.maintenance==="MAINTENANCE"
+
+).length;
+
+
+document.getElementById(
+"effective"
+).textContent=
+
+(
+S.passive
+?
+Math.round(S.demand*.9)
+:
+S.demand
+)+
+" kW";
+
+
+document.getElementById(
+"last"
+).textContent=
+S.events[0]?.message||
+"None";
+
+
+document.getElementById(
+"displaySource"
+).textContent=
+a;
+
+
+document.getElementById(
+"auto"
+).checked=
+S.auto;
+
+
+document.getElementById(
+"socRange"
+).value=
+S.soc;
+
+
+document.getElementById(
+"bigSoc"
+).textContent=
+S.soc+"%";
+
+
+document.getElementById(
+"bar"
+).style.width=
+S.soc+"%";
+
+
+document.getElementById(
+"demandRange"
+).value=
+S.demand;
+
+
+document.getElementById(
+"demandVal"
+).textContent=
+S.demand+
+" kW";
+
+
+document.getElementById(
+"passiveResult"
+).textContent=
+
+(
+S.passive
+?
+Math.round(S.demand*.9)
+:
+S.demand
+)+
+" kW";
+
+
+document.getElementById(
+"batEnabled"
+).checked=
+S.batteryEnabled;
+
+
+document.getElementById(
+"batState"
+).value=
+S.batteryState;
+
+}
+
+
+/* =========================================================
+MACHINE HEALTH
+========================================================= */
+
+function renderMachines(){
+
+document.getElementById(
+"machineGrid"
+).innerHTML=
+
+S.resources
+
+.filter(
+r=>r.id!=="passive"
+)
+
+.map(r=>`
+
+<div class="machine">
+
+<div class="machine-top">
+
+<div>
+
+<h3>
+${r.icon} ${r.name}
+</h3>
+
+<p>
+${r.online
+?"Machine available"
+:"Machine offline"}
+•
+${r.maintenance}
+</p>
+
+</div>
+
+<div
+class="ring"
+style="--h:${r.health}">
+
+${r.health}%
+
+</div>
+
+</div>
+
+
+<div class="info">
+
+<span>
+Condition
+</span>
+
+<b
+class="${
+r.condition==="GOOD"
+?"good"
+:
+r.condition==="ATTENTION"
+?"warn"
+:"bad"
+}">
+
+${r.condition}
+
+</b>
+
+</div>
+
+
+<div class="info">
+
+<span>
+Availability
+</span>
+
+<b>
+
+${r.online
+?"ONLINE"
+:"OFFLINE"}
+
+</b>
+
+</div>
+
+
+<div class="info">
+
+<span>
+Output
+</span>
+
+<b>
+
+${r.output}
+/
+${r.capacity}
+kW
+
+</b>
+
+</div>
+
+
+<div
+class="label"
+style="margin-top:12px">
+
+HEALTH
+
+</div>
+
+
+<input
+type="range"
+min="0"
+max="100"
+value="${r.health}"
+oninput="healthChange('${r.id}',this.value)">
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+HEALTH CHANGE
+========================================================= */
+
+function healthChange(id,v){
+
+let r=resource(id);
+
+r.health=+v;
+
+
+if(r.health>=85)
+r.condition="GOOD";
+
+else if(r.health>=60)
+r.condition="ATTENTION";
+
+else
+r.condition="FAULT";
+
+
+save();
+
+renderMachines();
+
+renderOverview();
+
+}
+
+
+/* =========================================================
+EVENTS
+========================================================= */
+
+function renderEvents(){
+
+document.getElementById(
+"events"
+).innerHTML=
+
+S.events.length
+
+?
+
+S.events.map(e=>`
+
+<div class="notice">
+
+<strong>
+${esc(e.message)}
+</strong>
+
+<small>
+${e.time}
+</small>
+
+</div>
+
+`).join("")
+
+:
+
+`
+
+<div class="notice">
+
+<strong>
+No admin actions yet.
+</strong>
+
+<small>
+Changes appear here.
+</small>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+DISASTER DISPLAY
+========================================================= */
+
+function renderDisaster(){
+
+[
+"Flood",
+"Storm",
+"Tsunami"
+].forEach(n=>{
+
+let c=
+document.getElementById(
+n.toLowerCase()
+);
+
+c.classList.toggle(
+"active",
+S.disasters[n]
+);
+
+c.querySelector(
+"button"
+).textContent=
+
+S.disasters[n]
+
+?
+
+"CLEAR "+
+n.toUpperCase()
+
+:
+
+"ACTIVATE "+
+n.toUpperCase();
+
+});
+
+
+let yes=
+Object.values(
+S.disasters
+).some(Boolean);
+
+
+let b=
+document.getElementById(
+"disasterBadge"
+);
+
+
+b.textContent=
+yes
+?
+"ACTIVE SCENARIO"
+:
+"NO ACTIVE THREAT";
+
+
+b.className=
+"badge "+
+(
+yes
+?
+"bad"
+:
+"good"
+);
+
+}
+
+
+/* =========================================================
+DATA VIEW
+========================================================= */
+
+function renderData(){
+
+let q=
+(
+document.getElementById(
+"search"
+)?.value||""
+).toLowerCase();
+
+
+let d={
+
+"Master State":S,
+
+"Backend Snapshot":backend,
+
+"Resources":S.resources,
+
+"Battery":{
+
+soc:S.soc,
+
+enabled:S.batteryEnabled,
+
+state:S.batteryState
+
+},
+
+"Loads":S.loads,
+
+"Disasters":S.disasters
+
+};
+
+
+document.getElementById(
+"dataGrid"
+).innerHTML=
+
+Object.entries(d)
+
+.filter(
+
+([k,v])=>
+
+(
+k+
+JSON.stringify(v)
+)
+
+.toLowerCase()
+.includes(q)
+
+)
+
+.map(
+([k,v])=>`
+
+<div class="data-box">
+
+<h3>
+${k}
+</h3>
+
+<div class="json">
+
+${esc(
+JSON.stringify(v,null,2)
+)}
+
+</div>
+
+</div>
+
+`
+)
+
+.join("");
+
+}
+
+
+/* =========================================================
+ESCAPE HTML
+========================================================= */
+
+function esc(s){
+
+return String(s).replace(
+
+/[&<>"']/g,
+
+m=>
+({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[m])
+
+);
+
+}
+
+
+/* =========================================================
+RENDER EVERYTHING
+========================================================= */
+
+function render(){
+
+renderOverview();
+
+renderResources();
+
+renderMachines();
+
+renderEvents();
+
+renderDisaster();
+
+renderData();
+
+
+document.getElementById(
+"heating"
+).checked=
+S.loads.heating;
+
+
+document.getElementById(
+"comm"
+).checked=
+S.loads.comm;
+
+
+document.getElementById(
+"medical"
+).checked=
+S.loads.medical;
+
+
+document.getElementById(
+"lab"
+).checked=
+S.loads.lab;
+
+
+document.getElementById(
+"water"
+).checked=
+S.loads.water;
+
+
+document.getElementById(
+"passive"
+).checked=
+S.passive;
+
+}
+
+
+/* =========================================================
+BACKEND GET
+========================================================= */
+
+async function apiGet(p){
+
+let r=
+await fetch(
+API+p
+);
+
+if(!r.ok){
+    if(r.status===404) return null;
+    throw Error(r.status);
+}
+
+return r.json();
+
+}
+
+
+/* =========================================================
+BACKEND WRITE
+========================================================= */
+
+async function apiWrite(p,m,b){
+
+try{
+
+let r=
+await fetch(
+
+API+p,
+
+{
+
+method:m,
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify(b)
+
+}
+
+);
+
+return r.ok;
+
+}catch(e){
+
+return false;
+
+}
+
+}
+
+
+/* =========================================================
+BACKEND SYNC & SYSTEM STATE TRACKING
+========================================================= */
+
+let wasOnline = false;
+let adminTrackedState = {
+    stationId: null,
+    scenario: null,
+    controlMode: null
+};
+
+function recordSystemEvent(msg, level = "INFO") {
+    if (!msg) return;
+    if (S.events.length > 0 && S.events[0].message === msg) return;
+    S.events.unshift({
+        time: new Date().toLocaleTimeString(),
+        message: msg,
+        level: level
+    });
+    S.events = S.events.slice(0, 16);
+    save();
+    renderEvents();
+    renderOverview();
+}
+
+async function sync(isManual = false){
+
+try{
+
+let ps=[
+"/status",
+"/station/status",
+"/energy/current",
+"/battery/status",
+"/optimizer/last",
+"/station/config",
+"/admin/summary",
+"/admin/resources"
+];
+
+let rs=
+await Promise.all(
+ps.map(
+async p=>
+[
+p,
+await apiGet(p)
+]
+)
+);
+
+backend=
+Object.fromEntries(rs);
+
+const c=
+document.getElementById(
+"conn"
+);
+
+c.textContent=
+"NCPOR LIVE CONNECTED";
+
+c.classList.add(
+"live"
+);
+
+// Process Unified Status & Telemetry
+const stRes = backend["/status"];
+const d = stRes?.data || {};
+
+// 1. Station info
+const st = d.station || {};
+if (st.name) {
+    const elName = document.getElementById("adminStationName");
+    if (elName) elName.textContent = "NCPOR " + (st.name.replace("Research Station", "").trim()).toUpperCase();
+    const elLoc = document.getElementById("adminStationLoc");
+    if (elLoc) elLoc.textContent = (st.continent || "Antarctica") + " (" + (st.location || "-69.41°S, 76.19°E") + ")";
+}
+
+// 2. Weather
+const dyn = d.dynamic_input_stream || {};
+const temp = dyn.temperature_c !== undefined ? dyn.temperature_c : (d.temperature_c !== undefined ? d.temperature_c : null);
+const wind = dyn.wind_speed_m_s !== undefined ? dyn.wind_speed_m_s : (d.wind_speed_m_s !== undefined ? d.wind_speed_m_s : null);
+const sol = dyn.solar_irradiance_w_m2 !== undefined ? dyn.solar_irradiance_w_m2 : (d.solar_irradiance_w_m2 !== undefined ? d.solar_irradiance_w_m2 : null);
+const cond = dyn.weather_condition || d.weather_condition || "Standby";
+
+const elWea = document.getElementById("adminWeatherCond");
+if (elWea) elWea.textContent = temp !== null ? temp + "°C • " + cond : "--°C • " + cond;
+const elSub = document.getElementById("adminWeatherSub");
+if (elSub) elSub.textContent = (wind !== null ? "Wind: " + wind + " m/s" : "Wind: -- m/s") + " • " + (sol !== null ? "Solar: " + Math.round(sol) + " W/m²" : "Solar: -- W/m²");
+
+// 3. AI Dispatch
+const ctrl = stRes?.control_mode || d.control_mode || (S.auto ? "AI_PPO" : "MANUAL");
+const aiFc = d.ai_forecast || {};
+const rec = aiFc.active_recommendation || {};
+const elAiMode = document.getElementById("adminAiMode");
+if (elAiMode) {
+    elAiMode.textContent = ctrl === "AI_PPO" ? "AI_PPO OPTIMIZING" : ctrl;
+    elAiMode.style.color = ctrl === "AI_PPO" ? "#42ffb5" : "#ffd166";
+}
+const elAiStrat = document.getElementById("adminAiStrategy");
+if (elAiStrat) {
+    if (rec.primary) elAiStrat.textContent = `Priority: ${rec.primary.name || "Wind"} → ${rec.secondary ? rec.secondary.name : "Solar"} (${aiFc.model_confidence ? Math.round(aiFc.model_confidence.demand || 82) : 85}% conf)`;
+    else elAiStrat.textContent = "AI Autonomous Dispatch Active";
+}
+
+// 4. Scenario
+const scen = stRes?.active_scenario || d.active_scenario || "normal";
+const elScen = document.getElementById("adminScenarioBadge");
+if (elScen) {
+    elScen.textContent = scen.toUpperCase().replace("_", " ");
+    if (scen === "blizzard" || scen === "storm") elScen.style.color = "#ff7b72";
+    else if (scen === "solar_peak") elScen.style.color = "#ffd166";
+    else if (scen === "flood") elScen.style.color = "#2db6a3";
+    else elScen.style.color = "#00e5ff";
+}
+const elSync = document.getElementById("adminSyncTime");
+if (elSync) elSync.textContent = "Sync: " + new Date().toLocaleTimeString();
+
+// 5. Deduplicated State Transition Logging
+if (adminTrackedState.stationId && st.id && adminTrackedState.stationId !== st.id) {
+    recordSystemEvent("NCPOR station switched to " + (st.name || st.id), "INFO");
+}
+if (adminTrackedState.scenario && scen && adminTrackedState.scenario !== scen) {
+    recordSystemEvent("System scenario transition: " + scen.toUpperCase(), "WARN");
+}
+if (adminTrackedState.controlMode && ctrl && adminTrackedState.controlMode !== ctrl) {
+    recordSystemEvent("Control mode transitioned to " + ctrl, "INFO");
+}
+adminTrackedState.stationId = st.id || adminTrackedState.stationId;
+adminTrackedState.scenario = scen;
+adminTrackedState.controlMode = ctrl;
+
+// 6. Battery & Demand
+let b=
+backend[
+"/battery/status"
+];
+
+let e=
+backend[
+"/energy/current"
+];
+
+let sv=
+Number(
+b?.soc ??
+b?.state_of_charge ??
+b?.battery_soc ??
+d?.battery_soc_pct
+);
+
+if(
+Number.isFinite(sv)
+){
+S.soc=Math.round(sv);
+}
+
+let dv=
+Number(
+e?.demand ??
+e?.current_demand ??
+e?.load_kw ??
+d?.total_station_load_kw
+);
+
+if(
+Number.isFinite(dv)
+){
+S.demand=Math.round(dv);
+}
+
+save();
+render();
+
+if (isManual) {
+    toast("Backend data synchronized");
+}
+wasOnline = true;
+
+}catch(e){
+
+const c=
+document.getElementById(
+"conn"
+);
+
+c.textContent=
+"DEMO / BACKEND OFFLINE";
+
+c.classList.remove(
+"live"
+);
+
+render();
+
+if (wasOnline || isManual) {
+    toast("Backend unavailable — local demo state active");
+}
+wasOnline = false;
+
+}
+
+}
+
+
+/* =========================================================
+SAVE ALL RESOURCES
+========================================================= */
+
+function saveAll(){
+
+save();
+
+S.resources.forEach(
+
+r=>
+
+apiWrite(
+
+"/admin/resources/"+r.id,
+
+"PUT",
+
+{
+
+online:r.online,
+
+output_kw:r.output,
+
+capacity_kw:r.capacity,
+
+condition:r.condition,
+
+maintenance:r.maintenance
+
+}
+
+)
+
+);
+
+event(
+"All resource changes saved"
+);
+
+}
+
+
+/* =========================================================
+COPY JSON
+========================================================= */
+
+function copyJSON(){
+
+navigator.clipboard?.writeText(
+
+JSON.stringify(
+{
+state:S,
+backend:backend
+},
+null,
+2
+)
+
+);
+
+toast(
+"JSON copied"
+);
+
+}
+
+
+/* =========================================================
+RESET DEMO
+========================================================= */
+
+function resetDemo(){
+
+if(
+confirm(
+"Reset all admin demo changes?"
+)
+){
+
+localStorage.removeItem(
+key
+);
+
+S=
+structuredClone(D);
+
+render();
+
+toast(
+"Demo state reset"
+);
+
+}
+
+}
+
+
+/* =========================================================
+AUTO LOGIN IF SESSION EXISTS
+========================================================= */
+
+if(
+sessionStorage.getItem(
+"polarisLogin"
+)==="1"
+){
+
+document
+.getElementById("login")
+.classList.add("hidden");
+
+document
+.getElementById("app")
+.classList.remove("hidden");
+
+render();
+sync();
+
+}
+
+setInterval(()=>{
+    if(sessionStorage.getItem("polarisLogin")==="1"){
+        sync();
+    }
+}, 3000);
+
+</script>
+
+</body>
+</html>

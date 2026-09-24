@@ -1,0 +1,70 @@
+{
+  "solar": {
+    "train": {
+      "mae": 0.12,
+      "rmse": 0.57,
+      "r2": 0.9885
+    },
+    "test": {
+      "mae": 1.15,
+      "rmse": 2.34,
+      "r2": 0.8019
+    },
+    "feature_importance": {
+      "solar_irradiance_wm2": 0.5683,
+      "cloud_cover_pct": 0.2508,
+      "temperature_c": 0.1063,
+      "snowfall_mm": 0.0071,
+      "hour": 0.0115,
+      "month": 0.0,
+      "season_encoded": 0.0,
+      "previous_hour_solar": 0.0155,
+      "is_solar_active": 0.0405
+    }
+  },
+  "wind": {
+    "train": {
+      "mae": 2.52,
+      "rmse": 11.15,
+      "r2": 0.9913
+    },
+    "test": {
+      "mae": 39.12,
+      "rmse": 67.41,
+      "r2": 0.5607
+    },
+    "feature_importance": {
+      "wind_speed_mps": 0.4627,
+      "wind_direction_sin": 0.1332,
+      "wind_direction_cos": 0.021,
+      "temperature_c": 0.1356,
+      "pressure_hpa": 0.0403,
+      "snowfall_mm": 0.0274,
+      "hour": 0.1342,
+      "previous_hour_wind": 0.0456
+    }
+  },
+  "demand": {
+    "train": {
+      "mae": 0.3,
+      "rmse": 1.0,
+      "r2": 0.9774
+    },
+    "test": {
+      "mae": 2.68,
+      "rmse": 3.61,
+      "r2": 0.7138
+    },
+    "feature_importance": {
+      "temperature_c": 0.4776,
+      "feels_like_c": 0.0082,
+      "hour": 0.2203,
+      "day_of_week": 0.0048,
+      "month": 0.0,
+      "snowfall_mm": 0.0086,
+      "weather_severity_score": 0.0498,
+      "previous_hour_demand": 0.1597,
+      "rolling_average_demand": 0.071
+    }
+  }
+}

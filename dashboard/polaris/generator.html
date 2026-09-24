@@ -1,0 +1,3945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Diesel / Fuel Generator Control | POLARIS</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:#080808;
+
+    color:#f5f1e8;
+
+    overflow-x:hidden;
+
+}
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+:root{
+
+    --bg:#080808;
+
+    --dark:#101010;
+
+    --panel:#151515;
+
+    --panel2:#1d1c19;
+
+    --yellow:#ffd447;
+
+    --yellow2:#ffe98a;
+
+    --gold:#c99b25;
+
+    --metal:#d8d4c8;
+
+    --muted:#aaa59a;
+
+    --dim:#77736b;
+
+    --line:rgba(255,212,71,.17);
+
+}
+
+
+/* =====================================================
+   BACKGROUND
+===================================================== */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:-2;
+
+    pointer-events:none;
+
+    background:
+
+        radial-gradient(
+            circle at 80% 12%,
+            rgba(255,212,71,.09),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 10% 85%,
+            rgba(201,155,37,.07),
+            transparent 30%
+        );
+
+}
+
+
+.grid{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:-1;
+
+    opacity:.11;
+
+    pointer-events:none;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255,255,255,.045) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.045) 1px,
+            transparent 1px
+        );
+
+    background-size:52px 52px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent
+        );
+
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:72px;
+
+    z-index:1000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 35px;
+
+    background:
+        rgba(8,8,8,.88);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
+}
+
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:18px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+}
+
+
+.logo-icon{
+
+    width:37px;
+
+    height:37px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:var(--yellow);
+
+    background:#17150d;
+
+    border:
+        1px solid
+        rgba(255,212,71,.4);
+
+    box-shadow:
+        0 0 22px
+        rgba(255,212,71,.12);
+
+}
+
+
+/* =====================================================
+   THREE DASH MENU
+===================================================== */
+
+.menu-btn{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    background:#121212;
+
+    cursor:pointer;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:5px;
+
+    transition:.3s;
+
+}
+
+
+.menu-btn span{
+
+    width:21px;
+
+    height:2px;
+
+    background:#f5f1e8;
+
+    border-radius:4px;
+
+}
+
+
+.menu-btn:hover{
+
+    border-color:var(--yellow);
+
+    box-shadow:
+        0 0 25px
+        rgba(255,212,71,.15);
+
+}
+
+
+/* =====================================================
+   SIDE MENU
+===================================================== */
+
+.side-menu{
+
+    position:fixed;
+
+    top:72px;
+
+    right:-320px;
+
+    width:310px;
+
+    min-height:
+        calc(100vh - 72px);
+
+    z-index:999;
+
+    padding:36px 25px;
+
+    background:
+        rgba(10,10,10,.98);
+
+    backdrop-filter:blur(20px);
+
+    border-left:
+        1px solid
+        rgba(255,212,71,.18);
+
+    transition:
+        .45s
+        cubic-bezier(.77,0,.18,1);
+
+}
+
+
+.side-menu.active{
+
+    right:0;
+
+}
+
+
+.side-menu h3{
+
+    color:var(--yellow);
+
+    font-size:15px;
+
+    letter-spacing:2px;
+
+    margin-bottom:25px;
+
+}
+
+
+.side-menu a{
+
+    display:block;
+
+    text-decoration:none;
+
+    color:#bdb8ad;
+
+    font-size:15px;
+
+    padding:15px 16px;
+
+    margin:7px 0;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+
+.side-menu a:hover{
+
+    color:var(--yellow2);
+
+    background:
+        rgba(255,212,71,.07);
+
+    transform:
+        translateX(7px);
+
+}
+
+
+/* =====================================================
+   PAGE NAV
+===================================================== */
+
+.page-nav{
+
+    position:sticky;
+
+    top:72px;
+
+    z-index:800;
+
+    height:58px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:34px;
+
+    background:
+        rgba(10,10,10,.92);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+
+}
+
+
+.page-nav a{
+
+    text-decoration:none;
+
+    color:#98938a;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+.page-nav a:hover{
+
+    color:var(--yellow);
+
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+    min-height:750px;
+
+    padding:
+        155px
+        7%
+        90px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    align-items:center;
+
+    gap:70px;
+
+}
+
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:
+        10px
+        16px;
+
+    border-radius:100px;
+
+    background:
+        rgba(255,212,71,.055);
+
+    border:
+        1px solid
+        rgba(255,212,71,.22);
+
+    color:var(--yellow);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:24px;
+
+}
+
+
+.live-dot{
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--yellow);
+
+    box-shadow:
+        0 0 13px
+        var(--yellow);
+
+    animation:pulse 1.5s infinite;
+
+}
+
+
+.hero h1{
+
+    font-size:
+        clamp(
+            50px,
+            6vw,
+            86px
+        );
+
+    line-height:.97;
+
+    letter-spacing:-4px;
+
+}
+
+
+.hero h1 span{
+
+    color:var(--yellow);
+
+    text-shadow:
+        0 0 35px
+        rgba(255,212,71,.18);
+
+}
+
+
+.hero-text{
+
+    color:var(--muted);
+
+    max-width:650px;
+
+    font-size:16px;
+
+    line-height:1.9;
+
+    margin-top:27px;
+
+}
+
+
+.hero-buttons{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:14px;
+
+    margin-top:33px;
+
+}
+
+
+.btn{
+
+    display:inline-block;
+
+    padding:
+        15px
+        23px;
+
+    border-radius:11px;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    transition:.3s;
+
+}
+
+
+.btn-main{
+
+    background:var(--yellow);
+
+    color:#171303;
+
+    box-shadow:
+        0 0 28px
+        rgba(255,212,71,.13);
+
+}
+
+
+.btn-main:hover{
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 14px 38px
+        rgba(255,212,71,.2);
+
+}
+
+
+.btn-outline{
+
+    background:#141414;
+
+    color:#e0dbce;
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+}
+
+
+.btn-outline:hover{
+
+    color:var(--yellow);
+
+    border-color:var(--yellow);
+
+}
+
+
+/* =====================================================
+   GENERATOR VISUAL
+===================================================== */
+
+.generator-stage{
+
+    height:500px;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+
+/* main generator */
+
+.generator{
+
+    width:370px;
+
+    height:245px;
+
+    position:relative;
+
+    border-radius:25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252523,
+            #0d0d0d
+        );
+
+    border:
+        2px solid
+        rgba(255,212,71,.28);
+
+    box-shadow:
+
+        0 30px 60px
+        rgba(0,0,0,.55),
+
+        0 0 50px
+        rgba(255,212,71,.07);
+
+}
+
+
+/* generator top */
+
+.generator-top{
+
+    position:absolute;
+
+    left:30px;
+
+    right:30px;
+
+    top:-28px;
+
+    height:30px;
+
+    border-radius:
+        14px
+        14px
+        5px
+        5px;
+
+    background:#181816;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+}
+
+
+/* side panels */
+
+.panel-lines{
+
+    position:absolute;
+
+    left:24px;
+
+    top:30px;
+
+    width:85px;
+
+    height:180px;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.panel-lines span{
+
+    display:block;
+
+    width:55px;
+
+    height:5px;
+
+    margin:
+        14px
+        0;
+
+    border-radius:4px;
+
+    background:#35342f;
+
+}
+
+
+.panel-lines span:nth-child(2){
+
+    background:
+        var(--yellow);
+
+    box-shadow:
+        0 0 10px
+        rgba(255,212,71,.4);
+
+}
+
+
+/* engine body */
+
+.engine{
+
+    position:absolute;
+
+    left:125px;
+
+    top:42px;
+
+    width:215px;
+
+    height:140px;
+
+    border-radius:16px;
+
+    background:
+        #111110;
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    overflow:hidden;
+
+}
+
+
+.engine-bars{
+
+    position:absolute;
+
+    inset:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+
+.engine-bars span{
+
+    height:10px;
+
+    border-radius:3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4b4535,
+            #91834c,
+            #403b2d
+        );
+
+    animation:
+        enginePulse
+        1.5s infinite;
+
+}
+
+
+.engine-bars span:nth-child(2){
+    animation-delay:.15s;
+}
+
+.engine-bars span:nth-child(3){
+    animation-delay:.3s;
+}
+
+.engine-bars span:nth-child(4){
+    animation-delay:.45s;
+}
+
+.engine-bars span:nth-child(5){
+    animation-delay:.6s;
+}
+
+
+/* exhaust */
+
+.exhaust{
+
+    position:absolute;
+
+    width:55px;
+
+    height:95px;
+
+    right:48px;
+
+    top:-105px;
+
+    border:
+        9px solid
+        #242422;
+
+    border-bottom:none;
+
+    border-radius:
+        18px
+        18px
+        0
+        0;
+
+}
+
+
+.smoke{
+
+    position:absolute;
+
+    width:13px;
+
+    height:13px;
+
+    border-radius:50%;
+
+    background:#77746d;
+
+    opacity:.35;
+
+    animation:
+        smoke 3.2s infinite;
+
+}
+
+
+.smoke.s1{
+
+    right:50px;
+
+    top:-125px;
+
+}
+
+
+.smoke.s2{
+
+    right:66px;
+
+    top:-145px;
+
+    animation-delay:1s;
+
+}
+
+
+.smoke.s3{
+
+    right:35px;
+
+    top:-155px;
+
+    animation-delay:1.8s;
+
+}
+
+
+/* power output */
+
+.power-port{
+
+    position:absolute;
+
+    right:-28px;
+
+    top:95px;
+
+    width:32px;
+
+    height:55px;
+
+    border-radius:
+        0
+        9px
+        9px
+        0;
+
+    background:#20201e;
+
+    border:
+        1px solid
+        rgba(255,212,71,.25);
+
+}
+
+
+.power-line{
+
+    position:absolute;
+
+    right:-150px;
+
+    top:121px;
+
+    width:125px;
+
+    height:3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--yellow),
+            transparent
+        );
+
+    box-shadow:
+        0 0 12px
+        rgba(255,212,71,.4);
+
+}
+
+
+.power-line::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:8px;
+
+    height:8px;
+
+    right:0;
+
+    top:50%;
+
+    transform:
+        translateY(-50%);
+
+    border-radius:50%;
+
+    background:var(--yellow);
+
+    box-shadow:
+        0 0 15px
+        var(--yellow);
+
+    animation:
+        powerPulse
+        1.2s infinite;
+
+}
+
+
+/* fuel droplets */
+
+.fuel-drop{
+
+    position:absolute;
+
+    width:7px;
+
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--yellow);
+
+    box-shadow:
+        0 0 12px
+        rgba(255,212,71,.65);
+
+    animation:
+        fuelFlow
+        2.8s infinite;
+
+}
+
+
+.f1{
+    left:105px;
+    top:60px;
+}
+
+.f2{
+    left:115px;
+    top:90px;
+    animation-delay:.7s;
+}
+
+.f3{
+    left:125px;
+    top:120px;
+    animation-delay:1.4s;
+}
+
+
+/* rotating ring */
+
+.energy-ring{
+
+    position:absolute;
+
+    width:460px;
+
+    height:460px;
+
+    border-radius:50%;
+
+    border:
+        1px dashed
+        rgba(255,212,71,.12);
+
+    animation:
+        spin
+        26s linear infinite;
+
+}
+
+
+.energy-ring::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:-5px;
+
+    left:50%;
+
+    width:9px;
+
+    height:9px;
+
+    border-radius:50%;
+
+    background:var(--yellow);
+
+    box-shadow:
+        0 0 20px
+        var(--yellow);
+
+}
+
+
+/* =====================================================
+   METRICS
+===================================================== */
+
+.metrics{
+
+    padding:
+        20px
+        7%
+        80px;
+
+}
+
+
+.metric-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:17px;
+
+}
+
+
+.metric{
+
+    min-height:165px;
+
+    padding:26px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #181817,
+            #0e0e0d
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+.metric:hover{
+
+    transform:
+        translateY(-8px);
+
+    border-color:
+        rgba(255,212,71,.3);
+
+    box-shadow:
+        0 20px 45px
+        rgba(0,0,0,.4);
+
+}
+
+
+.metric-label{
+
+    color:#9a958b;
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.metric-value{
+
+    font-size:38px;
+
+    font-weight:800;
+
+    margin-top:11px;
+
+    color:#f8f2df;
+
+}
+
+
+.metric-value span{
+
+    font-size:15px;
+
+    color:#8e897f;
+
+    font-weight:500;
+
+}
+
+
+.metric-desc{
+
+    color:#6f6a62;
+
+    font-size:12px;
+
+    margin-top:8px;
+
+}
+
+
+/* =====================================================
+   SECTION
+===================================================== */
+
+.section{
+
+    padding:
+        95px
+        7%;
+
+}
+
+
+.eyebrow{
+
+    color:var(--yellow);
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+
+.section h2{
+
+    font-size:42px;
+
+    letter-spacing:-1.8px;
+
+}
+
+
+.section-intro{
+
+    color:#89847b;
+
+    max-width:720px;
+
+    font-size:15px;
+
+    line-height:1.8;
+
+    margin-top:14px;
+
+}
+
+
+/* =====================================================
+   CONTROL CARDS
+===================================================== */
+
+.control-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:20px;
+
+    margin-top:40px;
+
+}
+
+
+.control-card{
+
+    min-height:260px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    background:#141413;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    transition:.4s;
+
+}
+
+
+.control-card:hover{
+
+    transform:
+        translateY(-10px);
+
+    border-color:
+        rgba(255,212,71,.3);
+
+    box-shadow:
+        0 22px 50px
+        rgba(0,0,0,.4);
+
+}
+
+
+.control-number{
+
+    color:var(--yellow);
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+}
+
+
+.control-icon{
+
+    font-size:34px;
+
+    margin:
+        25px
+        0
+        20px;
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(255,212,71,.3)
+        );
+
+}
+
+
+.control-card h3{
+
+    font-size:20px;
+
+}
+
+
+.control-card p{
+
+    color:#817c73;
+
+    font-size:14px;
+
+    line-height:1.75;
+
+    margin-top:10px;
+
+}
+
+
+/* =====================================================
+   LIVE CONTROL
+===================================================== */
+
+.control-section{
+
+    background:#0e0e0d;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.05);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+
+}
+
+
+.dashboard{
+
+    display:grid;
+
+    grid-template-columns:
+        1.1fr
+        .9fr;
+
+    gap:22px;
+
+    margin-top:40px;
+
+}
+
+
+.dashboard-card{
+
+    padding:32px;
+
+    border-radius:20px;
+
+    background:#151514;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+/* output */
+
+.output-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+.output-head h3{
+
+    font-size:19px;
+
+}
+
+
+.live-label{
+
+    color:var(--yellow);
+
+    font-size:11px;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.output-display{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:35px;
+
+    margin-top:35px;
+
+}
+
+
+.output-circle{
+
+    width:180px;
+
+    height:180px;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    position:relative;
+
+    background:
+        conic-gradient(
+            var(--yellow)
+            0 48%,
+            #302d25
+            48% 100%
+        );
+
+}
+
+
+.output-circle::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:13px;
+
+    border-radius:50%;
+
+    background:#151514;
+
+}
+
+
+.output-number{
+
+    position:relative;
+
+    z-index:2;
+
+    text-align:center;
+
+}
+
+
+.output-number strong{
+
+    display:block;
+
+    font-size:36px;
+
+}
+
+
+.output-number span{
+
+    color:#89847b;
+
+    font-size:12px;
+
+}
+
+
+.info{
+
+    flex:1;
+
+}
+
+
+.info-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:15px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+
+    font-size:13px;
+
+}
+
+
+.info-row span{
+
+    color:#807b72;
+
+}
+
+
+.info-row strong{
+
+    color:#e5dfd1;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-list{
+
+    display:grid;
+
+    gap:13px;
+
+    margin-top:5px;
+
+}
+
+
+.status-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    background:#0d0d0c;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+}
+
+
+.status-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+.status-dot{
+
+    width:9px;
+
+    height:9px;
+
+    border-radius:50%;
+
+    background:var(--yellow);
+
+    box-shadow:
+        0 0 12px
+        rgba(255,212,71,.65);
+
+    animation:pulse 1.7s infinite;
+
+}
+
+
+.status-row span{
+
+    color:#8f8a81;
+
+    font-size:13px;
+
+}
+
+
+.status-row strong{
+
+    font-size:13px;
+
+    color:#e9e3d7;
+
+}
+
+
+/* =====================================================
+   FUEL USAGE
+===================================================== */
+
+.fuel-panel{
+
+    margin-top:25px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(255,212,71,.07),
+            transparent 50%
+        ),
+        #141413;
+
+    border:
+        1px solid
+        rgba(255,212,71,.17);
+
+}
+
+
+.fuel-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+.fuel-title h3{
+
+    font-size:19px;
+
+}
+
+
+.fuel-title span{
+
+    color:var(--yellow);
+
+    font-size:12px;
+
+}
+
+
+.fuel-meter{
+
+    height:15px;
+
+    margin-top:27px;
+
+    background:#29271f;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+
+.fuel-fill{
+
+    height:100%;
+
+    width:38%;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8f6a12,
+            var(--yellow),
+            var(--yellow2)
+        );
+
+    transition:
+        width
+        1s ease;
+
+}
+
+
+.fuel-details{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+
+.fuel-detail{
+
+    padding:15px;
+
+    border-radius:11px;
+
+    background:#0e0e0d;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+}
+
+
+.fuel-detail span{
+
+    display:block;
+
+    color:#7d786f;
+
+    font-size:11px;
+
+}
+
+
+.fuel-detail strong{
+
+    display:block;
+
+    margin-top:6px;
+
+    font-size:16px;
+
+}
+
+
+/* =====================================================
+   AI PANEL
+===================================================== */
+
+.ai-panel{
+
+    margin-top:25px;
+
+    padding:32px;
+
+    border-radius:20px;
+
+    display:grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto;
+
+    align-items:center;
+
+    gap:24px;
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(255,212,71,.09),
+            transparent 35%
+        ),
+        #15140f;
+
+    border:
+        1px solid
+        rgba(255,212,71,.19);
+
+}
+
+
+.ai-icon{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:17px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:29px;
+
+    color:var(--yellow);
+
+    background:#211e11;
+
+    border:
+        1px solid
+        rgba(255,212,71,.25);
+
+}
+
+
+.ai-panel h3{
+
+    font-size:20px;
+
+}
+
+
+.ai-panel p{
+
+    color:#898379;
+
+    font-size:13px;
+
+    line-height:1.75;
+
+    margin-top:8px;
+
+}
+
+
+.ai-status{
+
+    padding:
+        11px
+        16px;
+
+    border-radius:10px;
+
+    color:var(--yellow);
+
+    background:
+        rgba(255,212,71,.06);
+
+    border:
+        1px solid
+        rgba(255,212,71,.17);
+
+    font-size:10px;
+
+    font-weight:700;
+
+    letter-spacing:1.2px;
+
+}
+
+
+/* =====================================================
+   24 HOUR GRAPH
+===================================================== */
+
+.chart-box{
+
+    margin-top:25px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    background:#131312;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.chart-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:28px;
+
+}
+
+
+.chart-title h3{
+
+    font-size:19px;
+
+}
+
+
+.chart-title span{
+
+    color:#89847b;
+
+    font-size:12px;
+
+}
+
+
+.chart{
+
+    height:250px;
+
+    display:flex;
+
+    align-items:end;
+
+    gap:9px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.1);
+
+}
+
+
+.bar{
+
+    flex:1;
+
+    min-height:8px;
+
+    border-radius:
+        5px
+        5px
+        0
+        0;
+
+    background:
+        linear-gradient(
+            to top,
+            #8b6815,
+            var(--yellow)
+        );
+
+    transition:.4s;
+
+    position:relative;
+
+}
+
+
+.bar:hover{
+
+    filter:brightness(1.35);
+
+}
+
+
+.bar::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:5px;
+
+    height:5px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    top:-6px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+}
+
+
+.hours{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:12px;
+
+    color:#656158;
+
+    font-size:11px;
+
+}
+
+
+/* =====================================================
+   ENERGY FLOW
+===================================================== */
+
+.flow{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    margin-top:45px;
+
+}
+
+
+.flow-node{
+
+    width:190px;
+
+    min-height:135px;
+
+    padding:22px;
+
+    text-align:center;
+
+    border-radius:16px;
+
+    background:#141413;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    transition:.35s;
+
+}
+
+
+.flow-node:hover{
+
+    transform:
+        translateY(-9px);
+
+    border-color:
+        rgba(255,212,71,.3);
+
+}
+
+
+.flow-icon{
+
+    color:var(--yellow);
+
+    font-size:28px;
+
+}
+
+
+.flow-node h4{
+
+    margin-top:12px;
+
+    font-size:15px;
+
+}
+
+
+.flow-node p{
+
+    color:#767168;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+    margin-top:7px;
+
+}
+
+
+.flow-arrow{
+
+    color:var(--yellow);
+
+    font-size:28px;
+
+    padding:
+        0
+        12px;
+
+    animation:
+        arrow
+        1.5s infinite;
+
+}
+
+
+/* =====================================================
+   TERMINAL
+===================================================== */
+
+.terminal{
+
+    margin-top:25px;
+
+    padding:26px;
+
+    border-radius:17px;
+
+    background:#070707;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    font-family:monospace;
+
+}
+
+
+.terminal-head{
+
+    display:flex;
+
+    gap:7px;
+
+    margin-bottom:18px;
+
+}
+
+
+.term-dot{
+
+    width:9px;
+
+    height:9px;
+
+    border-radius:50%;
+
+    background:#615d53;
+
+}
+
+
+.terminal-line{
+
+    font-size:12px;
+
+    color:#79746a;
+
+    line-height:2.2;
+
+}
+
+
+.terminal-line span{
+
+    color:var(--yellow);
+
+}
+
+
+/* =====================================================
+   CTA
+===================================================== */
+
+.cta{
+
+    margin:
+        40px
+        7%
+        90px;
+
+    padding:60px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,212,71,.08),
+            transparent 60%
+        ),
+        #13120d;
+
+    border:
+        1px solid
+        rgba(255,212,71,.18);
+
+}
+
+
+.cta h2{
+
+    font-size:40px;
+
+    letter-spacing:-1.5px;
+
+}
+
+
+.cta p{
+
+    max-width:700px;
+
+    margin:
+        16px
+        auto
+        28px;
+
+    color:#888278;
+
+    font-size:14px;
+
+    line-height:1.8;
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+
+    padding:
+        32px
+        7%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.06);
+
+    color:#625e55;
+
+    font-size:11px;
+
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes pulse{
+
+    0%,100%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    50%{
+        opacity:.4;
+        transform:scale(.7);
+    }
+
+}
+
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+@keyframes enginePulse{
+
+    0%,100%{
+        opacity:.4;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+}
+
+
+@keyframes powerPulse{
+
+    0%,100%{
+        opacity:.3;
+    }
+
+    50%{
+        opacity:1;
+
+        transform:
+            translateY(-50%)
+            scale(1.4);
+    }
+
+}
+
+
+@keyframes fuelFlow{
+
+    0%{
+        opacity:0;
+
+        transform:
+            translateY(-20px)
+            scale(.5);
+    }
+
+    30%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+
+        transform:
+            translateY(110px)
+            scale(1);
+    }
+
+}
+
+
+@keyframes smoke{
+
+    0%{
+        opacity:0;
+
+        transform:
+            translateY(0)
+            scale(.5);
+    }
+
+    30%{
+        opacity:.4;
+    }
+
+    100%{
+        opacity:0;
+
+        transform:
+            translateY(-70px)
+            translateX(25px)
+            scale(1.8);
+    }
+
+}
+
+
+@keyframes arrow{
+
+    0%,100%{
+        opacity:.3;
+    }
+
+    50%{
+        opacity:1;
+
+        transform:
+            translateX(5px);
+    }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1000px){
+
+    .hero{
+
+        grid-template-columns:1fr;
+
+        text-align:center;
+
+    }
+
+
+    .hero-text{
+
+        margin-left:auto;
+
+        margin-right:auto;
+
+    }
+
+
+    .hero-buttons{
+
+        justify-content:center;
+
+    }
+
+
+    .metric-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .control-grid{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .dashboard{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .navbar{
+
+        padding:
+            0
+            18px;
+
+    }
+
+
+    .page-nav{
+
+        justify-content:flex-start;
+
+        overflow-x:auto;
+
+        padding:
+            0
+            20px;
+
+        gap:23px;
+
+    }
+
+
+    .hero{
+
+        padding:
+            125px
+            5%
+            60px;
+
+    }
+
+
+    .hero h1{
+
+        letter-spacing:-2px;
+
+    }
+
+
+    .generator-stage{
+
+        transform:scale(.7);
+
+        height:410px;
+
+    }
+
+
+    .metric-grid{
+
+        grid-template-columns:
+            1fr
+            1fr;
+
+    }
+
+
+    .section{
+
+        padding:
+            70px
+            5%;
+
+    }
+
+
+    .section h2{
+
+        font-size:32px;
+
+    }
+
+
+    .output-display{
+
+        flex-direction:column;
+
+    }
+
+
+    .fuel-details{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .ai-panel{
+
+        grid-template-columns:
+            1fr;
+
+        text-align:center;
+
+    }
+
+
+    .ai-icon{
+
+        margin:auto;
+
+    }
+
+
+    .flow{
+
+        flex-direction:column;
+
+    }
+
+
+    .flow-arrow{
+
+        transform:rotate(90deg);
+
+        padding:9px;
+
+    }
+
+
+    .cta{
+
+        margin:
+            30px
+            5%
+            70px;
+
+        padding:
+            45px
+            20px;
+
+    }
+
+
+    .cta h2{
+
+        font-size:30px;
+
+    }
+
+
+    footer{
+
+        flex-direction:column;
+
+        gap:12px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="grid"></div>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ⛽
+        </div>
+
+        POLARIS
+
+    </div>
+
+
+    <!-- THREE DASH BUTTON -->
+
+    <button
+        class="menu-btn"
+        id="menuBtn"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+</nav>
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+    class="side-menu"
+    id="sideMenu"
+>
+
+    <h3>
+        POLARIS MENU
+    </h3>
+
+
+    <a href="index.html">
+        ⌂ Home
+    </a>
+
+
+    <a href="renewable.html">
+        ◈ Renewable Energy
+    </a>
+
+
+    <a href="nonrenewable.html">
+        ◉ Backup & Energy Support
+    </a>
+
+
+    <a href="admin.html">
+        ⚙ Admin Dashboard
+    </a>
+
+
+    <a href="disaster.html">
+        ⚠ Disaster Management
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     PAGE NAV
+===================================================== -->
+
+<div class="page-nav">
+
+    <a href="#overview">
+        Overview
+    </a>
+
+    <a href="#control">
+        Generator Control
+    </a>
+
+    <a href="#fuel">
+        Fuel Monitoring
+    </a>
+
+    <a href="#ai">
+        AI Logic
+    </a>
+
+    <a href="nonrenewable.html">
+        ← Backup Energy
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="overview"
+>
+
+
+    <div>
+
+
+        <div class="badge">
+
+            <span class="live-dot"></span>
+
+            DIESEL GENERATOR • BACKUP READY
+
+        </div>
+
+
+        <h1>
+
+            Power When<br>
+
+            <span>Everything Else Falls Short.</span>
+
+        </h1>
+
+
+        <p class="hero-text">
+
+            The diesel / fuel generator provides reliable backup
+            electricity when renewable sources and stored energy
+            cannot meet the station's demand. POLARIS starts it
+            only when required and operates it within its configured
+            20–100 kW operating range.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+
+            <a
+                href="#control"
+                class="btn btn-main"
+            >
+                Open Generator Control
+            </a>
+
+
+            <a
+                href="nonrenewable.html"
+                class="btn btn-outline"
+            >
+                ← Backup Energy
+            </a>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         GENERATOR VISUAL
+    ================================================= -->
+
+    <div class="generator-stage">
+
+
+        <div class="energy-ring"></div>
+
+
+        <div class="generator">
+
+
+            <div class="generator-top"></div>
+
+
+            <div class="panel-lines">
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+
+            <div class="engine">
+
+                <div class="engine-bars">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="exhaust"></div>
+
+
+            <div class="power-port"></div>
+
+
+            <div class="power-line"></div>
+
+
+            <div class="fuel-drop f1"></div>
+            <div class="fuel-drop f2"></div>
+            <div class="fuel-drop f3"></div>
+
+
+        </div>
+
+
+        <div class="smoke s1"></div>
+        <div class="smoke s2"></div>
+        <div class="smoke s3"></div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     METRICS
+===================================================== -->
+
+<section class="metrics">
+
+
+    <div class="metric-grid">
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Maximum Output
+            </div>
+
+            <div class="metric-value">
+
+                100
+                <span>kW</span>
+
+            </div>
+
+            <div class="metric-desc">
+
+                Maximum configured generator output
+
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Minimum Output
+            </div>
+
+            <div class="metric-value">
+
+                20
+                <span>kW</span>
+
+            </div>
+
+            <div class="metric-desc">
+
+                Minimum operating level when running
+
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Fuel Rate
+            </div>
+
+            <div class="metric-value">
+
+                0.25
+                <span>L/kWh</span>
+
+            </div>
+
+            <div class="metric-desc">
+
+                Configured fuel consumption rate
+
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Current Status
+            </div>
+
+            <div
+                class="metric-value"
+                id="statusMetric"
+            >
+
+                READY
+
+            </div>
+
+            <div class="metric-desc">
+
+                Generator available for backup
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GENERATOR CONTROL
+===================================================== -->
+
+<section
+    class="section control-section"
+    id="control"
+>
+
+
+    <div class="eyebrow">
+        Generator Operation
+    </div>
+
+
+    <h2>
+        Controlled Backup Power
+    </h2>
+
+
+    <p class="section-intro">
+
+        The generator is not the first choice for normal energy
+        supply. POLARIS attempts to satisfy demand through
+        renewable sources and stored energy first, then uses
+        the generator when additional power is required.
+
+    </p>
+
+
+    <div class="control-grid">
+
+
+        <!-- CARD 1 -->
+
+        <div class="control-card">
+
+            <div class="control-number">
+                01 • START
+            </div>
+
+            <div class="control-icon">
+                ▶
+            </div>
+
+            <h3>
+                Automatic Start
+            </h3>
+
+            <p>
+
+                If available renewable generation and storage
+                cannot satisfy the required demand, the optimizer
+                can call the generator for backup power.
+
+            </p>
+
+        </div>
+
+
+        <!-- CARD 2 -->
+
+        <div class="control-card">
+
+            <div class="control-number">
+                02 • CONTROL
+            </div>
+
+            <div class="control-icon">
+                ⚙
+            </div>
+
+            <h3>
+                20–100 kW Range
+            </h3>
+
+            <p>
+
+                When running, the generator operates within its
+                configured minimum and maximum output limits.
+
+            </p>
+
+        </div>
+
+
+        <!-- CARD 3 -->
+
+        <div class="control-card">
+
+            <div class="control-number">
+                03 • OPTIMIZE
+            </div>
+
+            <div class="control-icon">
+                ◈
+            </div>
+
+            <h3>
+                Minimize Fuel
+            </h3>
+
+            <p>
+
+                POLARIS aims to use the generator only when
+                needed and reduce unnecessary fuel consumption.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     LIVE DASHBOARD
+===================================================== -->
+
+<section
+    class="section"
+    id="fuel"
+>
+
+
+    <div class="eyebrow">
+        Live Demonstration
+    </div>
+
+
+    <h2>
+        Generator Control Center
+    </h2>
+
+
+    <p class="section-intro">
+
+        Frontend demonstration values below update automatically.
+        These can later be replaced by Prachi's backend API data.
+
+    </p>
+
+
+    <div class="dashboard">
+
+
+        <!-- OUTPUT -->
+
+        <div class="dashboard-card">
+
+
+            <div class="output-head">
+
+                <h3>
+                    Current Generator Output
+                </h3>
+
+                <span class="live-label">
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div class="output-display">
+
+
+                <div class="output-circle">
+
+                    <div class="output-number">
+
+                        <strong id="outputValue">
+                            0
+                        </strong>
+
+                        <span>
+                            kW
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info">
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Maximum
+                        </span>
+
+                        <strong>
+                            100 kW
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Minimum
+                        </span>
+
+                        <strong>
+                            20 kW
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Current
+                        </span>
+
+                        <strong id="outputText">
+                            0 kW
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Operating Mode
+                        </span>
+
+                        <strong id="modeText">
+                            STANDBY
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="dashboard-card">
+
+
+            <div class="output-head">
+
+                <h3>
+                    Generator Telemetry
+                </h3>
+
+                <span class="live-label">
+                    ACTIVE
+                </span>
+
+            </div>
+
+
+            <div class="status-list">
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Generator
+                        </span>
+
+                    </div>
+
+                    <strong id="generatorStatus">
+                        READY
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Fuel System
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        NORMAL
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Automatic Dispatch
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        ENABLED
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Protection
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        NORMAL
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         FUEL USAGE
+    ================================================= -->
+
+    <div class="fuel-panel">
+
+
+        <div class="fuel-title">
+
+            <h3>
+                Fuel Consumption Monitor
+            </h3>
+
+            <span id="fuelRate">
+                0.25 L/kWh
+            </span>
+
+        </div>
+
+
+        <div class="fuel-meter">
+
+            <div
+                class="fuel-fill"
+                id="fuelFill"
+            ></div>
+
+        </div>
+
+
+        <div class="fuel-details">
+
+
+            <div class="fuel-detail">
+
+                <span>
+                    Current Output
+                </span>
+
+                <strong id="fuelOutput">
+                    0 kW
+                </strong>
+
+            </div>
+
+
+            <div class="fuel-detail">
+
+                <span>
+                    Estimated Rate
+                </span>
+
+                <strong id="fuelPerHour">
+                    0 L/hr
+                </strong>
+
+            </div>
+
+
+            <div class="fuel-detail">
+
+                <span>
+                    Fuel Cost
+                </span>
+
+                <strong id="fuelCost">
+                    ₹0/hr
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         AI PANEL
+    ================================================= -->
+
+    <div
+        class="ai-panel"
+        id="ai"
+    >
+
+
+        <div class="ai-icon">
+            ✦
+        </div>
+
+
+        <div>
+
+            <h3>
+                AI Generator Dispatch
+            </h3>
+
+
+            <p>
+
+                POLARIS considers renewable availability,
+                battery state and station demand before
+                relying on the fuel generator. If the generator
+                is unavailable, the system can automatically
+                shift toward available renewable sources and
+                battery support.
+
+            </p>
+
+        </div>
+
+
+        <div class="ai-status">
+            AUTO MODE ACTIVE
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         TERMINAL
+    ================================================= -->
+
+    <div class="terminal">
+
+
+        <div class="terminal-head">
+
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[GENERATOR]</span>
+            Backup generator connected...
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[LIMIT]</span>
+            Operating range = 20–100 kW
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[FUEL]</span>
+            Consumption rate = 0.25 L/kWh
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[OPTIMIZER]</span>
+            Automatic dispatch enabled
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[STATUS]</span>
+            Generator ready for emergency support
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     ENERGY FLOW
+===================================================== -->
+
+<section class="section">
+
+
+    <div class="eyebrow">
+        Backup Energy Path
+    </div>
+
+
+    <h2>
+        When Backup Power Is Needed
+    </h2>
+
+
+    <div class="flow">
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                ☀
+            </div>
+
+            <h4>
+                Renewable Sources
+            </h4>
+
+            <p>
+                First priority whenever available.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                🔋
+            </div>
+
+            <h4>
+                Stored Energy
+            </h4>
+
+            <p>
+                Battery support is used when appropriate.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                ⛽
+            </div>
+
+            <h4>
+                Generator
+            </h4>
+
+            <p>
+                Backup power when additional supply is needed.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                🏠
+            </div>
+
+            <h4>
+                Station Loads
+            </h4>
+
+            <p>
+                Critical loads remain prioritized.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     24 HOUR OUTPUT
+===================================================== -->
+
+<section class="section">
+
+
+    <div class="chart-box">
+
+
+        <div class="chart-title">
+
+            <h3>
+                24-Hour Generator Output
+            </h3>
+
+            <span>
+                Demonstration Data • kW
+            </span>
+
+        </div>
+
+
+        <div
+            class="chart"
+            id="chart"
+        ></div>
+
+
+        <div class="hours">
+
+            <span>00</span>
+            <span>04</span>
+            <span>08</span>
+            <span>12</span>
+            <span>16</span>
+            <span>20</span>
+            <span>24</span>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section class="cta">
+
+
+    <h2>
+        Backup Power. Only When Necessary.
+    </h2>
+
+
+    <p>
+
+        POLARIS keeps the generator available as a dependable
+        fallback while prioritizing renewable energy and
+        stored energy whenever possible. This reduces fuel
+        dependence while protecting essential station operations.
+
+    </p>
+
+
+    <a
+        href="admin.html"
+        class="btn btn-main"
+    >
+        Open Admin Control
+    </a>
+
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div>
+        © 2026 POLARIS • Smart Energy Management
+    </div>
+
+    <div>
+        Diesel / Fuel Generator • Backup Energy
+    </div>
+
+</footer>
+
+
+<script>
+
+
+/* =====================================================
+   THREE DASH MENU
+===================================================== */
+
+const menuBtn =
+    document.getElementById("menuBtn");
+
+const sideMenu =
+    document.getElementById("sideMenu");
+
+
+menuBtn.addEventListener(
+    "click",
+    () => {
+
+        sideMenu.classList.toggle(
+            "active"
+        );
+
+    }
+);
+
+
+/* close menu */
+
+document
+    .querySelectorAll(".side-menu a")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                sideMenu.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+    });
+
+
+/* =====================================================
+   GENERATOR DEMO
+===================================================== */
+
+async function updateGenerator(){
+    /*
+        POLARIS Live Generator Telemetry.
+        Synchronized with backend simulation /api/status.
+    */
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+
+        let output = Math.round(d.generator_power_kw || 0);
+        let running = output > 0.1;
+        let mode = running ? "GENERATING" : "STANDBY";
+
+        const elOutVal = document.getElementById("outputValue");
+        if (elOutVal) elOutVal.textContent = output;
+
+        const elOutTxt = document.getElementById("outputText");
+        if (elOutTxt) elOutTxt.textContent = output + " kW";
+
+        const elMode = document.getElementById("modeText");
+        if (elMode) elMode.textContent = mode;
+
+        const elGenStat = document.getElementById("generatorStatus");
+        if (elGenStat) elGenStat.textContent = running ? "RUNNING" : "READY";
+
+        const elStatMetric = document.getElementById("statusMetric");
+        if (elStatMetric) elStatMetric.textContent = running ? "RUNNING" : "READY";
+
+        const fuelPerHour = output * 0.25;
+        const costPerHour = fuelPerHour * 10;
+
+        const elFuelOut = document.getElementById("fuelOutput");
+        if (elFuelOut) elFuelOut.textContent = output + " kW";
+
+        const elFuelHr = document.getElementById("fuelPerHour");
+        if (elFuelHr) elFuelHr.textContent = fuelPerHour.toFixed(1) + " L/hr";
+
+        const elFuelCost = document.getElementById("fuelCost");
+        if (elFuelCost) elFuelCost.textContent = "₹" + costPerHour.toFixed(0) + "/hr";
+
+        const meter = Math.min(100, output);
+        const elFuelFill = document.getElementById("fuelFill");
+        if (elFuelFill) elFuelFill.style.width = meter + "%";
+
+    } catch (e) {
+        console.warn("Generator telemetry notice:", e);
+    }
+}
+
+updateGenerator();
+
+setInterval(
+    updateGenerator,
+    2000
+);
+
+
+/* =====================================================
+   24-HOUR DEMO GRAPH
+===================================================== */
+
+const chart =
+    document.getElementById("chart");
+
+
+const values = [
+
+    0,
+    0,
+    0,
+    25,
+
+    35,
+    42,
+    0,
+    0,
+
+    0,
+    0,
+    20,
+    30,
+
+    48,
+    65,
+    55,
+    40,
+
+    0,
+    0,
+    25,
+    38,
+
+    52,
+    45,
+    30,
+    20
+
+];
+
+
+values.forEach(
+    value => {
+
+
+        const bar =
+            document.createElement(
+                "div"
+            );
+
+
+        bar.className =
+            "bar";
+
+
+        const height =
+            value === 0
+            ? 3
+            : (value / 100) * 100;
+
+
+        bar.style.height =
+            height + "%";
+
+
+        bar.title =
+            value + " kW";
+
+
+        chart.appendChild(bar);
+
+    }
+);
+
+
+</script>
+
+
+</body>
+</html>

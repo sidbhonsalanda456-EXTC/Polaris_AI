@@ -1,0 +1,3170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Hydrogen + Fuel Cell | POLARIS</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#070708;
+    color:#f5f2ee;
+    overflow-x:hidden;
+}
+
+:root{
+    --bg:#070708;
+    --bg2:#0e0e10;
+    --panel:#141416;
+    --panel2:#1b1b1e;
+
+    --red:#ff4b4b;
+    --red2:#ff7777;
+    --crimson:#c92d35;
+    --white:#f5f2ee;
+    --silver:#c8c8ca;
+
+    --muted:#969398;
+    --dim:#68666b;
+
+    --line:rgba(255,75,75,.17);
+}
+
+
+/* ================================
+   BACKGROUND
+================================ */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            circle at 78% 12%,
+            rgba(255,75,75,.10),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 12% 85%,
+            rgba(201,45,53,.07),
+            transparent 30%
+        );
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+
+    opacity:.10;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.05) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.05) 1px,
+            transparent 1px
+        );
+
+    background-size:52px 52px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent
+        );
+}
+
+
+/* ================================
+   NAVBAR
+================================ */
+
+.navbar{
+    height:72px;
+    width:100%;
+
+    position:fixed;
+    top:0;
+    left:0;
+
+    z-index:1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 35px;
+
+    background:rgba(7,7,8,.84);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-size:17px;
+    font-weight:800;
+
+    letter-spacing:2px;
+}
+
+.logo-icon{
+    width:35px;
+    height:35px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    color:var(--red);
+
+    background:#13090a;
+
+    border:
+        1px solid
+        rgba(255,75,75,.4);
+
+    box-shadow:
+        0 0 22px
+        rgba(255,75,75,.13);
+}
+
+
+/* ================================
+   THREE DASH MENU
+================================ */
+
+.menu-btn{
+    width:45px;
+    height:45px;
+
+    border-radius:12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    background:#101012;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:5px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.menu-btn span{
+    width:20px;
+    height:2px;
+
+    border-radius:3px;
+
+    background:#eee;
+
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    border-color:var(--red);
+
+    box-shadow:
+        0 0 25px
+        rgba(255,75,75,.16);
+}
+
+
+/* ================================
+   SIDE MENU
+================================ */
+
+.side-menu{
+    position:fixed;
+
+    top:72px;
+    right:-320px;
+
+    width:310px;
+    min-height:calc(100vh - 72px);
+
+    z-index:999;
+
+    padding:35px 25px;
+
+    background:rgba(10,10,11,.98);
+
+    backdrop-filter:blur(20px);
+
+    border-left:
+        1px solid
+        rgba(255,75,75,.18);
+
+    transition:
+        .45s
+        cubic-bezier(.77,0,.18,1);
+}
+
+.side-menu.active{
+    right:0;
+}
+
+.side-menu h3{
+    color:var(--red);
+
+    font-size:13px;
+
+    letter-spacing:2px;
+
+    margin-bottom:25px;
+}
+
+.side-menu a{
+    display:block;
+
+    text-decoration:none;
+
+    color:#aaa8ad;
+
+    padding:15px;
+
+    margin:7px 0;
+
+    border-radius:10px;
+
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:#fff;
+
+    background:
+        rgba(255,75,75,.07);
+
+    transform:translateX(7px);
+}
+
+
+/* ================================
+   PAGE NAV
+================================ */
+
+.page-nav{
+    position:sticky;
+
+    top:72px;
+
+    z-index:800;
+
+    height:55px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:30px;
+
+    background:
+        rgba(9,9,10,.91);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+}
+
+.page-nav a{
+    color:#858288;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:var(--red);
+}
+
+
+/* ================================
+   HERO
+================================ */
+
+.hero{
+    min-height:750px;
+
+    padding:
+        150px
+        7%
+        90px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    align-items:center;
+
+    gap:70px;
+}
+
+.badge{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:
+        9px
+        14px;
+
+    border-radius:100px;
+
+    color:var(--red);
+
+    background:
+        rgba(255,75,75,.055);
+
+    border:
+        1px solid
+        rgba(255,75,75,.23);
+
+    font-size:10px;
+
+    font-weight:700;
+
+    letter-spacing:1.6px;
+
+    margin-bottom:23px;
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--red);
+
+    box-shadow:
+        0 0 12px
+        var(--red);
+
+    animation:pulse 1.5s infinite;
+}
+
+.hero h1{
+    font-size:
+        clamp(
+            48px,
+            6vw,
+            84px
+        );
+
+    line-height:.97;
+
+    letter-spacing:-4px;
+}
+
+.hero h1 span{
+    color:var(--red);
+
+    text-shadow:
+        0 0 35px
+        rgba(255,75,75,.18);
+}
+
+.hero-text{
+    color:var(--muted);
+
+    max-width:610px;
+
+    font-size:14px;
+
+    line-height:1.85;
+
+    margin-top:26px;
+}
+
+.hero-buttons{
+    display:flex;
+
+    gap:13px;
+
+    margin-top:31px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+    display:inline-block;
+
+    text-decoration:none;
+
+    padding:
+        14px
+        21px;
+
+    border-radius:11px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.btn-main{
+    color:#160505;
+
+    background:var(--red);
+
+    box-shadow:
+        0 0 25px
+        rgba(255,75,75,.13);
+}
+
+.btn-main:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 12px 35px
+        rgba(255,75,75,.22);
+}
+
+.btn-outline{
+    color:#ddd9da;
+
+    background:#111113;
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+}
+
+.btn-outline:hover{
+    color:var(--red);
+
+    border-color:var(--red);
+}
+
+
+/* ================================
+   HYDROGEN VISUAL
+================================ */
+
+.hydrogen-stage{
+    height:500px;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+
+/* storage tank */
+
+.tank{
+    width:220px;
+    height:390px;
+
+    border-radius:
+        105px
+        105px
+        38px
+        38px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #27272a,
+            #0d0d0f
+        );
+
+    border:
+        2px solid
+        rgba(255,75,75,.42);
+
+    box-shadow:
+        0 0 50px
+        rgba(255,75,75,.08),
+
+        inset
+        0 0 35px
+        rgba(255,255,255,.035);
+}
+
+.tank-top{
+    position:absolute;
+
+    top:-13px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:70px;
+    height:25px;
+
+    border-radius:9px;
+
+    background:#19191b;
+
+    border:
+        2px solid
+        rgba(255,75,75,.4);
+}
+
+.tank-inner{
+    position:absolute;
+
+    inset:17px;
+
+    border-radius:
+        90px
+        90px
+        27px
+        27px;
+
+    overflow:hidden;
+
+    background:#09090a;
+}
+
+.hydrogen-fill{
+    position:absolute;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    height:68%;
+
+    background:
+        linear-gradient(
+            to top,
+            #7d171d,
+            #c92d35,
+            #ff5b5b
+        );
+
+    box-shadow:
+        0 -15px 35px
+        rgba(255,75,75,.18);
+
+    transition:
+        height 1s ease;
+}
+
+.hydrogen-fill::before{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:0;
+
+    height:2px;
+
+    background:#ffdede;
+
+    box-shadow:
+        0 0 16px
+        #ffdede;
+}
+
+
+/* tank content */
+
+.tank-content{
+    position:absolute;
+
+    inset:0;
+
+    z-index:5;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+}
+
+.h2-symbol{
+    font-size:53px;
+
+    font-weight:800;
+
+    color:#fff;
+
+    text-shadow:
+        0 0 20px
+        rgba(255,75,75,.45);
+
+    margin-bottom:12px;
+}
+
+.storage-value{
+    font-size:43px;
+
+    font-weight:800;
+}
+
+.storage-label{
+    color:#aaa4a7;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    margin-top:5px;
+}
+
+
+/* fuel cell */
+
+.fuel-cell{
+    position:absolute;
+
+    right:5%;
+
+    bottom:42px;
+
+    width:180px;
+    height:150px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #242426,
+            #0f0f11
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    box-shadow:
+        0 20px 40px
+        rgba(0,0,0,.45);
+}
+
+.fuel-cell::before{
+    content:"FUEL CELL";
+
+    position:absolute;
+
+    top:15px;
+    left:18px;
+
+    color:#aaa;
+
+    font-size:8px;
+
+    letter-spacing:2px;
+}
+
+.stack{
+    position:absolute;
+
+    left:18px;
+    right:18px;
+
+    bottom:18px;
+
+    height:75px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+}
+
+.stack-line{
+    height:7px;
+
+    border-radius:5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5c171c,
+            var(--red),
+            #5c171c
+        );
+
+    box-shadow:
+        0 0 9px
+        rgba(255,75,75,.25);
+
+    animation:stackPulse 1.7s infinite;
+}
+
+.stack-line:nth-child(2){
+    animation-delay:.2s;
+}
+
+.stack-line:nth-child(3){
+    animation-delay:.4s;
+}
+
+.stack-line:nth-child(4){
+    animation-delay:.6s;
+}
+
+.stack-line:nth-child(5){
+    animation-delay:.8s;
+}
+
+
+/* hydrogen particles */
+
+.h2-particle{
+    position:absolute;
+
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    box-shadow:
+        0 0 12px
+        var(--red);
+
+    animation:
+        hydrogenFlow
+        3s linear infinite;
+}
+
+.hp1{
+    left:35%;
+    top:32%;
+}
+
+.hp2{
+    left:39%;
+    top:43%;
+
+    animation-delay:.8s;
+}
+
+.hp3{
+    left:42%;
+    top:54%;
+
+    animation-delay:1.5s;
+}
+
+.hp4{
+    left:47%;
+    top:64%;
+
+    animation-delay:2.1s;
+}
+
+.connection{
+    position:absolute;
+
+    width:140px;
+    height:2px;
+
+    right:24%;
+
+    bottom:120px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--red),
+            transparent
+        );
+
+    box-shadow:
+        0 0 10px
+        rgba(255,75,75,.3);
+}
+
+.connection::after{
+    content:"";
+
+    position:absolute;
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--red);
+
+    right:0;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    box-shadow:
+        0 0 15px
+        var(--red);
+
+    animation:flowPulse 1.2s infinite;
+}
+
+.orbit{
+    position:absolute;
+
+    width:450px;
+    height:450px;
+
+    border-radius:50%;
+
+    border:
+        1px dashed
+        rgba(255,75,75,.13);
+
+    animation:
+        spin 25s linear infinite;
+}
+
+
+/* ================================
+   METRICS
+================================ */
+
+.metrics{
+    padding:
+        20px
+        7%
+        75px;
+}
+
+.metric-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:16px;
+}
+
+.metric{
+    min-height:150px;
+
+    padding:24px;
+
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #171719,
+            #0d0d0f
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:.35s;
+}
+
+.metric:hover{
+    transform:translateY(-7px);
+
+    border-color:
+        rgba(255,75,75,.3);
+
+    box-shadow:
+        0 18px 40px
+        rgba(0,0,0,.35);
+}
+
+.metric::after{
+    content:"";
+
+    position:absolute;
+
+    width:100px;
+    height:100px;
+
+    right:-55px;
+    top:-55px;
+
+    border-radius:50%;
+
+    border:
+        1px solid
+        rgba(255,75,75,.14);
+}
+
+.metric-label{
+    color:#89858a;
+
+    font-size:10px;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+}
+
+.metric-value{
+    font-size:33px;
+
+    font-weight:800;
+
+    margin-top:10px;
+}
+
+.metric-value span{
+    color:#858187;
+
+    font-size:13px;
+
+    font-weight:500;
+}
+
+.metric-desc{
+    color:#656268;
+
+    font-size:10px;
+
+    margin-top:7px;
+}
+
+
+/* ================================
+   SECTIONS
+================================ */
+
+.section{
+    padding:
+        90px
+        7%;
+}
+
+.section-head{
+    margin-bottom:35px;
+}
+
+.eyebrow{
+    color:var(--red);
+
+    text-transform:uppercase;
+
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+}
+
+.section h2{
+    font-size:39px;
+
+    letter-spacing:-1.5px;
+}
+
+.section-intro{
+    color:#858187;
+
+    max-width:650px;
+
+    line-height:1.75;
+
+    font-size:13px;
+
+    margin-top:12px;
+}
+
+
+/* ================================
+   PROCESS
+================================ */
+
+.process-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+}
+
+.process-card{
+    min-height:240px;
+
+    padding:28px;
+
+    border-radius:18px;
+
+    background:#111113;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.process-card:hover{
+    transform:translateY(-9px);
+
+    border-color:
+        rgba(255,75,75,.3);
+}
+
+.process-number{
+    color:var(--red);
+
+    font-size:11px;
+
+    letter-spacing:2px;
+}
+
+.process-icon{
+    font-size:31px;
+
+    margin:
+        23px
+        0
+        18px;
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(255,75,75,.25)
+        );
+}
+
+.process-card h3{
+    font-size:17px;
+}
+
+.process-card p{
+    color:#79757b;
+
+    font-size:11px;
+
+    line-height:1.7;
+
+    margin-top:9px;
+}
+
+
+/* ================================
+   OPERATION PANEL
+================================ */
+
+.operation{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:22px;
+}
+
+.panel{
+    padding:30px;
+
+    border-radius:19px;
+
+    background:#111113;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.panel-title{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:27px;
+}
+
+.panel-title h3{
+    font-size:16px;
+}
+
+.panel-title span{
+    color:var(--red);
+
+    font-size:10px;
+
+    letter-spacing:1px;
+}
+
+
+/* output meter */
+
+.output-meter{
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+}
+
+.output-circle{
+    width:150px;
+    height:150px;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            var(--red) 0 72%,
+            #29292c 72% 100%
+        );
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+}
+
+.output-circle::after{
+    content:"";
+
+    position:absolute;
+
+    inset:11px;
+
+    border-radius:50%;
+
+    background:#111113;
+}
+
+.output-number{
+    position:relative;
+
+    z-index:2;
+
+    text-align:center;
+}
+
+.output-number strong{
+    display:block;
+
+    font-size:29px;
+}
+
+.output-number span{
+    color:#777379;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+.output-info{
+    flex:1;
+}
+
+.info-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+
+    font-size:10px;
+}
+
+.info-row span{
+    color:#79757b;
+}
+
+.info-row strong{
+    color:#ddd8da;
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.status-list{
+    display:grid;
+
+    gap:12px;
+}
+
+.status-row{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:16px;
+
+    border-radius:11px;
+
+    background:#0c0c0e;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+}
+
+.status-left{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--red);
+
+    box-shadow:
+        0 0 12px
+        rgba(255,75,75,.65);
+
+    animation:pulse 1.7s infinite;
+}
+
+.status-row span{
+    color:#89858a;
+
+    font-size:11px;
+}
+
+.status-row strong{
+    font-size:11px;
+
+    color:#e6e1e2;
+}
+
+
+/* ================================
+   24 HOUR GRAPH
+================================ */
+
+.chart-box{
+    margin-top:25px;
+
+    padding:28px;
+
+    border-radius:19px;
+
+    background:#101012;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.chart{
+    height:240px;
+
+    display:flex;
+
+    align-items:end;
+
+    gap:8px;
+
+    padding-top:15px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.1);
+}
+
+.bar{
+    flex:1;
+
+    min-height:12px;
+
+    border-radius:
+        5px
+        5px
+        0
+        0;
+
+    background:
+        linear-gradient(
+            to top,
+            var(--crimson),
+            var(--red2)
+        );
+
+    transition:.4s;
+
+    position:relative;
+}
+
+.bar:hover{
+    filter:brightness(1.35);
+
+    transform:
+        scaleY(1.03);
+}
+
+.bar::after{
+    content:"";
+
+    position:absolute;
+
+    width:4px;
+    height:4px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    top:-5px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+}
+
+.hours{
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:10px;
+
+    color:#5e5b60;
+
+    font-size:9px;
+}
+
+
+/* ================================
+   AI PANEL
+================================ */
+
+.ai-panel{
+    margin-top:25px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    display:grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto;
+
+    align-items:center;
+
+    gap:23px;
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(255,75,75,.09),
+            transparent 35%
+        ),
+        #130d0e;
+
+    border:
+        1px solid
+        rgba(255,75,75,.19);
+}
+
+.ai-icon{
+    width:62px;
+    height:62px;
+
+    border-radius:17px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:27px;
+
+    color:var(--red);
+
+    background:#201011;
+
+    border:
+        1px solid
+        rgba(255,75,75,.24);
+}
+
+.ai-panel h3{
+    font-size:17px;
+}
+
+.ai-panel p{
+    color:#817c81;
+
+    font-size:11px;
+
+    line-height:1.7;
+
+    margin-top:7px;
+}
+
+.ai-status{
+    padding:
+        10px
+        14px;
+
+    border-radius:9px;
+
+    color:var(--red);
+
+    background:
+        rgba(255,75,75,.06);
+
+    border:
+        1px solid
+        rgba(255,75,75,.18);
+
+    font-size:9px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+}
+
+
+/* ================================
+   ENERGY FLOW
+================================ */
+
+.flow-section{
+    background:#0c0c0e;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.05);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+}
+
+.flow{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    margin-top:40px;
+}
+
+.flow-node{
+    width:175px;
+
+    min-height:125px;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    background:#111113;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    transition:.35s;
+}
+
+.flow-node:hover{
+    transform:translateY(-8px);
+
+    border-color:
+        rgba(255,75,75,.32);
+}
+
+.flow-icon{
+    font-size:25px;
+
+    color:var(--red);
+}
+
+.flow-node h4{
+    margin-top:10px;
+
+    font-size:13px;
+}
+
+.flow-node p{
+    color:#716d72;
+
+    font-size:9px;
+
+    line-height:1.5;
+
+    margin-top:6px;
+}
+
+.flow-arrow{
+    color:var(--red);
+
+    font-size:25px;
+
+    padding:
+        0
+        10px;
+
+    animation:
+        arrowPulse
+        1.5s infinite;
+}
+
+
+/* ================================
+   TERMINAL
+================================ */
+
+.terminal{
+    margin-top:25px;
+
+    padding:24px;
+
+    border-radius:17px;
+
+    background:#070708;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    font-family:monospace;
+}
+
+.terminal-head{
+    display:flex;
+
+    gap:6px;
+
+    margin-bottom:17px;
+}
+
+.term-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:#5f5b60;
+}
+
+.terminal-line{
+    color:#777278;
+
+    font-size:10px;
+
+    line-height:2.1;
+}
+
+.terminal-line span{
+    color:var(--red);
+}
+
+
+/* ================================
+   CTA
+================================ */
+
+.cta{
+    margin:
+        40px
+        7%
+        90px;
+
+    padding:55px;
+
+    border-radius:23px;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,75,75,.08),
+            transparent 60%
+        ),
+        #110a0b;
+
+    border:
+        1px solid
+        rgba(255,75,75,.18);
+}
+
+.cta h2{
+    font-size:37px;
+
+    letter-spacing:-1.5px;
+}
+
+.cta p{
+    max-width:620px;
+
+    margin:
+        15px
+        auto
+        25px;
+
+    color:#817a7e;
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+footer{
+    padding:
+        30px
+        7%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.06);
+
+    color:#5e5a5f;
+
+    font-size:10px;
+}
+
+
+/* ================================
+   ANIMATIONS
+================================ */
+
+@keyframes pulse{
+
+    0%,100%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    50%{
+        opacity:.4;
+        transform:scale(.7);
+    }
+}
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes hydrogenFlow{
+
+    0%{
+        opacity:0;
+        transform:
+            translate(0,80px)
+            scale(.5);
+    }
+
+    25%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+        transform:
+            translate(125px,-20px)
+            scale(1);
+    }
+}
+
+@keyframes flowPulse{
+
+    0%,100%{
+        opacity:.3;
+    }
+
+    50%{
+        opacity:1;
+        transform:
+            translateY(-50%)
+            scale(1.4);
+    }
+}
+
+@keyframes stackPulse{
+
+    0%,100%{
+        opacity:.4;
+    }
+
+    50%{
+        opacity:1;
+    }
+}
+
+@keyframes arrowPulse{
+
+    0%,100%{
+        opacity:.3;
+    }
+
+    50%{
+        opacity:1;
+
+        transform:
+            translateX(4px);
+    }
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width:1000px){
+
+    .hero{
+        grid-template-columns:1fr;
+
+        text-align:center;
+    }
+
+    .hero-text{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .metric-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .operation{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:
+            0
+            18px;
+    }
+
+    .page-nav{
+        justify-content:flex-start;
+
+        overflow-x:auto;
+
+        padding:
+            0
+            20px;
+
+        gap:22px;
+    }
+
+    .hero{
+        padding:
+            125px
+            5%
+            60px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .hydrogen-stage{
+        transform:scale(.75);
+
+        height:430px;
+    }
+
+    .fuel-cell{
+        right:-4%;
+    }
+
+    .connection{
+        right:23%;
+    }
+
+    .process-grid{
+        grid-template-columns:1fr;
+    }
+
+    .metric-grid{
+        grid-template-columns:
+            1fr
+            1fr;
+    }
+
+    .section{
+        padding:
+            65px
+            5%;
+    }
+
+    .output-meter{
+        flex-direction:column;
+    }
+
+    .ai-panel{
+        grid-template-columns:1fr;
+
+        text-align:center;
+    }
+
+    .ai-icon{
+        margin:auto;
+    }
+
+    .flow{
+        flex-direction:column;
+    }
+
+    .flow-arrow{
+        transform:rotate(90deg);
+
+        padding:8px;
+    }
+
+    .cta{
+        margin:
+            30px
+            5%
+            70px;
+
+        padding:
+            40px
+            20px;
+    }
+
+    .cta h2{
+        font-size:28px;
+    }
+
+    footer{
+        flex-direction:column;
+
+        gap:10px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="grid"></div>
+
+
+<!-- =================================
+     NAVBAR
+================================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            H₂
+        </div>
+
+        POLARIS
+
+    </div>
+
+
+    <!-- THREE DASH BUTTON -->
+
+    <button
+        class="menu-btn"
+        id="menuBtn"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+</nav>
+
+
+<!-- =================================
+     SIDE MENU
+================================= -->
+
+<div
+    class="side-menu"
+    id="sideMenu"
+>
+
+    <h3>
+        POLARIS MENU
+    </h3>
+
+    <a href="index.html">
+        ⌂ Home
+    </a>
+
+    <a href="renewable.html">
+        ◈ Renewable Energy
+    </a>
+
+    <a href="nonrenewable.html">
+        ◉ Backup & Energy Support
+    </a>
+
+    <a href="admin.html">
+        ⚙ Admin Dashboard
+    </a>
+
+    <a href="disaster.html">
+        ⚠ Disaster Management
+    </a>
+
+</div>
+
+
+<!-- =================================
+     PAGE NAV
+================================= -->
+
+<div class="page-nav">
+
+    <a href="#overview">
+        Overview
+    </a>
+
+    <a href="#process">
+        How It Works
+    </a>
+
+    <a href="#operation">
+        Operation
+    </a>
+
+    <a href="#ai">
+        AI Intelligence
+    </a>
+
+    <a href="nonrenewable.html">
+        ← Backup Energy
+    </a>
+
+</div>
+
+
+<!-- =================================
+     HERO
+================================= -->
+
+<section
+    class="hero"
+    id="overview"
+>
+
+    <div>
+
+        <div class="badge">
+
+            <span class="live-dot"></span>
+
+            HYDROGEN STORAGE • ONLINE
+
+        </div>
+
+
+        <h1>
+
+            Store Hydrogen.<br>
+
+            <span>Generate When Needed.</span>
+
+        </h1>
+
+
+        <p class="hero-text">
+
+            The POLARIS hydrogen energy system stores hydrogen
+            as an energy reserve and uses a fuel cell to convert
+            that stored chemical energy into electricity when
+            additional power is required.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+                href="#operation"
+                class="btn btn-main"
+            >
+                View Live System
+            </a>
+
+            <a
+                href="nonrenewable.html"
+                class="btn btn-outline"
+            >
+                ← Backup Energy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================
+         HYDROGEN VISUAL
+    ================================= -->
+
+    <div class="hydrogen-stage">
+
+        <div class="orbit"></div>
+
+
+        <div class="tank">
+
+            <div class="tank-top"></div>
+
+            <div class="tank-inner">
+
+                <div
+                    class="hydrogen-fill"
+                    id="hydrogenFill"
+                ></div>
+
+            </div>
+
+
+            <div class="tank-content">
+
+                <div class="h2-symbol">
+                    H₂
+                </div>
+
+                <div
+                    class="storage-value"
+                    id="storageValue"
+                >
+                    68%
+                </div>
+
+                <div class="storage-label">
+                    STORAGE LEVEL
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- fuel cell -->
+
+        <div class="fuel-cell">
+
+            <div class="stack">
+
+                <div class="stack-line"></div>
+                <div class="stack-line"></div>
+                <div class="stack-line"></div>
+                <div class="stack-line"></div>
+                <div class="stack-line"></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="connection"></div>
+
+
+        <!-- particles -->
+
+        <div class="h2-particle hp1"></div>
+        <div class="h2-particle hp2"></div>
+        <div class="h2-particle hp3"></div>
+        <div class="h2-particle hp4"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     METRICS
+================================= -->
+
+<section class="metrics">
+
+    <div class="metric-grid">
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Hydrogen Storage
+            </div>
+
+            <div class="metric-value">
+                200
+                <span>kWh</span>
+            </div>
+
+            <div class="metric-desc">
+                Configured hydrogen storage capacity
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Fuel Cell Output
+            </div>
+
+            <div class="metric-value">
+                50
+                <span>kW</span>
+            </div>
+
+            <div class="metric-desc">
+                Maximum configured electrical output
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                System Status
+            </div>
+
+            <div class="metric-value">
+                ON
+                <span>LINE</span>
+            </div>
+
+            <div class="metric-desc">
+                Hydrogen backup system available
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Backup Priority
+            </div>
+
+            <div class="metric-value">
+                H₂
+                <span>RESERVE</span>
+            </div>
+
+            <div class="metric-desc">
+                Stored energy for future support
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     HOW IT WORKS
+================================= -->
+
+<section
+    class="section"
+    id="process"
+>
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Hydrogen Energy Cycle
+        </div>
+
+        <h2>
+            How Hydrogen Becomes Power
+        </h2>
+
+        <p class="section-intro">
+
+            Hydrogen acts as an energy storage medium. When
+            electricity is required, the fuel cell converts
+            hydrogen's stored chemical energy into electrical energy.
+
+        </p>
+
+    </div>
+
+
+    <div class="process-grid">
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                STEP 01
+            </div>
+
+            <div class="process-icon">
+                ⚡
+            </div>
+
+            <h3>
+                Energy Available
+            </h3>
+
+            <p>
+
+                Renewable electricity can be used elsewhere
+                in the station's energy system while hydrogen
+                remains available as stored energy.
+
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                STEP 02
+            </div>
+
+            <div class="process-icon">
+                H₂
+            </div>
+
+            <h3>
+                Hydrogen Storage
+            </h3>
+
+            <p>
+
+                Hydrogen is kept in the configured storage
+                system as an energy reserve for periods when
+                additional electricity is required.
+
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                STEP 03
+            </div>
+
+            <div class="process-icon">
+                ◈
+            </div>
+
+            <h3>
+                Fuel Cell
+            </h3>
+
+            <p>
+
+                The fuel cell converts hydrogen into electrical
+                power without directly burning the hydrogen.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     OPERATION
+================================= -->
+
+<section
+    class="section"
+    id="operation"
+>
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Live Demonstration
+        </div>
+
+        <h2>
+            Hydrogen System Status
+        </h2>
+
+        <p class="section-intro">
+
+            These values are frontend demonstration values.
+            They can later be replaced by the backend's
+            real hydrogen resource data.
+
+        </p>
+
+    </div>
+
+
+    <div class="operation">
+
+
+        <!-- OUTPUT -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+
+                <h3>
+                    Fuel Cell Output
+                </h3>
+
+                <span>
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div class="output-meter">
+
+                <div class="output-circle">
+
+                    <div class="output-number">
+
+                        <strong id="outputValue">
+                            36
+                        </strong>
+
+                        <span>
+                            kW
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="output-info">
+
+                    <div class="info-row">
+
+                        <span>
+                            Maximum Output
+                        </span>
+
+                        <strong>
+                            50 kW
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Current Output
+                        </span>
+
+                        <strong id="outputText">
+                            36 kW
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Storage
+                        </span>
+
+                        <strong id="storageText">
+                            68%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Operating Mode
+                        </span>
+
+                        <strong id="modeText">
+                            STANDBY
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+
+                <h3>
+                    System Telemetry
+                </h3>
+
+                <span>
+                    ACTIVE
+                </span>
+
+            </div>
+
+
+            <div class="status-list">
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Hydrogen Storage
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        AVAILABLE
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Fuel Cell
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        ONLINE
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Backup Dispatch
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        READY
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Protection
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        NORMAL
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 24 HOUR GRAPH -->
+
+    <div class="chart-box">
+
+        <div class="panel-title">
+
+            <h3>
+                24-Hour Fuel Cell Output
+            </h3>
+
+            <span>
+                kW
+            </span>
+
+        </div>
+
+
+        <div
+            class="chart"
+            id="chart"
+        ></div>
+
+
+        <div class="hours">
+
+            <span>00</span>
+            <span>04</span>
+            <span>08</span>
+            <span>12</span>
+            <span>16</span>
+            <span>20</span>
+            <span>24</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     AI INTELLIGENCE
+================================= -->
+
+<section
+    class="section"
+    id="ai"
+>
+
+    <div class="ai-panel">
+
+        <div class="ai-icon">
+            ✦
+        </div>
+
+
+        <div>
+
+            <h3>
+                AI Energy Reserve Intelligence
+            </h3>
+
+            <p>
+
+                POLARIS can consider predicted generation,
+                demand and source availability when deciding
+                how much backup energy should remain available.
+                Hydrogen can therefore act as a longer-duration
+                energy reserve within the station's backup strategy.
+
+            </p>
+
+        </div>
+
+
+        <div class="ai-status">
+            AI MONITORING
+        </div>
+
+    </div>
+
+
+    <!-- TERMINAL -->
+
+    <div class="terminal">
+
+        <div class="terminal-head">
+
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[H₂]</span>
+            Hydrogen storage detected...
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[FUEL CELL]</span>
+            Electrical conversion system online
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[OUTPUT]</span>
+            Maximum configured output = 50 kW
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[STORAGE]</span>
+            Monitoring hydrogen reserve...
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[OPTIMIZER]</span>
+            Backup dispatch ready
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     ENERGY FLOW
+================================= -->
+
+<section class="section flow-section">
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Backup Energy Path
+        </div>
+
+        <h2>
+            Hydrogen → Electricity
+        </h2>
+
+    </div>
+
+
+    <div class="flow">
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                H₂
+            </div>
+
+            <h4>
+                Hydrogen Reserve
+            </h4>
+
+            <p>
+                Stored chemical energy
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                ◈
+            </div>
+
+            <h4>
+                Fuel Cell
+            </h4>
+
+            <p>
+                Converts hydrogen to electricity
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                ⚡
+            </div>
+
+            <h4>
+                Electrical Power
+            </h4>
+
+            <p>
+                Up to 50 kW configured output
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                🏠
+            </div>
+
+            <h4>
+                Station Loads
+            </h4>
+
+            <p>
+                Supports required station demand
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     CTA
+================================= -->
+
+<section class="cta">
+
+    <h2>
+        Hydrogen Is Ready When Energy Isn't.
+    </h2>
+
+    <p>
+
+        Stored hydrogen gives the station another energy
+        pathway when renewable generation is insufficient.
+        POLARIS monitors the reserve and coordinates it with
+        the rest of the energy system.
+
+    </p>
+
+
+    <a
+        href="admin.html"
+        class="btn btn-main"
+    >
+        Open Control Center
+    </a>
+
+</section>
+
+
+<!-- =================================
+     FOOTER
+================================= -->
+
+<footer>
+
+    <div>
+        © 2026 POLARIS • Smart Energy Management
+    </div>
+
+    <div>
+        Hydrogen + Fuel Cell • Polar Research Station
+    </div>
+
+</footer>
+
+
+<script>
+
+/* =================================
+   THREE DASH MENU
+================================= */
+
+const menuBtn =
+    document.getElementById("menuBtn");
+
+const sideMenu =
+    document.getElementById("sideMenu");
+
+
+menuBtn.addEventListener(
+    "click",
+    () => {
+
+        sideMenu.classList.toggle(
+            "active"
+        );
+
+    }
+);
+
+
+/* close menu */
+
+document
+    .querySelectorAll(".side-menu a")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                sideMenu.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+    });
+
+
+/* =================================
+   HYDROGEN DEMO
+================================= */
+
+let storage = 68;
+
+
+function updateHydrogen(){
+
+    /*
+        Frontend demonstration only.
+
+        Later this can be replaced with
+        backend hydrogen resource data.
+    */
+
+    const change =
+        (Math.random() - .5) * 1.4;
+
+
+    storage += change;
+
+
+    if(storage > 100){
+        storage = 100;
+    }
+
+    if(storage < 20){
+        storage = 20;
+    }
+
+
+    storage =
+        Math.round(storage * 10) / 10;
+
+
+    /*
+        Fuel-cell output is simulated
+        between 0 and 50 kW.
+    */
+
+    let output =
+        Math.floor(
+            15 +
+            Math.random() * 36
+        );
+
+
+    if(storage <= 25){
+
+        output =
+            Math.floor(
+                10 +
+                Math.random() * 20
+            );
+
+    }
+
+
+    let mode =
+        "STANDBY";
+
+
+    if(output > 8){
+        mode = "GENERATING";
+    }
+
+
+    document
+        .getElementById("storageValue")
+        .textContent =
+        Math.round(storage) + "%";
+
+
+    document
+        .getElementById("storageText")
+        .textContent =
+        Math.round(storage) + "%";
+
+
+    document
+        .getElementById("hydrogenFill")
+        .style.height =
+        storage + "%";
+
+
+    document
+        .getElementById("outputValue")
+        .textContent =
+        output;
+
+
+    document
+        .getElementById("outputText")
+        .textContent =
+        output + " kW";
+
+
+    document
+        .getElementById("modeText")
+        .textContent =
+        mode;
+
+}
+
+
+updateHydrogen();
+
+
+setInterval(
+    updateHydrogen,
+    2500
+);
+
+
+/* =================================
+   24-HOUR GRAPH
+================================= */
+
+const chart =
+    document.getElementById("chart");
+
+
+const values = [
+
+    0,
+    0,
+    8,
+    12,
+    15,
+    10,
+    18,
+    22,
+
+    30,
+    34,
+    28,
+    40,
+
+    45,
+    38,
+    32,
+    27,
+
+    22,
+    35,
+    42,
+    31,
+
+    24,
+    20,
+    14,
+    8
+
+];
+
+
+values.forEach(
+    value => {
+
+        const bar =
+            document.createElement(
+                "div"
+            );
+
+        bar.className =
+            "bar";
+
+
+        const percentage =
+            Math.max(
+                5,
+                (value / 50) * 100
+            );
+
+
+        bar.style.height =
+            percentage + "%";
+
+
+        bar.title =
+            value + " kW";
+
+
+        chart.appendChild(bar);
+
+    }
+);
+
+</script>
+
+</body>
+</html>

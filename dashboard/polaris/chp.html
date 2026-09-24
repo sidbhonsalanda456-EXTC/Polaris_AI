@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CHP | Cogeneration Control</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#090807;
+    color:#f5eee0;
+    overflow-x:hidden;
+}
+
+/* =========================
+   VARIABLES
+========================= */
+
+:root{
+    --bg:#090807;
+    --panel:#12100d;
+    --panel2:#18140f;
+    --accent:#d6b36a;
+    --accent2:#e8d49b;
+    --cream:#f6ead1;
+    --silver:#c9c4b8;
+    --muted:#a59d8d;
+    --line:rgba(214,179,106,.18);
+    --danger:#ff7061;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    background:radial-gradient(
+        circle,
+        rgba(214,179,106,.09),
+        transparent 70%
+    );
+    top:-180px;
+    right:-150px;
+    pointer-events:none;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:400px;
+    height:400px;
+    border-radius:50%;
+    background:radial-gradient(
+        circle,
+        rgba(232,212,155,.05),
+        transparent 70%
+    );
+    bottom:-200px;
+    left:-150px;
+    pointer-events:none;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:72px;
+    z-index:1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 6%;
+
+    background:rgba(9,8,7,.88);
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid var(--line);
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:2px;
+    color:var(--cream);
+}
+
+.logo span{
+    color:var(--accent);
+}
+
+.nav-links{
+    display:flex;
+    gap:28px;
+}
+
+.nav-links a{
+    color:#aaa394;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:700;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:var(--accent2);
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu-btn{
+    position:fixed;
+    top:88px;
+    left:25px;
+
+    width:52px;
+    height:52px;
+
+    border:1px solid var(--line);
+    border-radius:13px;
+
+    background:rgba(18,16,13,.92);
+
+    cursor:pointer;
+    z-index:1100;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    transform:scale(1.08);
+    border-color:var(--accent);
+    box-shadow:0 0 25px rgba(214,179,106,.18);
+}
+
+.menu-btn span{
+    width:22px;
+    height:2px;
+    background:var(--cream);
+    transition:.3s;
+}
+
+.side-menu{
+    position:fixed;
+    top:0;
+    left:-300px;
+
+    width:280px;
+    height:100vh;
+
+    background:#0d0b09;
+
+    border-right:1px solid var(--line);
+
+    z-index:1050;
+
+    padding:110px 30px 30px;
+
+    transition:.4s;
+}
+
+.side-menu.active{
+    left:0;
+}
+
+.side-menu h2{
+    color:var(--accent);
+    margin-bottom:30px;
+}
+
+.side-menu a{
+    display:block;
+
+    padding:16px 0;
+
+    color:#bdb5a5;
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:var(--cream);
+    padding-left:8px;
+}
+
+/* =========================
+   PAGE NAV
+========================= */
+
+.page-nav{
+    margin-top:72px;
+
+    height:60px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+    background:#0b0908;
+}
+
+.page-nav a{
+    color:#999181;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:var(--accent);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:650px;
+
+    padding:100px 7%;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:70px;
+
+    align-items:center;
+}
+
+.hero-text{
+    animation:fadeUp 1s ease;
+}
+
+.tag{
+    display:inline-block;
+
+    padding:8px 14px;
+
+    border:1px solid rgba(214,179,106,.35);
+    border-radius:30px;
+
+    color:var(--accent2);
+
+    font-size:12px;
+    font-weight:800;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:clamp(50px,7vw,88px);
+    line-height:.95;
+
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    color:var(--accent);
+}
+
+.hero p{
+    max-width:600px;
+
+    color:#aaa292;
+
+    font-size:18px;
+    line-height:1.8;
+
+    margin-bottom:35px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:15px 24px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:800;
+
+    transition:.3s;
+}
+
+.btn-primary{
+    background:var(--accent);
+    color:#0a0907;
+}
+
+.btn-primary:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(214,179,106,.2);
+}
+
+.btn-secondary{
+    border:1px solid var(--line);
+    color:var(--cream);
+}
+
+.btn-secondary:hover{
+    background:var(--panel2);
+}
+
+/* =========================
+   CHP VISUAL
+========================= */
+
+.chp-visual{
+    height:430px;
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    animation:float 5s ease-in-out infinite;
+}
+
+.machine{
+    width:330px;
+    height:220px;
+
+    border:2px solid rgba(214,179,106,.5);
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1b1711,
+            #0e0c09
+        );
+
+    box-shadow:
+        0 0 60px rgba(214,179,106,.08),
+        inset 0 0 40px rgba(255,255,255,.02);
+
+    position:relative;
+
+    transform:perspective(600px) rotateY(-10deg);
+}
+
+.machine-top{
+    position:absolute;
+
+    width:150px;
+    height:35px;
+
+    top:-35px;
+    left:90px;
+
+    border:2px solid var(--accent);
+
+    border-bottom:none;
+
+    border-radius:18px 18px 0 0;
+}
+
+.machine-title{
+    position:absolute;
+
+    top:35px;
+    left:0;
+    width:100%;
+
+    text-align:center;
+
+    color:var(--accent2);
+
+    font-size:15px;
+    font-weight:900;
+
+    letter-spacing:2px;
+}
+
+.engine{
+    position:absolute;
+
+    left:35px;
+    bottom:35px;
+
+    width:150px;
+    height:100px;
+
+    border:1px solid rgba(214,179,106,.4);
+
+    border-radius:15px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:8px;
+}
+
+.engine span{
+    width:12px;
+    height:55px;
+
+    background:linear-gradient(
+        to top,
+        #6f5930,
+        var(--accent2)
+    );
+
+    border-radius:8px;
+
+    animation:enginePulse 1s infinite alternate;
+}
+
+.engine span:nth-child(2){
+    animation-delay:.2s;
+}
+
+.engine span:nth-child(3){
+    animation-delay:.4s;
+}
+
+.engine span:nth-child(4){
+    animation-delay:.6s;
+}
+
+.engine span:nth-child(5){
+    animation-delay:.8s;
+}
+
+.heat{
+    position:absolute;
+
+    right:45px;
+    bottom:40px;
+
+    width:70px;
+    height:100px;
+
+    border:1px solid rgba(232,212,155,.4);
+
+    border-radius:50%;
+
+    animation:heatPulse 2s infinite;
+}
+
+.heat::before,
+.heat::after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    width:3px;
+
+    height:55px;
+
+    background:var(--accent2);
+
+    transform:translateX(-50%);
+
+    opacity:.5;
+
+    animation:rise 2s infinite;
+}
+
+.heat::after{
+    animation-delay:1s;
+}
+
+.power-line{
+    position:absolute;
+
+    right:-100px;
+    top:50%;
+
+    width:120px;
+
+    height:3px;
+
+    background:var(--accent);
+
+    box-shadow:0 0 18px var(--accent);
+
+    animation:powerFlow 1s linear infinite;
+}
+
+.output-node{
+    position:absolute;
+
+    right:-120px;
+    top:calc(50% - 12px);
+
+    width:24px;
+    height:24px;
+
+    border-radius:50%;
+
+    background:var(--accent2);
+
+    box-shadow:
+        0 0 15px var(--accent2),
+        0 0 35px rgba(232,212,155,.4);
+}
+
+/* =========================
+   METRICS
+========================= */
+
+.metrics{
+    padding:40px 7%;
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+}
+
+.metric{
+    padding:28px;
+
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    border-radius:18px;
+
+    transition:.35s;
+}
+
+.metric:hover{
+    transform:translateY(-8px);
+    border-color:rgba(214,179,106,.6);
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+
+.metric small{
+    color:#938b7c;
+    font-size:13px;
+}
+
+.metric strong{
+    display:block;
+
+    font-size:34px;
+
+    margin-top:12px;
+
+    color:var(--accent2);
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+    padding:100px 7%;
+}
+
+.section-heading{
+    max-width:750px;
+    margin-bottom:55px;
+}
+
+.section-heading .mini{
+    color:var(--accent);
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.section-heading h2{
+    font-size:clamp(38px,5vw,60px);
+    margin:12px 0 18px;
+}
+
+.section-heading p{
+    color:#9d9586;
+    line-height:1.8;
+    font-size:17px;
+}
+
+/* =========================
+   PROCESS
+========================= */
+
+.process{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:22px;
+}
+
+.process-card{
+    min-height:260px;
+
+    padding:35px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #17130e,
+            #0f0d0a
+        );
+
+    border:1px solid var(--line);
+
+    border-radius:22px;
+
+    transition:.4s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.process-card::after{
+    content:"";
+
+    position:absolute;
+
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    right:-50px;
+    bottom:-50px;
+
+    background:rgba(214,179,106,.08);
+
+    transition:.4s;
+}
+
+.process-card:hover{
+    transform:translateY(-12px) scale(1.02);
+    border-color:var(--accent);
+}
+
+.process-card:hover::after{
+    transform:scale(2);
+}
+
+.number{
+    font-size:50px;
+
+    color:rgba(214,179,106,.22);
+
+    font-weight:900;
+
+    margin-bottom:20px;
+}
+
+.process-card h3{
+    font-size:25px;
+    margin-bottom:15px;
+}
+
+.process-card p{
+    color:#958d7d;
+    line-height:1.7;
+}
+
+/* =========================
+   ENERGY SPLIT
+========================= */
+
+.energy-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:30px;
+}
+
+.energy-box{
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    border-radius:24px;
+
+    padding:35px;
+
+    transition:.3s;
+}
+
+.energy-box:hover{
+    transform:translateY(-7px);
+}
+
+.energy-box h3{
+    font-size:27px;
+    margin-bottom:25px;
+}
+
+.energy-item{
+    margin:25px 0;
+}
+
+.energy-label{
+    display:flex;
+    justify-content:space-between;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+}
+
+.bar{
+    height:10px;
+
+    border-radius:20px;
+
+    background:#27221a;
+
+    overflow:hidden;
+}
+
+.fill{
+    height:100%;
+
+    width:0;
+
+    background:linear-gradient(
+        90deg,
+        #9b7a3e,
+        var(--accent2)
+    );
+
+    border-radius:20px;
+
+    transition:1.5s;
+}
+
+/* =========================
+   LIVE CONTROL
+========================= */
+
+.control-panel{
+    display:grid;
+
+    grid-template-columns:1.2fr .8fr;
+
+    gap:25px;
+}
+
+.control-main{
+    background:#11100d;
+
+    border:1px solid var(--line);
+
+    border-radius:25px;
+
+    padding:40px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    margin-bottom:25px;
+}
+
+.status-dot{
+    width:13px;
+    height:13px;
+
+    border-radius:50%;
+
+    background:#d6b36a;
+
+    box-shadow:0 0 15px rgba(214,179,106,.8);
+
+    animation:blink 1.5s infinite;
+}
+
+.status span{
+    color:var(--accent2);
+    font-weight:900;
+}
+
+.control-main h3{
+    font-size:38px;
+    margin-bottom:15px;
+}
+
+.control-main p{
+    color:#958d7e;
+    line-height:1.8;
+}
+
+.control-side{
+    display:grid;
+    gap:18px;
+}
+
+.control-card{
+    padding:28px;
+
+    border-radius:20px;
+
+    background:var(--panel2);
+
+    border:1px solid var(--line);
+
+    transition:.3s;
+}
+
+.control-card:hover{
+    transform:translateX(7px);
+    border-color:var(--accent);
+}
+
+.control-card small{
+    color:#898274;
+}
+
+.control-card strong{
+    display:block;
+
+    margin-top:8px;
+
+    font-size:27px;
+
+    color:var(--accent2);
+}
+
+/* =========================
+   GRAPH
+========================= */
+
+.graph-box{
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    border-radius:25px;
+
+    padding:35px;
+}
+
+.graph{
+    height:280px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:8px;
+
+    margin-top:35px;
+
+    border-bottom:1px solid rgba(255,255,255,.1);
+
+    padding-bottom:10px;
+}
+
+.bar-chart{
+    flex:1;
+
+    height:var(--h);
+
+    min-width:7px;
+
+    border-radius:7px 7px 2px 2px;
+
+    background:linear-gradient(
+        to top,
+        #72582f,
+        var(--accent2)
+    );
+
+    opacity:.85;
+
+    transition:.3s;
+}
+
+.bar-chart:hover{
+    opacity:1;
+
+    transform:scaleY(1.06);
+
+    box-shadow:0 0 20px rgba(232,212,155,.3);
+}
+
+/* =========================
+   AI TERMINAL
+========================= */
+
+.ai-box{
+    background:#0c0b09;
+
+    border:1px solid var(--line);
+
+    border-radius:25px;
+
+    padding:35px;
+
+    box-shadow:inset 0 0 50px rgba(214,179,106,.02);
+}
+
+.terminal{
+    margin-top:25px;
+
+    background:#060605;
+
+    border:1px solid rgba(214,179,106,.15);
+
+    border-radius:15px;
+
+    padding:25px;
+
+    font-family:monospace;
+
+    color:#cdbb8d;
+
+    line-height:2;
+
+    min-height:170px;
+}
+
+.cursor{
+    display:inline-block;
+
+    width:8px;
+    height:17px;
+
+    background:var(--accent);
+
+    animation:cursor 1s infinite;
+}
+
+/* =========================
+   CTA
+========================= */
+
+.cta{
+    margin:70px 7% 100px;
+
+    padding:65px;
+
+    border-radius:30px;
+
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(214,179,106,.13),
+            transparent 40%
+        ),
+        #14110c;
+
+    border:1px solid var(--line);
+
+    text-align:center;
+}
+
+.cta h2{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.cta p{
+    color:#958d7e;
+
+    max-width:650px;
+
+    margin:0 auto 30px;
+
+    line-height:1.7;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    padding:40px 7%;
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+    text-align:center;
+
+    color:#716b60;
+
+    font-size:13px;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+@keyframes enginePulse{
+    from{
+        transform:scaleY(.65);
+    }
+    to{
+        transform:scaleY(1);
+    }
+}
+
+@keyframes heatPulse{
+    0%,100%{
+        transform:scale(.9);
+        opacity:.5;
+    }
+    50%{
+        transform:scale(1.15);
+        opacity:1;
+    }
+}
+
+@keyframes rise{
+    0%{
+        transform:translate(-50%,20px);
+        opacity:0;
+    }
+    50%{
+        opacity:1;
+    }
+    100%{
+        transform:translate(-50%,-30px);
+        opacity:0;
+    }
+}
+
+@keyframes powerFlow{
+    0%{
+        opacity:.2;
+        transform:translateX(-20px);
+    }
+    100%{
+        opacity:1;
+        transform:translateX(20px);
+    }
+}
+
+@keyframes blink{
+    0%,100%{
+        opacity:1;
+    }
+    50%{
+        opacity:.3;
+    }
+}
+
+@keyframes cursor{
+    50%{
+        opacity:0;
+    }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+
+    .hero{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .hero p{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .metrics{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .process{
+        grid-template-columns:1fr;
+    }
+
+    .energy-grid,
+    .control-panel{
+        grid-template-columns:1fr;
+    }
+
+    .chp-visual{
+        margin-top:30px;
+    }
+
+    .nav-links{
+        display:none;
+    }
+}
+
+@media(max-width:600px){
+
+    .hero{
+        padding:70px 5%;
+    }
+
+    .hero h1{
+        font-size:52px;
+    }
+
+    .metrics{
+        grid-template-columns:1fr;
+        padding:30px 5%;
+    }
+
+    .section{
+        padding:70px 5%;
+    }
+
+    .machine{
+        width:270px;
+        height:190px;
+    }
+
+    .machine-top{
+        left:60px;
+        width:150px;
+    }
+
+    .power-line{
+        display:none;
+    }
+
+    .output-node{
+        display:none;
+    }
+
+    .cta{
+        margin:40px 5% 70px;
+        padding:40px 25px;
+    }
+
+    .cta h2{
+        font-size:36px;
+    }
+
+    .page-nav{
+        gap:12px;
+        padding:0 10px;
+        overflow-x:auto;
+        justify-content:flex-start;
+    }
+
+    .page-nav a{
+        white-space:nowrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        POLAR<span>IS</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="renewable.html">Renewable Energy</a>
+        <a href="nonrenewable.html">Backup Support</a>
+        <a href="admin.html">Admin</a>
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     THREE DASH MENU
+========================= -->
+
+<button class="menu-btn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<div class="side-menu" id="sideMenu">
+
+    <h2>POLARIS</h2>
+
+    <a href="index.html">⌂ Home</a>
+
+    <a href="renewable.html">Renewable Energy</a>
+
+    <a href="nonrenewable.html">Backup & Energy Support</a>
+
+    <a href="battery.html">Battery Storage</a>
+
+    <a href="hydrogen.html">Hydrogen + Fuel Cell</a>
+
+    <a href="generator.html">Diesel / Fuel Generator</a>
+
+    <a href="chp.html">CHP / Cogeneration</a>
+
+    <a href="passive-solar.html">Passive Solar</a>
+
+    <a href="admin.html">Admin Dashboard</a>
+
+</div>
+
+
+<!-- =========================
+     PAGE NAV
+========================= -->
+
+<div class="page-nav">
+
+    <a href="#overview">Overview</a>
+
+    <a href="#process">How It Works</a>
+
+    <a href="#energy">Energy Output</a>
+
+    <a href="#live">Live Status</a>
+
+    <a href="#analytics">Analytics</a>
+
+    <a href="nonrenewable.html">← Backup Support</a>
+
+</div>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero" id="overview">
+
+    <div class="hero-text">
+
+        <div class="tag">
+            BACKUP RESOURCE • PRIORITY #11
+        </div>
+
+        <h1>
+            CHP<br>
+            <span>COGENERATION</span>
+        </h1>
+
+        <p>
+            Combined Heat and Power produces useful electricity
+            and heat from the same energy source. In POLARIS,
+            CHP acts as a high-cost backup and last-resort support
+            resource when the primary energy system needs help.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#live" class="btn btn-primary">
+                View Live System
+            </a>
+
+            <a href="nonrenewable.html" class="btn btn-secondary">
+                ← Backup Support
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- CHP VISUAL -->
+
+    <div class="chp-visual">
+
+        <div class="machine">
+
+            <div class="machine-top"></div>
+
+            <div class="machine-title">
+                CHP UNIT
+            </div>
+
+            <div class="engine">
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+            <div class="heat"></div>
+
+            <div class="power-line"></div>
+
+            <div class="output-node"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     METRICS
+========================= -->
+
+<section class="metrics">
+
+    <div class="metric">
+
+        <small>Installed Capacity</small>
+
+        <strong>60 kW</strong>
+
+    </div>
+
+    <div class="metric">
+
+        <small>System Priority</small>
+
+        <strong>#11</strong>
+
+    </div>
+
+    <div class="metric">
+
+        <small>Operating Role</small>
+
+        <strong>Backup</strong>
+
+    </div>
+
+    <div class="metric">
+
+        <small>Current Status</small>
+
+        <strong id="statusText">READY</strong>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PROCESS
+========================= -->
+
+<section class="section" id="process">
+
+    <div class="section-heading">
+
+        <div class="mini">
+            ENERGY CONVERSION
+        </div>
+
+        <h2>
+            One source.<br>
+            Two useful outputs.
+        </h2>
+
+        <p>
+            CHP is different from a normal generator because
+            the system can make electricity while also recovering
+            useful heat instead of wasting it.
+        </p>
+
+    </div>
+
+
+    <div class="process">
+
+        <div class="process-card">
+
+            <div class="number">01</div>
+
+            <h3>Energy Input</h3>
+
+            <p>
+                The CHP unit receives its available fuel or
+                energy input and converts it inside the
+                cogeneration system.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="number">02</div>
+
+            <h3>Electricity</h3>
+
+            <p>
+                Part of the converted energy is used to
+                produce electrical power for station loads.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="number">03</div>
+
+            <h3>Useful Heat</h3>
+
+            <p>
+                Recoverable heat can support heating-related
+                station needs instead of being completely
+                wasted.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ENERGY OUTPUT
+========================= -->
+
+<section class="section" id="energy">
+
+    <div class="section-heading">
+
+        <div class="mini">
+            COGENERATION BALANCE
+        </div>
+
+        <h2>
+            Electricity + useful heat
+        </h2>
+
+        <p>
+            The CHP resource is treated as a backup option
+            in the POLARIS energy priority system.
+        </p>
+
+    </div>
+
+
+    <div class="energy-grid">
+
+        <div class="energy-box">
+
+            <h3>Electrical Support</h3>
+
+            <div class="energy-item">
+
+                <div class="energy-label">
+                    <span>Available Capacity</span>
+                    <strong>60 kW</strong>
+                </div>
+
+                <div class="bar">
+                    <div class="fill" data-width="82%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <div class="energy-label">
+                    <span>Backup Readiness</span>
+                    <strong>92%</strong>
+                </div>
+
+                <div class="bar">
+                    <div class="fill" data-width="92%"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="energy-box">
+
+            <h3>Heat Recovery</h3>
+
+            <div class="energy-item">
+
+                <div class="energy-label">
+                    <span>Heat Recovery</span>
+                    <strong>76%</strong>
+                </div>
+
+                <div class="bar">
+                    <div class="fill" data-width="76%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <div class="energy-label">
+                    <span>Thermal Utility</span>
+                    <strong>68%</strong>
+                </div>
+
+                <div class="bar">
+                    <div class="fill" data-width="68%"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     LIVE CONTROL
+========================= -->
+
+<section class="section" id="live">
+
+    <div class="section-heading">
+
+        <div class="mini">
+            LIVE CONTROL
+        </div>
+
+        <h2>
+            CHP standby intelligence
+        </h2>
+
+        <p>
+            POLARIS keeps CHP available as a final backup
+            resource and activates it only when the optimizer
+            determines that higher-priority sources and storage
+            are insufficient.
+        </p>
+
+    </div>
+
+
+    <div class="control-panel">
+
+        <div class="control-main">
+
+            <div class="status">
+
+                <div class="status-dot"></div>
+
+                <span id="liveStatus">
+                    SYSTEM READY
+                </span>
+
+            </div>
+
+            <h3 id="chpOutput">
+                0 kW
+            </h3>
+
+            <p>
+                Current CHP electrical output.
+                The frontend is using a live demonstration
+                simulation. Later this value can be connected
+                directly to the backend API.
+            </p>
+
+        </div>
+
+
+        <div class="control-side">
+
+            <div class="control-card">
+
+                <small>Dispatch Role</small>
+
+                <strong>Last Resort</strong>
+
+            </div>
+
+
+            <div class="control-card">
+
+                <small>Installed Power</small>
+
+                <strong>60 kW</strong>
+
+            </div>
+
+
+            <div class="control-card">
+
+                <small>Availability</small>
+
+                <strong id="availability">
+                    100%
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ANALYTICS
+========================= -->
+
+<section class="section" id="analytics">
+
+    <div class="section-heading">
+
+        <div class="mini">
+            24 HOUR ANALYTICS
+        </div>
+
+        <h2>
+            CHP dispatch profile
+        </h2>
+
+        <p>
+            CHP normally remains inactive while renewable
+            generation and storage can satisfy demand.
+            Higher activity indicates greater backup pressure.
+        </p>
+
+    </div>
+
+
+    <div class="graph-box">
+
+        <h3>
+            Estimated CHP Output
+        </h3>
+
+        <div class="graph" id="graph"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     AI
+========================= -->
+
+<section class="section">
+
+    <div class="ai-box">
+
+        <div class="section-heading">
+
+            <div class="mini">
+                AI OPTIMIZER
+            </div>
+
+            <h2>
+                Why CHP is being held back
+            </h2>
+
+            <p>
+                The optimizer prioritizes renewable resources
+                and energy storage before activating expensive
+                backup resources.
+            </p>
+
+        </div>
+
+
+        <div class="terminal" id="terminal">
+
+            <div>
+                > POLARIS ENERGY ENGINE INITIALIZED
+            </div>
+
+            <div>
+                > Checking renewable availability...
+            </div>
+
+            <div>
+                > Checking battery reserve...
+            </div>
+
+            <div>
+                > CHP STATUS: STANDBY
+            </div>
+
+            <div>
+                > Backup readiness: HIGH
+            </div>
+
+            <div>
+                > Waiting for optimizer instruction...
+                <span class="cursor"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CTA
+========================= -->
+
+<div class="cta">
+
+    <h2>
+        Built for the final line of defense.
+    </h2>
+
+    <p>
+        CHP provides additional resilience when the polar
+        station needs both electrical and useful thermal support.
+    </p>
+
+    <a href="nonrenewable.html" class="btn btn-primary">
+        Back to Backup & Energy Support
+    </a>
+
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    POLARIS • AI-DRIVEN SMART ENERGY MANAGEMENT SYSTEM
+
+    <br><br>
+
+    CHP / COGENERATION • BACKUP RESOURCE • PRIORITY #11
+
+</footer>
+
+
+<script>
+
+/* =========================
+   MENU
+========================= */
+
+function toggleMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList.toggle("active");
+
+}
+
+
+/* =========================
+   ENERGY BARS
+========================= */
+
+const fills =
+document.querySelectorAll(".fill");
+
+setTimeout(()=>{
+
+    fills.forEach(fill=>{
+
+        fill.style.width =
+            fill.dataset.width;
+
+    });
+
+},500);
+
+
+/* =========================
+   LIVE CHP SIMULATION
+========================= */
+
+async function updateCHP(){
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+        const resources = d.modeled_resources_12 || [];
+        const chp = resources.find(r => r.id === "chp") || {};
+
+        const output = Math.round(chp.output_kw || 0);
+
+        const elOut = document.getElementById("chpOutput");
+        if (elOut) elOut.textContent = output + " kW";
+
+        const elStat = document.getElementById("statusText");
+        const elLive = document.getElementById("liveStatus");
+        const elAvail = document.getElementById("availability");
+
+        if(output === 0){
+            if (elStat) elStat.textContent = "READY";
+            if (elLive) elLive.textContent = "SYSTEM READY";
+            if (elAvail) elAvail.textContent = "100%";
+        }else{
+            if (elStat) elStat.textContent = "ACTIVE";
+            if (elLive) elLive.textContent = "CHP SUPPORT ACTIVE";
+            if (elAvail) elAvail.textContent = "98%";
+        }
+    } catch (e) {
+        console.warn("CHP telemetry notice:", e);
+    }
+}
+
+updateCHP();
+
+setInterval(updateCHP,2000);
+
+
+/* =========================
+   GRAPH
+========================= */
+
+const graph =
+document.getElementById("graph");
+
+for(let i=0;i<24;i++){
+
+    let value;
+
+    /*
+       Mostly standby.
+       Occasional backup demand.
+    */
+
+    if(
+        i>=18 &&
+        i<=22 &&
+        Math.random()<0.45
+    ){
+
+        value =
+            20 +
+            Math.random()*40;
+
+    }else{
+
+        value =
+            Math.random()*8;
+
+    }
+
+    const bar =
+        document.createElement("div");
+
+    bar.className =
+        "bar-chart";
+
+    bar.style.setProperty(
+        "--h",
+        Math.max(4,value*4)+"px"
+    );
+
+    bar.title =
+        `${i}:00 — ${value.toFixed(1)} kW`;
+
+    graph.appendChild(bar);
+
+}
+
+
+/* =========================
+   TERMINAL ROTATION
+========================= */
+
+const messages = [
+
+    "> Renewable sources prioritized.",
+
+    "> Battery reserve checked.",
+
+    "> Non-critical loads monitored.",
+
+    "> CHP remains on standby.",
+
+    "> No CHP dispatch required.",
+
+    "> System operating normally."
+
+];
+
+let messageIndex = 0;
+
+setInterval(()=>{
+
+    const terminal =
+        document.getElementById("terminal");
+
+    const line =
+        document.createElement("div");
+
+    line.textContent =
+        messages[messageIndex];
+
+    terminal.appendChild(line);
+
+    messageIndex++;
+
+    if(messageIndex >= messages.length){
+        messageIndex = 0;
+    }
+
+    if(terminal.children.length > 12){
+        terminal.removeChild(
+            terminal.children[0]
+        );
+    }
+
+},4000);
+
+
+/* =========================
+   SCROLL REVEAL
+========================= */
+
+const observer =
+new IntersectionObserver(
+(entries)=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            entry.target.style.opacity="1";
+
+            entry.target.style.transform=
+                "translateY(0)";
+
+        }
+
+    });
+
+},
+{
+    threshold:.12
+});
+
+
+document
+.querySelectorAll(
+    ".metric,.process-card,.energy-box,.control-card,.graph-box,.ai-box"
+)
+.forEach(el=>{
+
+    el.style.opacity="0";
+
+    el.style.transform=
+        "translateY(25px)";
+
+    el.style.transition=
+        "opacity .7s ease, transform .7s ease";
+
+    observer.observe(el);
+
+});
+
+</script>
+
+</body>
+</html>

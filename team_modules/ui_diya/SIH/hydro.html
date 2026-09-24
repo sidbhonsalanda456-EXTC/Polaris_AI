@@ -1,0 +1,3282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLARIS | Hydropower</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+
+/* =========================================================
+   HYDROPOWER THEME
+   LIGHT • AQUA • STONE • PEARL
+   NO BLUE / NO GREEN
+========================================================= */
+
+:root{
+
+    --page:#f4f1eb;
+    --page2:#ebe7df;
+
+    --white:#ffffff;
+    --ink:#252724;
+    --soft-ink:#555852;
+    --muted:#7b7d77;
+
+    --aqua:#2db6a3;
+    --aqua-dark:#188b7c;
+    --aqua-light:#a7e6dc;
+
+    --sand:#d9cdbb;
+    --stone:#9b968c;
+
+    --orange:#d58a45;
+    --red:#c9634e;
+
+    --line:#ddd9d1;
+
+    --shadow:
+        0 18px 50px
+        rgba(49,45,38,.10);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+
+    font-family:'DM Sans',sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(45,182,163,.08),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 25%,
+            rgba(213,138,69,.07),
+            transparent 25%
+        ),
+        var(--page);
+
+    color:var(--ink);
+
+    overflow-x:hidden;
+
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 6%;
+
+    background:
+        rgba(244,241,235,.88);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid
+        rgba(37,39,36,.08);
+
+    z-index:1000;
+
+}
+
+
+.logo{
+
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    font-family:'Space Grotesk',sans-serif;
+
+    font-size:20px;
+    font-weight:800;
+
+    letter-spacing:2px;
+
+}
+
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:
+        var(--ink);
+
+    color:
+        var(--aqua-light);
+
+    box-shadow:
+        0 6px 20px
+        rgba(37,39,36,.15);
+
+}
+
+
+.logo span{
+    color:var(--aqua-dark);
+}
+
+
+/* =========================================================
+   THREE DASH BUTTON
+========================================================= */
+
+.menu-btn{
+
+    width:45px;
+    height:45px;
+
+    border:
+        1px solid
+        #d1cdc5;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.65);
+
+    color:var(--ink);
+
+    font-size:23px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+.menu-btn:hover{
+
+    background:var(--ink);
+
+    color:white;
+
+    border-color:var(--ink);
+
+    transform:
+        rotate(4deg);
+
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(37,39,36,.35);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:1500;
+
+}
+
+
+.overlay.active{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu{
+
+    position:fixed;
+
+    top:0;
+    right:-350px;
+
+    width:330px;
+    height:100vh;
+
+    padding:
+        90px 25px 30px;
+
+    background:
+        #f7f5f0;
+
+    border-left:
+        1px solid
+        #d8d3ca;
+
+    transition:
+        .4s
+        cubic-bezier(.77,0,.18,1);
+
+    z-index:1600;
+
+    box-shadow:
+        -20px 0 60px
+        rgba(0,0,0,.08);
+
+}
+
+
+.side-menu.active{
+    right:0;
+}
+
+
+.close-menu{
+
+    position:absolute;
+
+    top:24px;
+    right:25px;
+
+    border:0;
+
+    background:none;
+
+    color:var(--ink);
+
+    font-size:28px;
+
+    cursor:pointer;
+
+}
+
+
+.menu-title{
+
+    margin-bottom:25px;
+
+    font-family:'Space Grotesk',sans-serif;
+
+    font-size:12px;
+
+    color:var(--muted);
+
+    letter-spacing:2px;
+
+}
+
+
+.side-menu a{
+
+    display:flex;
+    align-items:center;
+    gap:13px;
+
+    padding:15px 16px;
+
+    margin:8px 0;
+
+    border-radius:12px;
+
+    color:var(--soft-ink);
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+
+.side-menu a:hover{
+
+    color:var(--ink);
+
+    background:
+        var(--aqua-light);
+
+    transform:
+        translateX(7px);
+
+}
+
+
+/* =========================================================
+   PAGE NAV
+========================================================= */
+
+.page-nav{
+
+    position:sticky;
+
+    top:72px;
+
+    z-index:900;
+
+    display:flex;
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px;
+
+    background:
+        rgba(244,241,235,.85);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:
+        1px solid
+        rgba(37,39,36,.07);
+
+    overflow-x:auto;
+
+}
+
+
+.page-nav a{
+
+    white-space:nowrap;
+
+    padding:
+        9px 15px;
+
+    border-radius:20px;
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    transition:.3s;
+
+}
+
+
+.page-nav a:hover,
+.page-nav a.active{
+
+    color:
+        var(--aqua-dark);
+
+    background:
+        rgba(45,182,163,.10);
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    min-height:650px;
+
+    padding:
+        145px 7% 80px;
+
+    display:grid;
+
+    grid-template-columns:
+        .9fr 1.1fr;
+
+    gap:40px;
+
+    align-items:center;
+
+}
+
+
+/* =========================================================
+   HERO TEXT
+========================================================= */
+
+.hero-content{
+
+    max-width:620px;
+
+}
+
+
+.eyebrow{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:
+        8px 14px;
+
+    border-radius:30px;
+
+    background:
+        rgba(45,182,163,.09);
+
+    border:
+        1px solid
+        rgba(45,182,163,.22);
+
+    color:
+        var(--aqua-dark);
+
+    font-size:11px;
+
+    font-weight:800;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:22px;
+
+}
+
+
+.dot{
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:
+        var(--aqua);
+
+    box-shadow:
+        0 0 10px
+        rgba(45,182,163,.45);
+
+    animation:
+        pulse 1.5s infinite;
+
+}
+
+
+@keyframes pulse{
+
+    50%{
+        opacity:.35;
+        transform:scale(.7);
+    }
+
+}
+
+
+.hero h1{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(48px,7vw,82px);
+
+    line-height:.95;
+
+    letter-spacing:-4px;
+
+    margin-bottom:25px;
+
+}
+
+
+.hero h1 span{
+
+    color:
+        var(--aqua-dark);
+
+}
+
+
+.hero p{
+
+    max-width:590px;
+
+    color:
+        var(--soft-ink);
+
+    font-size:16px;
+
+    line-height:1.8;
+
+}
+
+
+/* =========================================================
+   HERO STATS
+========================================================= */
+
+.hero-stats{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:35px;
+
+}
+
+
+.hero-stat{
+
+    padding:
+        17px 20px;
+
+    min-width:135px;
+
+    background:
+        rgba(255,255,255,.72);
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:16px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.04);
+
+    transition:.3s;
+
+}
+
+
+.hero-stat:hover{
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        var(--aqua-light);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.hero-stat small{
+
+    display:block;
+
+    color:
+        var(--muted);
+
+    font-size:10px;
+
+    margin-bottom:7px;
+
+}
+
+
+.hero-stat strong{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:23px;
+
+}
+
+
+/* =========================================================
+   WATER ENGINEERING VISUAL
+========================================================= */
+
+.water-machine{
+
+    height:510px;
+
+    position:relative;
+
+    border-radius:
+        38px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #ebe7df
+        );
+
+    border:
+        1px solid
+        #ded9d0;
+
+    box-shadow:
+        var(--shadow);
+
+    overflow:hidden;
+
+}
+
+
+/* top water reservoir */
+
+.reservoir{
+
+    position:absolute;
+
+    top:45px;
+    left:12%;
+
+    width:76%;
+    height:115px;
+
+    border-radius:
+        28px 28px 12px 12px;
+
+    background:
+        #fdfcf9;
+
+    border:
+        2px solid
+        #c9c3b8;
+
+    overflow:hidden;
+
+}
+
+
+.water-surface{
+
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:65%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a7e6dc,
+            #59cbbb
+        );
+
+}
+
+
+.wave{
+
+    position:absolute;
+
+    left:-10%;
+
+    bottom:40px;
+
+    width:120%;
+
+    height:25px;
+
+    border-radius:50%;
+
+    border-top:
+        3px solid
+        rgba(255,255,255,.7);
+
+    animation:
+        waveMove
+        3s
+        ease-in-out
+        infinite
+        alternate;
+
+}
+
+
+@keyframes waveMove{
+
+    from{
+        transform:
+            translateX(-25px);
+    }
+
+    to{
+        transform:
+            translateX(25px);
+    }
+
+}
+
+
+/* water column */
+
+.water-column{
+
+    position:absolute;
+
+    top:145px;
+    left:37%;
+
+    width:26%;
+
+    height:230px;
+
+    overflow:hidden;
+
+    background:
+        rgba(45,182,163,.12);
+
+    border-left:
+        2px solid
+        rgba(45,182,163,.25);
+
+    border-right:
+        2px solid
+        rgba(45,182,163,.25);
+
+}
+
+
+/* animated water particles */
+
+.water-particle{
+
+    position:absolute;
+
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.8);
+
+    animation:
+        waterFall
+        var(--speed)
+        linear
+        infinite;
+
+    left:
+        var(--left);
+
+}
+
+
+@keyframes waterFall{
+
+    from{
+        transform:
+            translateY(-30px);
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    to{
+        transform:
+            translateY(270px);
+        opacity:.1;
+    }
+
+}
+
+
+/* turbine chamber */
+
+.turbine-chamber{
+
+    position:absolute;
+
+    left:27%;
+
+    bottom:65px;
+
+    width:46%;
+
+    height:120px;
+
+    border-radius:
+        25px;
+
+    background:
+        #343833;
+
+    border:
+        5px solid
+        #b9b4aa;
+
+    box-shadow:
+        0 15px 30px
+        rgba(0,0,0,.13);
+
+}
+
+
+/* turbine wheel */
+
+.turbine-wheel{
+
+    position:absolute;
+
+    width:92px;
+    height:92px;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:50%;
+
+    border:
+        8px solid
+        #d8d4cb;
+
+    background:
+        #454943;
+
+    animation:
+        turbineSpin
+        3s
+        linear
+        infinite;
+
+}
+
+
+@keyframes turbineSpin{
+
+    to{
+        transform:
+            translate(-50%,-50%)
+            rotate(360deg);
+    }
+
+}
+
+
+.turbine-wheel::before,
+.turbine-wheel::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:70px;
+    height:8px;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:10px;
+
+    background:
+        var(--aqua-light);
+
+}
+
+
+.turbine-wheel::after{
+
+    transform:
+        translate(-50%,-50%)
+        rotate(90deg);
+
+}
+
+
+/* outgoing energy */
+
+.energy-line{
+
+    position:absolute;
+
+    left:66%;
+
+    bottom:120px;
+
+    width:25%;
+
+    height:4px;
+
+    background:
+        var(--aqua);
+
+    border-radius:20px;
+
+    box-shadow:
+        0 0 15px
+        rgba(45,182,163,.35);
+
+    overflow:hidden;
+
+}
+
+
+.energy-line::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-40px;
+
+    width:40px;
+
+    height:100%;
+
+    background:
+        white;
+
+    box-shadow:
+        0 0 10px white;
+
+    animation:
+        energyFlow
+        1.5s
+        linear
+        infinite;
+
+}
+
+
+@keyframes energyFlow{
+
+    to{
+        left:100%;
+    }
+
+}
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+.machine-label{
+
+    position:absolute;
+
+    padding:
+        8px 11px;
+
+    border-radius:9px;
+
+    background:
+        rgba(255,255,255,.88);
+
+    border:
+        1px solid
+        #ddd8cf;
+
+    color:
+        var(--soft-ink);
+
+    font-size:10px;
+
+    font-weight:700;
+
+    box-shadow:
+        0 6px 18px
+        rgba(0,0,0,.05);
+
+}
+
+
+.label-water{
+
+    top:180px;
+    left:10%;
+
+}
+
+
+.label-turbine{
+
+    bottom:105px;
+    left:8%;
+
+}
+
+
+.label-energy{
+
+    bottom:90px;
+    right:8%;
+
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section{
+
+    padding:
+        90px 7%;
+
+}
+
+
+.section-heading{
+
+    margin-bottom:35px;
+
+}
+
+
+.kicker{
+
+    color:
+        var(--aqua-dark);
+
+    font-size:11px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+    margin-bottom:9px;
+
+}
+
+
+.section-heading h2{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(31px,4vw,49px);
+
+    letter-spacing:-2px;
+
+}
+
+
+.section-heading p{
+
+    max-width:650px;
+
+    margin-top:12px;
+
+    color:
+        var(--muted);
+
+    line-height:1.7;
+
+}
+
+
+/* =========================================================
+   UNIQUE ORIENTATION: WATER JOURNEY
+========================================================= */
+
+.journey{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr 1fr;
+
+    gap:0;
+
+    position:relative;
+
+}
+
+
+.journey::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:52px;
+    left:10%;
+    right:10%;
+
+    height:2px;
+
+    background:
+        var(--line);
+
+    z-index:0;
+
+}
+
+
+.journey-step{
+
+    position:relative;
+
+    z-index:2;
+
+    text-align:center;
+
+    padding:0 15px;
+
+}
+
+
+.journey-number{
+
+    width:104px;
+    height:104px;
+
+    margin:
+        0 auto 20px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:50%;
+
+    background:
+        var(--white);
+
+    border:
+        2px solid
+        var(--aqua-light);
+
+    color:
+        var(--aqua-dark);
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:25px;
+
+    font-weight:800;
+
+    transition:.35s;
+
+}
+
+
+.journey-step:hover
+.journey-number{
+
+    transform:
+        translateY(-8px)
+        rotate(8deg);
+
+    background:
+        var(--aqua);
+
+    color:white;
+
+    border-color:
+        var(--aqua);
+
+    box-shadow:
+        0 15px 35px
+        rgba(45,182,163,.20);
+
+}
+
+
+.journey-step h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:18px;
+
+    margin-bottom:8px;
+
+}
+
+
+.journey-step p{
+
+    color:
+        var(--muted);
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+
+/* =========================================================
+   CAPACITY DISPLAY
+========================================================= */
+
+.capacity-layout{
+
+    display:grid;
+
+    grid-template-columns:
+        1.2fr .8fr;
+
+    gap:22px;
+
+}
+
+
+.capacity-card{
+
+    padding:35px;
+
+    border-radius:30px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid
+        var(--line);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.capacity-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:25px;
+
+    margin-bottom:8px;
+
+}
+
+
+.capacity-card p{
+
+    color:
+        var(--muted);
+
+    font-size:13px;
+
+    line-height:1.7;
+
+}
+
+
+/* large capacity */
+
+.capacity-number{
+
+    margin-top:30px;
+
+    display:flex;
+
+    align-items:end;
+
+    gap:10px;
+
+}
+
+
+.capacity-number strong{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:76px;
+
+    line-height:.9;
+
+    color:
+        var(--aqua-dark);
+
+}
+
+
+.capacity-number span{
+
+    color:
+        var(--muted);
+
+    font-size:14px;
+
+    padding-bottom:5px;
+
+}
+
+
+/* capacity meter */
+
+.meter{
+
+    margin-top:30px;
+
+}
+
+
+.meter-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:12px;
+
+    margin-bottom:8px;
+
+}
+
+
+.meter-top span:last-child{
+
+    color:
+        var(--aqua-dark);
+
+    font-weight:800;
+
+}
+
+
+.meter-track{
+
+    height:12px;
+
+    border-radius:20px;
+
+    background:
+        #e5e1d9;
+
+    overflow:hidden;
+
+}
+
+
+.meter-fill{
+
+    height:100%;
+
+    width:45%;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--aqua-light),
+            var(--aqua)
+        );
+
+    animation:
+        meterGrow
+        1.5s
+        ease;
+
+}
+
+
+@keyframes meterGrow{
+
+    from{
+        width:0;
+    }
+
+}
+
+
+/* =========================================================
+   SIDE STAT CARDS
+========================================================= */
+
+.side-stats{
+
+    display:grid;
+
+    grid-template-rows:
+        repeat(3,1fr);
+
+    gap:15px;
+
+}
+
+
+.side-stat{
+
+    padding:25px;
+
+    border-radius:22px;
+
+    background:
+        #eeebe4;
+
+    border:
+        1px solid
+        #ddd8cf;
+
+    transition:.35s;
+
+}
+
+
+.side-stat:hover{
+
+    transform:
+        translateX(8px);
+
+    background:
+        var(--white);
+
+    border-color:
+        var(--aqua-light);
+
+}
+
+
+.side-stat small{
+
+    display:block;
+
+    color:
+        var(--muted);
+
+    font-size:10px;
+
+    margin-bottom:8px;
+
+}
+
+
+.side-stat strong{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:28px;
+
+    color:
+        var(--ink);
+
+}
+
+
+.side-stat span{
+
+    color:
+        var(--aqua-dark);
+
+    font-size:11px;
+
+}
+
+
+/* =========================================================
+   24 HOUR FLOW
+========================================================= */
+
+.flow-chart{
+
+    padding:30px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:28px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.flow-bars{
+
+    height:270px;
+
+    display:flex;
+
+    align-items:end;
+
+    gap:9px;
+
+    border-bottom:
+        1px solid
+        var(--line);
+
+}
+
+
+.flow-bar{
+
+    flex:1;
+
+    height:
+        var(--height);
+
+    min-width:9px;
+
+    border-radius:
+        8px 8px 2px 2px;
+
+    background:
+        linear-gradient(
+            to top,
+            #9bcfc6,
+            var(--aqua)
+        );
+
+    position:relative;
+
+    transition:.35s;
+
+}
+
+
+.flow-bar:hover{
+
+    transform:
+        scaleX(1.2);
+
+    filter:
+        brightness(1.08);
+
+}
+
+
+.flow-bar span{
+
+    position:absolute;
+
+    bottom:-25px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+}
+
+
+/* =========================================================
+   FLOOD RESPONSE
+========================================================= */
+
+.response{
+
+    margin-top:25px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:20px;
+
+}
+
+
+.response-card{
+
+    padding:28px;
+
+    border-radius:25px;
+
+    border:
+        1px solid
+        var(--line);
+
+    background:
+        var(--white);
+
+    transition:.35s;
+
+}
+
+
+.response-card:hover{
+
+    transform:
+        translateY(-7px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.response-icon{
+
+    width:48px;
+    height:48px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:14px;
+
+    background:
+        #eeeae2;
+
+    font-size:21px;
+
+    margin-bottom:18px;
+
+}
+
+
+.response-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    margin-bottom:8px;
+
+}
+
+
+.response-card p{
+
+    color:
+        var(--muted);
+
+    font-size:12px;
+
+    line-height:1.7;
+
+}
+
+
+.warning-card{
+
+    border-color:
+        rgba(201,99,78,.25);
+
+    background:
+        #fff8f4;
+
+}
+
+
+.warning-card .response-icon{
+
+    background:
+        rgba(201,99,78,.10);
+
+    color:
+        var(--red);
+
+}
+
+
+/* =========================================================
+   AI PANEL
+========================================================= */
+
+.ai-panel{
+
+    margin-top:25px;
+
+    padding:30px;
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2f3733,
+            #454c47
+        );
+
+    color:white;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+.ai-panel::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    right:-100px;
+    top:-130px;
+
+    border-radius:50%;
+
+    background:
+        rgba(167,230,220,.13);
+
+}
+
+
+.ai-panel h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:26px;
+
+    margin-bottom:9px;
+
+}
+
+
+.ai-panel p{
+
+    max-width:760px;
+
+    color:
+        #dce4df;
+
+    font-size:13px;
+
+    line-height:1.7;
+
+}
+
+
+.ai-pill{
+
+    display:inline-flex;
+
+    margin-top:20px;
+
+    padding:
+        8px 13px;
+
+    border-radius:20px;
+
+    background:
+        rgba(167,230,220,.10);
+
+    border:
+        1px solid
+        rgba(167,230,220,.20);
+
+    color:
+        var(--aqua-light);
+
+    font-size:11px;
+
+    font-weight:800;
+
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta{
+
+    margin-top:60px;
+
+    padding:
+        65px 20px;
+
+    text-align:center;
+
+    border-radius:32px;
+
+    background:
+        var(--page2);
+
+    border:
+        1px solid
+        var(--line);
+
+}
+
+
+.cta h2{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(30px,5vw,52px);
+
+    letter-spacing:-2px;
+
+}
+
+
+.cta h2 span{
+
+    color:
+        var(--aqua-dark);
+
+}
+
+
+.cta p{
+
+    max-width:600px;
+
+    margin:
+        15px auto 0;
+
+    color:
+        var(--muted);
+
+    line-height:1.7;
+
+}
+
+
+.cta-button{
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    padding:
+        13px 23px;
+
+    border-radius:13px;
+
+    background:
+        var(--ink);
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    transition:.3s;
+
+}
+
+
+.cta-button:hover{
+
+    background:
+        var(--aqua-dark);
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(45,182,163,.18);
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:
+        40px 7%;
+
+    border-top:
+        1px solid
+        var(--line);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    color:
+        var(--muted);
+
+    font-size:11px;
+
+}
+
+
+.footer-logo{
+
+    color:
+        var(--aqua-dark);
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-weight:800;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+    .hero{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .hero-content{
+
+        max-width:800px;
+
+    }
+
+    .water-machine{
+
+        height:500px;
+
+    }
+
+    .parameter-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+    .capacity-layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .navbar{
+
+        padding:
+            0 20px;
+
+    }
+
+    .hero{
+
+        padding:
+            130px 20px 60px;
+
+    }
+
+    .hero h1{
+
+        letter-spacing:-2px;
+
+    }
+
+    .hero-stats{
+
+        flex-direction:column;
+
+    }
+
+    .hero-stat{
+
+        width:100%;
+
+    }
+
+    .section{
+
+        padding:
+            65px 20px;
+
+    }
+
+    .journey{
+
+        grid-template-columns:1fr;
+
+        gap:30px;
+
+    }
+
+    .journey::before{
+
+        display:none;
+
+    }
+
+    .flow-bars{
+
+        gap:5px;
+
+    }
+
+    .response{
+
+        grid-template-columns:1fr;
+
+    }
+
+    footer{
+
+        flex-direction:column;
+
+    }
+
+    .side-menu{
+
+        width:85%;
+
+    }
+
+    .machine-label{
+
+        display:none;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ≋
+        </div>
+
+        POLAR<span>IS</span>
+
+    </div>
+
+
+    <button
+        class="menu-btn"
+        onclick="openMenu()">
+
+        ☰
+
+    </button>
+
+</nav>
+
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+    class="overlay"
+    id="overlay"
+    onclick="closeMenu()">
+</div>
+
+
+<div
+    class="side-menu"
+    id="sideMenu">
+
+
+    <button
+        class="close-menu"
+        onclick="closeMenu()">
+
+        ×
+
+    </button>
+
+
+    <div class="menu-title">
+
+        POLARIS CONTROL CENTER
+
+    </div>
+
+
+    <a href="index.html">
+        ⌂ &nbsp; Home
+    </a>
+
+
+    <a href="renewable.html">
+        ⚡ &nbsp; Renewable Energy
+    </a>
+
+
+    <a href="nonrenewable.html">
+        ◈ &nbsp; Backup & Energy Support
+    </a>
+
+
+    <a href="admin.html">
+        ◉ &nbsp; Admin Dashboard
+    </a>
+
+
+    <a href="disaster.html">
+        ⚠ &nbsp; Disaster Management
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     PAGE NAV
+===================================================== -->
+
+<div class="page-nav">
+
+    <a
+        href="#overview"
+        class="active">
+
+        Overview
+
+    </a>
+
+
+    <a href="#journey">
+
+        Water → Energy
+
+    </a>
+
+
+    <a href="#capacity">
+
+        Capacity
+
+    </a>
+
+
+    <a href="#analytics">
+
+        Generation
+
+    </a>
+
+
+    <a href="#response">
+
+        Flood Response
+
+    </a>
+
+
+    <a href="renewable.html">
+
+        ← Renewable
+
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="overview">
+
+
+    <div class="hero-content">
+
+
+        <div class="eyebrow">
+
+            <span class="dot"></span>
+
+            HYDROPOWER • ONLINE
+
+        </div>
+
+
+        <h1>
+
+            Turn
+            <span>
+
+                Water Flow
+
+            </span>
+
+            Into Power.
+
+        </h1>
+
+
+        <p>
+
+            Hydropower converts available water flow
+            into electricity for the polar research
+            station. POLARIS monitors its availability
+            and automatically coordinates it with the
+            rest of the renewable energy fleet.
+
+        </p>
+
+
+        <div class="hero-stats">
+
+
+            <div class="hero-stat">
+
+                <small>
+                    INSTALLED
+                </small>
+
+                <strong>
+                    200 kW
+                </strong>
+
+            </div>
+
+
+            <div class="hero-stat">
+
+                <small>
+                    AVG. OUTPUT
+                </small>
+
+                <strong>
+                    ~90 kW
+                </strong>
+
+            </div>
+
+
+            <div class="hero-stat">
+
+                <small>
+                    PRIORITY
+                </small>
+
+                <strong>
+                    #03
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         WATER MACHINE
+    ================================================= -->
+
+    <div class="water-machine">
+
+
+        <div class="reservoir">
+
+            <div class="water-surface"></div>
+
+            <div class="wave"></div>
+
+        </div>
+
+
+        <div class="water-column">
+
+
+            <div
+                class="water-particle"
+                style="--left:15%;--speed:2.2s;">
+            </div>
+
+
+            <div
+                class="water-particle"
+                style="--left:35%;--speed:1.7s;">
+            </div>
+
+
+            <div
+                class="water-particle"
+                style="--left:55%;--speed:2.5s;">
+            </div>
+
+
+            <div
+                class="water-particle"
+                style="--left:72%;--speed:1.9s;">
+            </div>
+
+
+            <div
+                class="water-particle"
+                style="--left:87%;--speed:2.8s;">
+            </div>
+
+        </div>
+
+
+        <div class="turbine-chamber">
+
+            <div class="turbine-wheel"></div>
+
+        </div>
+
+
+        <div class="energy-line"></div>
+
+
+        <div class="machine-label label-water">
+
+            WATER FLOW
+
+        </div>
+
+
+        <div class="machine-label label-turbine">
+
+            TURBINE
+
+        </div>
+
+
+        <div class="machine-label label-energy">
+
+            ELECTRICITY →
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WATER JOURNEY
+===================================================== -->
+
+<section
+    class="section"
+    id="journey">
+
+
+    <div class="section-heading">
+
+
+        <div class="kicker">
+
+            THE ENERGY JOURNEY
+
+        </div>
+
+
+        <h2>
+
+            From Water to Electricity
+
+        </h2>
+
+
+        <p>
+
+            Instead of a normal dashboard, this section
+            shows the physical journey of energy through
+            the hydropower system.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="journey">
+
+
+        <div class="journey-step">
+
+
+            <div class="journey-number">
+
+                01
+
+            </div>
+
+
+            <h3>
+
+                Water Flow
+
+            </h3>
+
+
+            <p>
+
+                Available water flow provides the energy
+                input for the modeled hydropower resource.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="journey-step">
+
+
+            <div class="journey-number">
+
+                02
+
+            </div>
+
+
+            <h3>
+
+                Turbine
+
+            </h3>
+
+
+            <p>
+
+                Moving water drives the turbine mechanism,
+                converting flow energy into mechanical
+                rotation.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="journey-step">
+
+
+            <div class="journey-number">
+
+                03
+
+            </div>
+
+
+            <h3>
+
+                Generator
+
+            </h3>
+
+
+            <p>
+
+                The rotating system produces electrical
+                energy for the station.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="journey-step">
+
+
+            <div class="journey-number">
+
+                04
+
+            </div>
+
+
+            <h3>
+
+                Station Load
+
+            </h3>
+
+
+            <p>
+
+                Electricity is supplied to station demand
+                according to the POLARIS optimizer.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CAPACITY
+===================================================== -->
+
+<section
+    class="section"
+    id="capacity">
+
+
+    <div class="section-heading">
+
+        <div class="kicker">
+
+            HYDROPOWER PERFORMANCE
+
+        </div>
+
+
+        <h2>
+
+            Capacity & Output
+
+        </h2>
+
+
+        <p>
+
+            The modeled hydropower resource has a
+            200 kW installed capacity with an average
+            output of approximately 90 kW.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="capacity-layout">
+
+
+        <div class="capacity-card">
+
+
+            <h3>
+
+                Installed Capacity
+
+            </h3>
+
+
+            <p>
+
+                Maximum modeled electrical output from
+                the hydropower resource.
+
+            </p>
+
+
+            <div class="capacity-number">
+
+                <strong>
+                    200
+                </strong>
+
+                <span>
+                    kW
+                </span>
+
+            </div>
+
+
+            <div class="meter">
+
+
+                <div class="meter-top">
+
+                    <span>
+                        Average modeled output
+                    </span>
+
+                    <span>
+                        90 kW
+                    </span>
+
+                </div>
+
+
+                <div class="meter-track">
+
+                    <div class="meter-fill"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="side-stats">
+
+
+            <div class="side-stat">
+
+                <small>
+                    AVERAGE OUTPUT
+                </small>
+
+                <strong>
+                    ~90 kW
+                </strong>
+
+                <span>
+                    Normal modeled condition
+                </span>
+
+            </div>
+
+
+            <div class="side-stat">
+
+                <small>
+                    RENEWABLE PRIORITY
+                </small>
+
+                <strong>
+                    #03
+                </strong>
+
+                <span>
+                    After Solar & Wind
+                </span>
+
+            </div>
+
+
+            <div class="side-stat">
+
+                <small>
+                    NORMAL ROLE
+                </small>
+
+                <strong>
+                    STABLE
+                </strong>
+
+                <span>
+                    Renewable generation
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ANALYTICS
+===================================================== -->
+
+<section
+    class="section"
+    id="analytics">
+
+
+    <div class="section-heading">
+
+
+        <div class="kicker">
+
+            GENERATION PROFILE
+
+        </div>
+
+
+        <h2>
+
+            24-Hour Hydro Output
+
+        </h2>
+
+
+        <p>
+
+            A visual representation of the modeled
+            hydropower generation profile.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="flow-chart">
+
+
+        <div class="flow-bars">
+
+
+            <div
+                class="flow-bar"
+                style="--height:43%">
+                <span>00</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:47%">
+                <span>02</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:45%">
+                <span>04</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:46%">
+                <span>06</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:48%">
+                <span>08</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:44%">
+                <span>10</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:49%">
+                <span>12</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:47%">
+                <span>14</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:46%">
+                <span>16</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:44%">
+                <span>18</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:43%">
+                <span>20</span>
+            </div>
+
+
+            <div
+                class="flow-bar"
+                style="--height:45%">
+                <span>22</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FLOOD RESPONSE
+===================================================== -->
+
+<section
+    class="section"
+    id="response">
+
+
+    <div class="section-heading">
+
+
+        <div class="kicker">
+
+            RESILIENCE MODE
+
+        </div>
+
+
+        <h2>
+
+            What Happens During a Flood?
+
+        </h2>
+
+
+        <p>
+
+            POLARIS is designed to respond automatically
+            when a natural disaster changes the
+            availability of an energy source.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="response">
+
+
+        <div class="response-card warning-card">
+
+
+            <div class="response-icon">
+
+                ⚠
+
+            </div>
+
+
+            <h3>
+
+                Flood Scenario
+
+            </h3>
+
+
+            <p>
+
+                In the modeled flood scenario from
+                04:00–04:59, hydropower is derated to
+                10% of its normal modeled capacity.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="response-card">
+
+
+            <div class="response-icon">
+
+                ↗
+
+            </div>
+
+
+            <h3>
+
+                Automatic Compensation
+
+            </h3>
+
+
+            <p>
+
+                The optimizer can shift energy supply
+                toward other available renewable sources,
+                battery storage and backup resources.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- AI -->
+
+    <div class="ai-panel">
+
+
+        <h3>
+
+            ✦ AI + Hydropower Intelligence
+
+        </h3>
+
+
+        <p>
+
+            If the system predicts that hydropower will
+            become unavailable or significantly reduced,
+            the AI-assisted optimizer can prepare the
+            energy system in advance. Battery reserve
+            can be protected and other renewable sources
+            can be prioritized.
+
+        </p>
+
+
+        <div class="ai-pill">
+
+            ● AUTO MODE READY
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CTA -->
+
+    <div class="cta">
+
+
+        <h2>
+
+            Water Flow.
+            <span>
+
+                Smart Power.
+
+            </span>
+
+        </h2>
+
+
+        <p>
+
+            Hydropower becomes more resilient when it is
+            connected to forecasting, storage and
+            autonomous source switching.
+
+        </p>
+
+
+        <a
+            href="renewable.html"
+            class="cta-button">
+
+            ← BACK TO RENEWABLE ENERGY
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <div class="footer-logo">
+
+        POLARIS ENERGY SYSTEM
+
+    </div>
+
+
+    <div>
+
+        AI-Driven Smart Energy Management
+        • Polar Research Station
+
+    </div>
+
+
+    <div>
+
+        Hydropower Module • v1.0
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+function openMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList
+        .add("active");
+
+
+    document
+        .getElementById("overlay")
+        .classList
+        .add("active");
+
+}
+
+
+function closeMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList
+        .remove("active");
+
+
+    document
+        .getElementById("overlay")
+        .classList
+        .remove("active");
+
+}
+
+
+/* =====================================================
+   ESC
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+
+            closeMenu();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ACTIVE NAVIGATION
+===================================================== */
+
+const sections =
+    document.querySelectorAll(
+        "section[id]"
+    );
+
+
+const navLinks =
+    document.querySelectorAll(
+        ".page-nav a"
+    );
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        let current = "";
+
+
+        sections.forEach(
+            section => {
+
+                const top =
+                    section.offsetTop - 180;
+
+
+                if(
+                    window.scrollY >= top
+                ){
+
+                    current =
+                        section.getAttribute("id");
+
+                }
+
+            }
+        );
+
+
+        navLinks.forEach(
+            link => {
+
+                link.classList.remove(
+                    "active"
+                );
+
+
+                if(
+                    link.getAttribute("href")
+                    ===
+                    "#" + current
+                ){
+
+                    link.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   INTERACTIVE WATER PARTICLES
+===================================================== */
+
+const machine =
+    document.querySelector(
+        ".water-machine"
+    );
+
+
+machine.addEventListener(
+    "mousemove",
+    function(event){
+
+        const rect =
+            machine.getBoundingClientRect();
+
+
+        const x =
+            event.clientX - rect.left;
+
+
+        const y =
+            event.clientY - rect.top;
+
+
+        machine.style.setProperty(
+            "--mouse-x",
+            x + "px"
+        );
+
+
+        machine.style.setProperty(
+            "--mouse-y",
+            y + "px"
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

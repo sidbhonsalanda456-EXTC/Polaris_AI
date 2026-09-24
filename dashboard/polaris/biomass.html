@@ -1,0 +1,2258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLARIS | Biomass Energy</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#080606;
+    color:#f4eee8;
+    overflow-x:hidden;
+}
+
+::selection{
+    background:#c53d55;
+    color:#fff;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 38px;
+
+    background:rgba(8,6,6,.90);
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid rgba(197,61,85,.20);
+
+    z-index:1000;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:4px;
+
+    color:#c53d55;
+}
+
+.logo span{
+    color:#e6d5c2;
+    font-weight:500;
+}
+
+/* =========================================================
+   THREE DASH MENU
+========================================================= */
+
+.menu-btn{
+    width:46px;
+    height:46px;
+
+    border:1px solid rgba(197,61,85,.45);
+    border-radius:12px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    gap:5px;
+
+    cursor:pointer;
+
+    transition:.35s;
+}
+
+.menu-btn span{
+    width:20px;
+    height:2px;
+
+    background:#f4eee8;
+
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    background:#c53d55;
+    transform:rotate(4deg);
+}
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu{
+    position:fixed;
+
+    top:0;
+    right:-330px;
+
+    width:330px;
+    height:100vh;
+
+    padding:105px 35px;
+
+    background:#110b0b;
+
+    border-left:1px solid rgba(197,61,85,.30);
+
+    box-shadow:-25px 0 70px rgba(0,0,0,.55);
+
+    z-index:999;
+
+    transition:.45s cubic-bezier(.77,0,.18,1);
+}
+
+.side-menu.active{
+    right:0;
+}
+
+.side-menu h3{
+    color:#c53d55;
+
+    font-size:14px;
+
+    letter-spacing:2px;
+
+    margin-bottom:28px;
+}
+
+.side-menu a{
+    display:block;
+
+    padding:15px 0;
+
+    color:#a99d99;
+
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:#c53d55;
+    padding-left:12px;
+}
+
+/* =========================================================
+   PAGE NAV
+========================================================= */
+
+.page-nav{
+    position:sticky;
+
+    top:72px;
+
+    z-index:800;
+
+    display:flex;
+    justify-content:center;
+
+    gap:32px;
+
+    padding:15px;
+
+    background:rgba(8,6,6,.93);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid rgba(197,61,85,.12);
+}
+
+.page-nav a{
+    color:#817775;
+
+    font-size:13px;
+
+    text-decoration:none;
+
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:#c53d55;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    min-height:92vh;
+
+    padding:145px 8% 80px;
+
+    display:grid;
+
+    grid-template-columns:.9fr 1.1fr;
+
+    gap:70px;
+
+    align-items:center;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+    height:700px;
+
+    left:-350px;
+    top:-300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(197,61,85,.16),
+            transparent 68%
+        );
+}
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+    height:500px;
+
+    right:-250px;
+    bottom:-300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(230,213,194,.07),
+            transparent 70%
+        );
+}
+
+.hero-text{
+    position:relative;
+    z-index:5;
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:8px 16px;
+
+    border:1px solid rgba(197,61,85,.45);
+
+    border-radius:30px;
+
+    color:#c53d55;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+
+    margin-bottom:25px;
+}
+
+.hero h1{
+
+    font-size:clamp(48px,6vw,84px);
+
+    line-height:.94;
+
+    letter-spacing:-3px;
+
+    margin-bottom:28px;
+}
+
+.hero h1 span{
+    color:#c53d55;
+}
+
+.hero p{
+
+    max-width:570px;
+
+    color:#a69a96;
+
+    font-size:17px;
+
+    line-height:1.8;
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:35px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+
+    padding:14px 23px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.35s;
+}
+
+.btn-primary{
+
+    background:#c53d55;
+
+    color:#18070a;
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 18px 45px rgba(197,61,85,.25);
+}
+
+.btn-outline{
+
+    color:#e6d5c2;
+
+    border:1px solid #46383a;
+}
+
+.btn-outline:hover{
+
+    color:#c53d55;
+
+    border-color:#c53d55;
+}
+
+/* =========================================================
+   BIOMASS PLANT VISUAL
+========================================================= */
+
+.biomass-scene{
+
+    height:500px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:35px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 55%,
+            rgba(197,61,85,.13),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            180deg,
+            #120b0b,
+            #090606
+        );
+
+    border:1px solid #342628;
+
+    box-shadow:
+        inset 0 0 100px rgba(0,0,0,.55);
+}
+
+/* ambient particles */
+
+.particle{
+
+    position:absolute;
+
+    width:5px;
+    height:5px;
+
+    border-radius:50%;
+
+    background:#c53d55;
+
+    opacity:.6;
+
+    animation:
+        particleFloat 5s infinite;
+}
+
+.p1{
+    left:15%;
+    bottom:100px;
+}
+
+.p2{
+    left:30%;
+    bottom:80px;
+    animation-delay:1s;
+}
+
+.p3{
+    left:75%;
+    bottom:120px;
+    animation-delay:2s;
+}
+
+.p4{
+    left:85%;
+    bottom:60px;
+    animation-delay:3s;
+}
+
+@keyframes particleFloat{
+
+    0%{
+        transform:
+            translateY(0)
+            scale(.5);
+
+        opacity:0;
+    }
+
+    20%{
+        opacity:.7;
+    }
+
+    100%{
+        transform:
+            translateY(-180px)
+            translateX(25px)
+            scale(1.2);
+
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   BIOMASS PILES
+========================================================= */
+
+.fuel-pile{
+
+    position:absolute;
+
+    bottom:40px;
+
+    left:45px;
+
+    width:170px;
+    height:80px;
+
+    background:
+        radial-gradient(
+            ellipse,
+            #5b3930,
+            #241513
+        );
+
+    border-radius:
+        50% 50% 35% 35%;
+
+    transform:rotate(-4deg);
+
+    box-shadow:
+        0 15px 30px rgba(0,0,0,.4);
+}
+
+.fuel-piece{
+
+    position:absolute;
+
+    width:50px;
+    height:15px;
+
+    border-radius:15px;
+
+    background:#805348;
+
+    transform:rotate(20deg);
+}
+
+.fp1{
+    left:35px;
+    bottom:78px;
+}
+
+.fp2{
+    left:90px;
+    bottom:85px;
+    transform:rotate(-15deg);
+}
+
+.fp3{
+    left:120px;
+    bottom:65px;
+    transform:rotate(12deg);
+}
+
+/* =========================================================
+   BIOMASS REACTOR
+========================================================= */
+
+.reactor{
+
+    position:absolute;
+
+    width:170px;
+    height:230px;
+
+    left:50%;
+
+    bottom:50px;
+
+    transform:translateX(-50%);
+
+    background:
+        linear-gradient(
+            90deg,
+            #241719,
+            #4a282d,
+            #211315
+        );
+
+    border:
+        2px solid #6c4145;
+
+    border-radius:
+        25px 25px 15px 15px;
+
+    box-shadow:
+        0 0 45px rgba(197,61,85,.12);
+}
+
+.reactor::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:115px;
+    height:40px;
+
+    left:50%;
+    top:-21px;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    background:#322024;
+
+    border:2px solid #71484d;
+}
+
+.reactor-window{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:75px;
+    height:110px;
+
+    border-radius:40px;
+
+    background:
+
+        radial-gradient(
+            ellipse,
+            #ed6a5f,
+            #a82d42 45%,
+            #35131b 75%
+        );
+
+    border:3px solid #8c5555;
+
+    box-shadow:
+        0 0 35px rgba(197,61,85,.35);
+
+    animation:
+        reactorPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes reactorPulse{
+
+    from{
+        box-shadow:
+            0 0 20px rgba(197,61,85,.2);
+    }
+
+    to{
+        box-shadow:
+            0 0 55px rgba(197,61,85,.5);
+    }
+}
+
+/* =========================================================
+   STACK
+========================================================= */
+
+.stack{
+
+    position:absolute;
+
+    width:45px;
+    height:150px;
+
+    right:75px;
+
+    bottom:180px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #292022,
+            #6a4b45,
+            #292022
+        );
+
+    border-radius:10px 10px 0 0;
+}
+
+.stack::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:70px;
+    height:25px;
+
+    left:50%;
+
+    top:-10px;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    background:#39262a;
+}
+
+/* smoke */
+
+.smoke{
+
+    position:absolute;
+
+    width:35px;
+    height:35px;
+
+    border-radius:50%;
+
+    background:#82716d;
+
+    opacity:.15;
+
+    top:-25px;
+
+    left:5px;
+
+    filter:blur(5px);
+
+    animation:
+        smokeRise 4s infinite;
+}
+
+.smoke-two{
+
+    animation-delay:1.5s;
+
+    left:20px;
+
+    width:25px;
+    height:25px;
+}
+
+@keyframes smokeRise{
+
+    0%{
+        transform:
+            translateY(0)
+            scale(.5);
+
+        opacity:0;
+    }
+
+    30%{
+        opacity:.18;
+    }
+
+    100%{
+        transform:
+            translateY(-100px)
+            translateX(20px)
+            scale(1.5);
+
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   ENERGY CABLE
+========================================================= */
+
+.energy-pulse{
+
+    position:absolute;
+
+    left:calc(50% + 80px);
+
+    bottom:190px;
+
+    width:180px;
+    height:4px;
+
+    background:#c53d55;
+
+    animation:
+        energyMove 1.8s linear infinite;
+}
+
+@keyframes energyMove{
+
+    0%{
+        transform:translateX(-120px);
+        opacity:0;
+    }
+
+    30%{
+        opacity:1;
+    }
+
+    100%{
+        transform:translateX(120px);
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics{
+
+    padding:40px 8% 85px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:18px;
+}
+
+.metric{
+
+    padding:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #140d0e,
+            #0b0707
+        );
+
+    border:1px solid #2d2022;
+
+    border-radius:20px;
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.metric::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:90px;
+    height:90px;
+
+    right:-40px;
+    top:-40px;
+
+    border-radius:50%;
+
+    background:#c53d55;
+
+    opacity:.05;
+}
+
+.metric:hover{
+
+    transform:translateY(-9px);
+
+    border-color:#c53d55;
+
+    box-shadow:
+        0 20px 55px rgba(197,61,85,.1);
+}
+
+.metric small{
+
+    color:#817674;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+.metric strong{
+
+    display:block;
+
+    margin-top:12px;
+
+    color:#c53d55;
+
+    font-size:31px;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+
+    padding:90px 8%;
+}
+
+.section-title{
+
+    margin-bottom:45px;
+}
+
+.section-title span{
+
+    color:#c53d55;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+}
+
+.section-title h2{
+
+    font-size:42px;
+
+    margin-top:10px;
+}
+
+/* =========================================================
+   PROCESS
+========================================================= */
+
+.process{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:18px;
+}
+
+.process-card{
+
+    min-height:245px;
+
+    padding:30px;
+
+    background:#100909;
+
+    border:1px solid #2b2021;
+
+    border-radius:23px;
+
+    transition:.4s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.process-card:hover{
+
+    transform:
+        translateY(-10px)
+        scale(1.01);
+
+    border-color:#c53d55;
+}
+
+.process-number{
+
+    font-size:45px;
+
+    font-weight:900;
+
+    color:#554043;
+
+    margin-bottom:20px;
+
+    transition:.3s;
+}
+
+.process-card:hover .process-number{
+
+    color:#c53d55;
+}
+
+.process-card h3{
+
+    margin-bottom:12px;
+}
+
+.process-card p{
+
+    color:#817675;
+
+    line-height:1.7;
+
+    font-size:14px;
+}
+
+/* =========================================================
+   ANALYTICS
+========================================================= */
+
+.analytics{
+
+    display:grid;
+
+    grid-template-columns:
+        1.25fr .75fr;
+
+    gap:25px;
+}
+
+.chart-box,
+.capacity-box{
+
+    padding:30px;
+
+    background:#0e0809;
+
+    border:1px solid #2c2022;
+
+    border-radius:25px;
+}
+
+.chart{
+
+    height:275px;
+
+    margin-top:30px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:9px;
+}
+
+.bar{
+
+    flex:1;
+
+    min-height:20px;
+
+    border-radius:
+        7px 7px 0 0;
+
+    background:
+        linear-gradient(
+            to top,
+            #662733,
+            #c53d55
+        );
+
+    position:relative;
+
+    transition:.45s;
+}
+
+.bar:hover{
+
+    transform:
+        scaleY(1.08);
+
+    filter:brightness(1.25);
+}
+
+.bar span{
+
+    position:absolute;
+
+    top:-24px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    color:#75696b;
+
+    font-size:10px;
+}
+
+/* =========================================================
+   CAPACITY
+========================================================= */
+
+.capacity-ring{
+
+    width:210px;
+    height:210px;
+
+    margin:28px auto;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            #c53d55 0 76%,
+            #302124 76% 100%
+        );
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+        0 0 50px rgba(197,61,85,.08);
+}
+
+.capacity-inner{
+
+    width:140px;
+    height:140px;
+
+    border-radius:50%;
+
+    background:#0e0809;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+}
+
+.capacity-inner strong{
+
+    font-size:30px;
+
+    color:#e6d5c2;
+}
+
+.capacity-inner small{
+
+    color:#75696b;
+}
+
+/* =========================================================
+   BIOFUEL STATUS
+========================================================= */
+
+.status-box{
+
+    margin-top:25px;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    border:1px solid rgba(197,61,85,.28);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(197,61,85,.08),
+            rgba(230,213,194,.03)
+        );
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.status-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.status-icon{
+
+    width:45px;
+    height:45px;
+
+    border-radius:12px;
+
+    background:#c53d55;
+
+    color:#17070a;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-weight:900;
+}
+
+.status-box p{
+
+    color:#817575;
+
+    font-size:13px;
+
+    margin-top:5px;
+}
+
+/* =========================================================
+   AI
+========================================================= */
+
+.ai-box{
+
+    padding:42px;
+
+    border-radius:30px;
+
+    border:1px solid #3b272a;
+
+    background:
+
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(197,61,85,.13),
+            transparent 35%
+        ),
+
+        #110909;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.ai-box h2{
+
+    color:#c53d55;
+
+    margin-bottom:15px;
+}
+
+.ai-box > p{
+
+    color:#a09794;
+
+    line-height:1.8;
+
+    max-width:850px;
+}
+
+.ai-grid{
+
+    margin-top:28px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+}
+
+.ai-item{
+
+    padding:22px;
+
+    background:#090606;
+
+    border:1px solid #292022;
+
+    border-radius:17px;
+
+    transition:.35s;
+}
+
+.ai-item:hover{
+
+    transform:
+        translateY(-6px);
+
+    border-color:#c53d55;
+}
+
+.ai-item strong{
+
+    display:block;
+
+    color:#e6d5c2;
+
+    margin-bottom:8px;
+}
+
+.ai-item p{
+
+    color:#756a6b;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:45px 8%;
+
+    border-top:1px solid #241a1d;
+
+    color:#62595a;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:950px){
+
+    .hero{
+
+        grid-template-columns:1fr;
+    }
+
+    .metrics{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .process{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .analytics{
+
+        grid-template-columns:1fr;
+    }
+
+    .ai-grid{
+
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .navbar{
+
+        padding:0 18px;
+    }
+
+    .logo{
+
+        font-size:17px;
+
+        letter-spacing:2px;
+    }
+
+    .page-nav{
+
+        justify-content:flex-start;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+    }
+
+    .hero{
+
+        padding:
+            125px 5% 55px;
+    }
+
+    .hero h1{
+
+        font-size:52px;
+    }
+
+    .biomass-scene{
+
+        height:390px;
+    }
+
+    .reactor{
+
+        transform:
+            translateX(-50%)
+            scale(.8);
+    }
+
+    .metrics{
+
+        grid-template-columns:1fr;
+
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    .process{
+
+        grid-template-columns:1fr;
+    }
+
+    .section{
+
+        padding:
+            65px 5%;
+    }
+
+    .section-title h2{
+
+        font-size:32px;
+    }
+
+    .ai-box{
+
+        padding:28px;
+    }
+
+    footer{
+
+        padding:
+            35px 5%;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        POLARIS
+        <span>/ BIOMASS</span>
+
+    </div>
+
+
+    <!-- THREE DASH BUTTON -->
+
+    <div
+        class="menu-btn"
+        onclick="toggleMenu()"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+    class="side-menu"
+    id="sideMenu"
+>
+
+    <h3>
+        POLARIS NAVIGATION
+    </h3>
+
+
+    <a href="index.html">
+        ⌂ Home
+    </a>
+
+
+    <a href="renewable.html">
+        ☀ Renewable Energy
+    </a>
+
+
+    <a href="nonrenewable.html">
+        ⚡ Backup & Energy Support
+    </a>
+
+
+    <a href="solar.html">
+        Solar Energy
+    </a>
+
+
+    <a href="wind.html">
+        Wind Energy
+    </a>
+
+
+    <a href="hydro.html">
+        Hydropower
+    </a>
+
+
+    <a href="geothermal.html">
+        Geothermal Energy
+    </a>
+
+
+    <a href="marine.html">
+        Marine Energy
+    </a>
+
+
+    <a href="biomass.html">
+        Biomass Energy
+    </a>
+
+
+    <a href="admin.html">
+        Admin Dashboard
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     PAGE NAVIGATION
+===================================================== -->
+
+<div class="page-nav">
+
+    <a href="#overview">
+        Overview
+    </a>
+
+    <a href="#process">
+        Energy Flow
+    </a>
+
+    <a href="#analytics">
+        Analytics
+    </a>
+
+    <a href="#ai">
+        AI Intelligence
+    </a>
+
+    <a href="renewable.html">
+        ← Renewable
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="overview"
+>
+
+
+    <div class="hero-text">
+
+
+        <div class="badge">
+
+            RENEWABLE SOURCE #06
+
+        </div>
+
+
+        <h1>
+
+            Organic Matter.
+            <br>
+
+            <span>Usable Energy.</span>
+
+        </h1>
+
+
+        <p>
+
+            Biomass and biogas convert organic material into
+            useful energy. POLARIS integrates this resource
+            into the station's renewable energy fleet while
+            coordinating it with other available sources.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+
+            <a
+                href="#process"
+                class="btn btn-primary"
+            >
+
+                Explore Energy Flow
+
+            </a>
+
+
+            <a
+                href="#analytics"
+                class="btn btn-outline"
+            >
+
+                View Analytics
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         BIOMASS VISUAL
+    ================================================= -->
+
+    <div class="biomass-scene">
+
+
+        <div class="particle p1"></div>
+
+        <div class="particle p2"></div>
+
+        <div class="particle p3"></div>
+
+        <div class="particle p4"></div>
+
+
+        <!-- FUEL -->
+
+        <div class="fuel-pile"></div>
+
+        <div class="fuel-piece fp1"></div>
+
+        <div class="fuel-piece fp2"></div>
+
+        <div class="fuel-piece fp3"></div>
+
+
+        <!-- REACTOR -->
+
+        <div class="reactor">
+
+            <div class="reactor-window"></div>
+
+        </div>
+
+
+        <!-- STACK -->
+
+        <div class="stack">
+
+            <div class="smoke"></div>
+
+            <div class="smoke smoke-two"></div>
+
+        </div>
+
+
+        <!-- ENERGY -->
+
+        <div class="energy-pulse"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     METRICS
+========================================================= -->
+
+<section class="metrics">
+
+
+    <div class="metric">
+
+        <small>
+            INSTALLED CAPACITY
+        </small>
+
+        <strong>
+            60 kW
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            AVERAGE OUTPUT
+        </small>
+
+        <strong>
+            ~55 kW
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            ENERGY PRIORITY
+        </small>
+
+        <strong>
+            #06
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            SYSTEM STATUS
+        </small>
+
+        <strong>
+            ONLINE
+        </strong>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     ENERGY FLOW
+========================================================= -->
+
+<section
+    class="section"
+    id="process"
+>
+
+
+    <div class="section-title">
+
+        <span>
+            ENERGY CONVERSION
+        </span>
+
+        <h2>
+            Organic Material → Power
+        </h2>
+
+    </div>
+
+
+    <div class="process">
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                01
+            </div>
+
+            <h3>
+                Organic Feedstock
+            </h3>
+
+            <p>
+                Biomass or organic material provides the
+                energy source used by the system.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                02
+            </div>
+
+            <h3>
+                Bioenergy Conversion
+            </h3>
+
+            <p>
+                Organic material can be processed or converted
+                into a usable bioenergy resource.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                03
+            </div>
+
+            <h3>
+                Heat & Motion
+            </h3>
+
+            <p>
+                The stored chemical energy is converted into
+                useful thermal or mechanical energy.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                04
+            </div>
+
+            <h3>
+                Electricity
+            </h3>
+
+            <p>
+                The generated energy is converted into
+                electricity and supplied to the station.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ANALYTICS
+========================================================= -->
+
+<section
+    class="section"
+    id="analytics"
+>
+
+
+    <div class="section-title">
+
+        <span>
+            RESOURCE ANALYTICS
+        </span>
+
+        <h2>
+            Biomass Generation
+        </h2>
+
+    </div>
+
+
+    <div class="analytics">
+
+
+        <!-- CHART -->
+
+        <div class="chart-box">
+
+            <h3>
+                24-Hour Output
+            </h3>
+
+
+            <div class="chart">
+
+
+                <div
+                    class="bar"
+                    style="height:72%"
+                >
+                    <span>00</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:76%"
+                >
+                    <span>02</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:81%"
+                >
+                    <span>04</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:77%"
+                >
+                    <span>06</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:87%"
+                >
+                    <span>08</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:90%"
+                >
+                    <span>10</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:82%"
+                >
+                    <span>12</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:92%"
+                >
+                    <span>14</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:84%"
+                >
+                    <span>16</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:79%"
+                >
+                    <span>18</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:75%"
+                >
+                    <span>20</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:70%"
+                >
+                    <span>22</span>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- CAPACITY -->
+
+        <div class="capacity-box">
+
+            <h3>
+                Current Capacity
+            </h3>
+
+
+            <div class="capacity-ring">
+
+                <div class="capacity-inner">
+
+                    <div>
+
+                        <strong>
+                            60 kW
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            INSTALLED
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p
+                style="
+                text-align:center;
+                color:#75696b;
+                font-size:13px;
+                "
+            >
+                Maximum biomass generation capacity
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div class="status-box">
+
+
+        <div class="status-left">
+
+
+            <div class="status-icon">
+                ✓
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Biomass Resource Available
+                </strong>
+
+                <p>
+                    Resource is currently available for
+                    intelligent energy dispatch.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <strong
+            style="
+            color:#c53d55;
+            "
+        >
+            ONLINE
+        </strong>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     AI INTELLIGENCE
+========================================================= -->
+
+<section
+    class="section"
+    id="ai"
+>
+
+
+    <div class="ai-box">
+
+
+        <h2>
+            ✦ AI Biomass Intelligence
+        </h2>
+
+
+        <p>
+
+            POLARIS considers biomass generation alongside
+            solar, wind, hydro, geothermal, marine and other
+            energy resources. The optimizer selects the
+            best available source while protecting critical
+            station loads.
+
+        </p>
+
+
+        <div class="ai-grid">
+
+
+            <div class="ai-item">
+
+                <strong>
+                    Resource Coordination
+                </strong>
+
+                <p>
+                    Biomass generation is coordinated with
+                    other renewable sources.
+                </p>
+
+            </div>
+
+
+            <div class="ai-item">
+
+                <strong>
+                    Demand Matching
+                </strong>
+
+                <p>
+                    The optimizer compares available supply
+                    with station demand before dispatch.
+                </p>
+
+            </div>
+
+
+            <div class="ai-item">
+
+                <strong>
+                    AUTO MODE
+                </strong>
+
+                <p>
+                    POLARIS automatically changes the energy
+                    mix when another source becomes unavailable.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div>
+        POLARIS Smart Energy Management
+    </div>
+
+    <div>
+        Biomass / Biogas • 60 kW
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   THREE DASH MENU
+========================================================= */
+
+function toggleMenu(){
+
+    const menu =
+        document.getElementById("sideMenu");
+
+    menu.classList.toggle("active");
+
+}
+
+
+/* =========================================================
+   CLOSE MENU OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const menu =
+            document.getElementById("sideMenu");
+
+        const button =
+            document.querySelector(".menu-btn");
+
+        if(
+            menu.classList.contains("active") &&
+            !menu.contains(event.target) &&
+            !button.contains(event.target)
+        ){
+
+            menu.classList.remove("active");
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DYNAMIC GENERATION GRAPH
+========================================================= */
+
+async function updateBiomass(){
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+        const resources = d.modeled_resources_12 || [];
+        const biomass = resources.find(r => r.id === "biomass") || {};
+
+        const output = biomass.output_kw !== undefined ? biomass.output_kw : 55;
+        const capacity = biomass.capacity_kw || 60;
+        const percentage = Math.min(100, Math.max(0, Math.round((output / capacity) * 100)));
+
+        const ring = document.querySelector(".capacity-ring");
+        if (ring) {
+            ring.style.background =
+                `conic-gradient(
+                    #c53d55 0 ${percentage}%,
+                    #302124 ${percentage}% 100%
+                )`;
+        }
+
+        const bars = document.querySelectorAll(".bar");
+        bars.forEach(function(bar, idx){
+            const variance = Math.cos((idx + Date.now() / 4000)) * 10;
+            const barVal = Math.min(100, Math.max(15, Math.round(percentage + variance)));
+            bar.style.height = barVal + "%";
+        });
+    } catch (e) {
+        console.warn("Biomass telemetry notice:", e);
+    }
+}
+
+updateBiomass();
+setInterval(updateBiomass, 2500);
+
+</script>
+
+</body>
+</html>

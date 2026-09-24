@@ -1,0 +1,4710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>POLARIS | AI Smart Energy Management</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+            background: #020b13;
+
+            color: white;
+
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .section-title, .stat-value, .power-number {
+            font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
+        }
+
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: -2;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 15%,
+                    rgba(0, 220, 255, .13),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 90% 70%,
+                    rgba(55, 100, 255, .10),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    145deg,
+                    #020910,
+                    #061722 50%,
+                    #02080d
+                );
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: -1;
+
+            opacity: .15;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,.03) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.03) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+        }
+
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        nav {
+
+            height: 78px;
+
+            padding: 0 6%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            z-index: 100;
+
+            background:
+                rgba(2, 11, 18, .70);
+
+            backdrop-filter:
+                blur(18px);
+
+            border-bottom:
+                1px solid rgba(255,255,255,.07);
+        }
+
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            letter-spacing: 3px;
+        }
+
+
+        .logo-orbit {
+
+            width: 37px;
+
+            height: 37px;
+
+            border:
+                1px solid #00e5ff;
+
+            border-radius: 50%;
+
+            position: relative;
+
+            box-shadow:
+                0 0 25px rgba(0,225,255,.25);
+        }
+
+
+        .logo-orbit::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 8px;
+
+            height: 8px;
+
+            background: #00e5ff;
+
+            border-radius: 50%;
+
+            top: 13px;
+
+            left: 13px;
+
+            box-shadow:
+                0 0 15px #00e5ff;
+        }
+
+
+        .menu-button {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(255,255,255,.18);
+
+            background:
+                rgba(255,255,255,.05);
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 5px;
+
+            cursor: pointer;
+
+            transition: .35s;
+        }
+
+
+        .menu-button span {
+
+            width: 19px;
+
+            height: 2px;
+
+            background: white;
+        }
+
+
+        .menu-button:hover {
+
+            transform:
+                rotate(90deg);
+
+            border-color:
+                #00e5ff;
+
+            box-shadow:
+                0 0 25px
+                rgba(0,225,255,.25);
+        }
+
+
+
+        /* =====================================================
+           SIDE MENU
+        ===================================================== */
+
+        .overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,.6);
+
+            z-index: 150;
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transition: .4s;
+        }
+
+
+        .overlay.active {
+
+            opacity: 1;
+
+            visibility: visible;
+        }
+
+
+        .side-menu {
+
+            position: fixed;
+
+            right: -380px;
+
+            top: 0;
+
+            width: 360px;
+
+            height: 100vh;
+
+            padding: 35px;
+
+            z-index: 200;
+
+            background:
+                rgba(3,15,23,.98);
+
+            border-left:
+                1px solid rgba(255,255,255,.1);
+
+            backdrop-filter:
+                blur(25px);
+
+            transition:
+                .5s cubic-bezier(.77,0,.18,1);
+        }
+
+
+        .side-menu.active {
+
+            right: 0;
+        }
+
+
+        .close-menu {
+
+            position: absolute;
+
+            top: 22px;
+
+            right: 25px;
+
+            font-size: 30px;
+
+            color: #78909c;
+
+            cursor: pointer;
+
+            transition: .3s;
+        }
+
+
+        .close-menu:hover {
+
+            color: white;
+
+            transform:
+                rotate(90deg);
+        }
+
+
+        .side-menu h2 {
+
+            margin-top: 65px;
+
+            margin-bottom: 10px;
+
+            font-size: 25px;
+        }
+
+
+        .side-subtitle {
+
+            color: #58717d;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 35px;
+        }
+
+
+        .menu-item {
+
+            padding: 19px 0;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.07);
+
+            color: #8da5af;
+
+            cursor: pointer;
+
+            transition: .3s;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .menu-item:hover {
+
+            color: #4eeaff;
+
+            padding-left: 10px;
+        }
+
+
+        .menu-arrow {
+
+            color: #395461;
+
+            transition: .3s;
+        }
+
+
+        .menu-item:hover .menu-arrow {
+
+            color: #00e5ff;
+
+            transform:
+                translateX(5px);
+        }
+
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            min-height: 100vh;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            overflow: hidden;
+
+            padding:
+                120px 8% 80px;
+        }
+
+
+        .hero-image {
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: -1;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    rgba(2,10,17,.97) 0%,
+                    rgba(2,10,17,.82) 42%,
+                    rgba(2,10,17,.40) 75%,
+                    rgba(2,10,17,.82) 100%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    rgba(0,0,0,.05),
+                    #020b13 100%
+                ),
+
+                url(
+                    "https://images.unsplash.com/photo-1517783999520-f068d7431a60?auto=format&fit=crop&w=2200&q=90"
+                );
+
+            background-size: cover;
+
+            background-position: center;
+
+            transform:
+                scale(1.05);
+
+            animation:
+                heroZoom 18s ease-in-out infinite alternate;
+        }
+
+
+        @keyframes heroZoom {
+
+            from {
+                transform: scale(1.05);
+            }
+
+            to {
+                transform: scale(1.12);
+            }
+
+        }
+
+
+        .hero-content {
+
+            max-width:
+                850px;
+        }
+
+
+        .live-label {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: #61eaff;
+
+            font-size: 11px;
+
+            letter-spacing: 4px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .live-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #36ffb5;
+
+            box-shadow:
+                0 0 15px #36ffb5;
+
+            animation:
+                pulse 1.5s infinite;
+        }
+
+
+        @keyframes pulse {
+
+            0%,100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .35;
+                transform: scale(.7);
+            }
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(50px, 8vw, 100px);
+
+            line-height:
+                .88;
+
+            letter-spacing:
+                -5px;
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .hero h1 span {
+
+            color: transparent;
+
+            -webkit-text-stroke:
+                1px rgba(255,255,255,.8);
+        }
+
+
+        .hero-description {
+
+            max-width:
+                650px;
+
+            color:
+                #b4c8d1;
+
+            line-height:
+                1.7;
+
+            font-size:
+                17px;
+
+            margin-bottom:
+                35px;
+        }
+
+
+        .hero-buttons {
+
+            display:
+                flex;
+
+            gap:
+                14px;
+
+            flex-wrap:
+                wrap;
+        }
+
+
+        .button {
+
+            padding:
+                14px 23px;
+
+            border-radius:
+                30px;
+
+            text-decoration:
+                none;
+
+            font-size:
+                13px;
+
+            cursor:
+                pointer;
+
+            border:
+                1px solid rgba(255,255,255,.18);
+
+            background:
+                rgba(255,255,255,.06);
+
+            color:
+                white;
+
+            transition:
+                .35s;
+
+            backdrop-filter:
+                blur(10px);
+        }
+
+
+        .button-primary {
+
+            background:
+                #00cee8;
+
+            color:
+                #001217;
+
+            border-color:
+                #00cee8;
+
+            font-weight:
+                bold;
+        }
+
+
+        .button:hover {
+
+            transform:
+                translateY(-5px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(0,220,255,.18);
+        }
+
+
+        .button-primary:hover {
+
+            background:
+                #5deaff;
+
+            box-shadow:
+                0 0 35px
+                rgba(0,225,255,.4);
+        }
+
+
+
+        /* =====================================================
+           HERO STATUS CARD
+        ===================================================== */
+
+        .hero-status {
+
+            position: absolute;
+
+            right: 7%;
+
+            bottom: 13%;
+
+            width: 245px;
+
+            padding: 23px;
+
+            background:
+                rgba(3,18,27,.68);
+
+            border:
+                1px solid rgba(255,255,255,.12);
+
+            border-radius:
+                20px;
+
+            backdrop-filter:
+                blur(18px);
+
+            animation:
+                floatCard 4s ease-in-out infinite;
+        }
+
+
+        @keyframes floatCard {
+
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+
+        .status-heading {
+
+            color:
+                #6e8792;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                2px;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .status-value {
+
+            font-size:
+                32px;
+
+            font-weight:
+                bold;
+        }
+
+
+        .status-good {
+
+            color:
+                #42ffb5;
+
+            font-size:
+                11px;
+
+            margin-top:
+                7px;
+        }
+
+
+
+        /* =====================================================
+           DASHBOARD
+        ===================================================== */
+
+        main {
+
+            padding:
+                90px 7%;
+        }
+
+
+        .section-label {
+
+            color:
+                #4eeaff;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                3px;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                12px;
+        }
+
+
+        .section-title {
+
+            font-size:
+                clamp(32px,4vw,52px);
+
+            letter-spacing:
+                -2px;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .section-description {
+
+            color:
+                #708892;
+
+            font-size:
+                13px;
+
+            line-height:
+                1.6;
+
+            margin-bottom:
+                40px;
+        }
+
+
+
+        /* =====================================================
+           TOP STATUS GRID
+        ===================================================== */
+
+        .status-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap:
+                18px;
+
+            margin-bottom:
+                25px;
+        }
+
+
+        .stat-card {
+
+            padding:
+                25px;
+
+            min-height:
+                160px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            background:
+                rgba(7,26,37,.72);
+
+            border-radius:
+                21px;
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            transition:
+                .4s;
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-8px);
+
+            border-color:
+                rgba(0,225,255,.3);
+
+            box-shadow:
+                0 20px 45px
+                rgba(0,0,0,.25);
+        }
+
+
+        .stat-name {
+
+            color:
+                #718a95;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .stat-value {
+
+            font-size:
+                32px;
+
+            font-weight:
+                bold;
+
+            margin-top:
+                20px;
+        }
+
+
+        .stat-change {
+
+            margin-top:
+                8px;
+
+            color:
+                #42ffb5;
+
+            font-size:
+                11px;
+        }
+
+
+
+        /* =====================================================
+           MAIN ENERGY PANEL
+        ===================================================== */
+
+        .energy-panel {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.4fr .6fr;
+
+            gap:
+                20px;
+
+            margin-top:
+                20px;
+        }
+
+
+        .panel {
+
+            padding:
+                32px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius:
+                25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(10,31,43,.85),
+                    rgba(3,15,23,.85)
+                );
+
+            transition:
+                .4s;
+        }
+
+
+        .panel:hover {
+
+            border-color:
+                rgba(0,225,255,.2);
+        }
+
+
+        .panel-header {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .panel-header h3 {
+
+            font-size:
+                20px;
+        }
+
+
+        .online {
+
+            padding:
+                7px 12px;
+
+            border-radius:
+                20px;
+
+            color:
+                #42ffb5;
+
+            background:
+                rgba(50,255,180,.07);
+
+            border:
+                1px solid rgba(50,255,180,.15);
+
+            font-size:
+                10px;
+        }
+
+
+
+        /* =====================================================
+           CURRENT SOURCE
+        ===================================================== */
+
+        .current-source {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                20px;
+        }
+
+
+        .source-icon {
+
+            width:
+                80px;
+
+            height:
+                80px;
+
+            border-radius:
+                50%;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            font-size:
+                34px;
+
+            background:
+                rgba(0,225,255,.08);
+
+            border:
+                1px solid rgba(0,225,255,.3);
+
+            box-shadow:
+                0 0 30px
+                rgba(0,225,255,.08);
+
+            transition:
+                .4s;
+        }
+
+
+        .source-icon:hover {
+
+            transform:
+                rotate(10deg)
+                scale(1.08);
+        }
+
+
+        .source-info h2 {
+
+            font-size:
+                27px;
+
+            margin-bottom:
+                6px;
+        }
+
+
+        .source-info p {
+
+            color:
+                #728995;
+
+            font-size:
+                12px;
+        }
+
+
+        .power-output {
+
+            margin-top:
+                30px;
+        }
+
+
+        .power-number {
+
+            font-size:
+                58px;
+
+            letter-spacing:
+                -3px;
+        }
+
+
+        .power-number span {
+
+            font-size:
+                15px;
+
+            color:
+                #708893;
+
+            letter-spacing:
+                0;
+        }
+
+
+        .energy-progress {
+
+            height:
+                6px;
+
+            background:
+                rgba(255,255,255,.06);
+
+            border-radius:
+                10px;
+
+            margin-top:
+                18px;
+
+            overflow:
+                hidden;
+        }
+
+
+        .energy-fill {
+
+            width:
+                74%;
+
+            height:
+                100%;
+
+            border-radius:
+                inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #008da7,
+                    #42eaff
+                );
+
+            box-shadow:
+                0 0 15px
+                rgba(0,225,255,.4);
+
+            transition:
+                width 1s;
+        }
+
+
+
+        /* =====================================================
+           AI PANEL
+        ===================================================== */
+
+        .ai-panel {
+
+            text-align:
+                center;
+        }
+
+
+        .ai-orb {
+
+            width:
+                105px;
+
+            height:
+                105px;
+
+            margin:
+                10px auto 22px;
+
+            border-radius:
+                50%;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            font-size:
+                25px;
+
+            font-weight:
+                bold;
+
+            border:
+                1px solid rgba(0,225,255,.45);
+
+            box-shadow:
+                0 0 45px
+                rgba(0,225,255,.12),
+
+                inset 0 0 30px
+                rgba(0,225,255,.08);
+
+            animation:
+                aiPulse 3s infinite;
+        }
+
+
+        @keyframes aiPulse {
+
+            0%,100% {
+                box-shadow:
+                    0 0 25px
+                    rgba(0,225,255,.1);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 60px
+                    rgba(0,225,255,.3);
+            }
+        }
+
+
+        .ai-panel h3 {
+
+            font-size:
+                22px;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .ai-panel p {
+
+            color:
+                #748c97;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
+        }
+
+
+        .auto-mode {
+
+            margin-top:
+                20px;
+
+            padding:
+                11px;
+
+            border-radius:
+                10px;
+
+            background:
+                rgba(50,255,180,.05);
+
+            color:
+                #42ffb5;
+
+            border:
+                1px solid rgba(50,255,180,.13);
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1px;
+        }
+
+
+
+        /* =====================================================
+           ENERGY FLOW
+        ===================================================== */
+
+        .flow-panel {
+
+            margin-top:
+                20px;
+
+            padding:
+                35px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius:
+                25px;
+
+            background:
+                rgba(6,23,33,.72);
+
+            overflow:
+                hidden;
+        }
+
+
+        .flow {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                8px;
+
+            overflow-x:
+                auto;
+
+            padding:
+                20px 5px;
+        }
+
+
+        .flow-node {
+
+            min-width:
+                110px;
+
+            padding:
+                18px 12px;
+
+            text-align:
+                center;
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255,255,255,.03);
+
+            transition:
+                .35s;
+        }
+
+
+        .flow-node:hover {
+
+            transform:
+                translateY(-7px);
+
+            border-color:
+                #00e5ff;
+
+            box-shadow:
+                0 0 25px
+                rgba(0,225,255,.12);
+        }
+
+
+        .flow-number {
+
+            font-size:
+                9px;
+
+            color:
+                #526d78;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .flow-icon {
+
+            font-size:
+                24px;
+
+            margin-bottom:
+                7px;
+        }
+
+
+        .flow-name {
+
+            font-size:
+                10px;
+
+            color:
+                #9bb0b9;
+        }
+
+
+        .flow-arrow {
+
+            color:
+                #2e6474;
+
+            font-size:
+                20px;
+
+            flex-shrink:
+                0;
+        }
+
+
+
+        /* =====================================================
+           LOWER DASHBOARD
+        ===================================================== */
+
+        .lower-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                20px;
+
+            margin-top:
+                20px;
+        }
+
+
+        /* BATTERY */
+
+        .battery-visual {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                25px;
+        }
+
+
+        .battery {
+
+            width:
+                80px;
+
+            height:
+                150px;
+
+            border:
+                2px solid #49626d;
+
+            border-radius:
+                10px;
+
+            padding:
+                5px;
+
+            position:
+                relative;
+        }
+
+
+        .battery::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            top:
+                -10px;
+
+            left:
+                24px;
+
+            width:
+                28px;
+
+            height:
+                8px;
+
+            background:
+                #49626d;
+
+            border-radius:
+                4px 4px 0 0;
+        }
+
+
+        .battery-level {
+
+            position:
+                absolute;
+
+            bottom:
+                5px;
+
+            left:
+                5px;
+
+            right:
+                5px;
+
+            height:
+                70%;
+
+            border-radius:
+                5px;
+
+            background:
+                linear-gradient(
+                    to top,
+                    #008ca5,
+                    #46ebff
+                );
+
+            box-shadow:
+                0 0 20px
+                rgba(0,225,255,.25);
+
+            transition:
+                height 1s;
+        }
+
+
+        .battery-details h3 {
+
+            font-size:
+                30px;
+        }
+
+
+        .battery-details p {
+
+            color:
+                #6f8792;
+
+            font-size:
+                11px;
+
+            margin-top:
+                7px;
+        }
+
+
+        /* NOTIFICATIONS */
+
+        .notification {
+
+            padding:
+                15px 0;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.06);
+
+            display:
+                flex;
+
+            gap:
+                12px;
+
+            align-items:
+                flex-start;
+        }
+
+
+        .notification:last-child {
+
+            border-bottom:
+                none;
+        }
+
+
+        .notification-dot {
+
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                #42ffb5;
+
+            margin-top:
+                5px;
+
+            flex-shrink:
+                0;
+
+            box-shadow:
+                0 0 10px
+                rgba(66,255,181,.5);
+        }
+
+
+        .notification.warning
+        .notification-dot {
+
+            background:
+                #ffb24d;
+        }
+
+
+        .notification-text {
+
+            font-size:
+                11px;
+
+            color:
+                #8ca3ad;
+
+            line-height:
+                1.5;
+        }
+
+
+        .notification-time {
+
+            display:
+                block;
+
+            color:
+                #526b76;
+
+            margin-top:
+                4px;
+
+            font-size:
+                9px;
+        }
+
+
+
+        /* =====================================================
+           DISASTER MANAGEMENT
+        ===================================================== */
+
+        .disaster-section {
+
+            margin-top:
+                20px;
+
+            padding:
+                30px;
+
+            border-radius:
+                25px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(34,21,12,.75),
+                    rgba(14,17,21,.75)
+                );
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+        }
+
+
+        .disaster-section::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                250px;
+
+            height:
+                250px;
+
+            right:
+                -100px;
+
+            top:
+                -100px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(255,150,50,.06);
+
+            filter:
+                blur(30px);
+        }
+
+
+        .disaster-header {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                20px;
+        }
+
+
+        .disaster-status {
+
+            padding:
+                8px 14px;
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(66,255,181,.06);
+
+            color:
+                #42ffb5;
+
+            border:
+                1px solid rgba(66,255,181,.15);
+
+            font-size:
+                10px;
+        }
+
+
+        .disaster-content {
+
+            margin-top:
+                25px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap:
+                15px;
+        }
+
+
+        .disaster-card {
+
+            padding:
+                20px;
+
+            border:
+                1px solid rgba(255,255,255,.07);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            transition:
+                .3s;
+        }
+
+
+        .disaster-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                rgba(255,160,70,.35);
+        }
+
+
+        .disaster-icon {
+
+            font-size:
+                25px;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .disaster-card h4 {
+
+            font-size:
+                14px;
+
+            margin-bottom:
+                7px;
+        }
+
+
+        .disaster-card p {
+
+            color:
+                #7f969f;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.5;
+        }
+
+
+
+        /* 12-RESOURCE MICROGRID SUITE */
+        .res-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 25px;
+        }
+
+        .res-card {
+            background: rgba(11, 25, 36, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: .35s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .res-card:hover {
+            transform: translateY(-6px);
+            border-color: #00e5ff;
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.15);
+            background: rgba(14, 34, 49, 0.85);
+        }
+
+        .res-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .res-icon {
+            font-size: 26px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .res-badge {
+            font-size: 9px;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .res-badge.clean {
+            background: rgba(66, 255, 181, 0.1);
+            color: #42ffb5;
+            border: 1px solid rgba(66, 255, 181, 0.25);
+        }
+
+        .res-badge.storage {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        .res-badge.backup {
+            background: rgba(255, 178, 77, 0.1);
+            color: #ffb24d;
+            border: 1px solid rgba(255, 178, 77, 0.25);
+        }
+
+        .res-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .res-desc {
+            font-size: 10px;
+            color: #7b949f;
+            line-height: 1.4;
+            margin-bottom: 14px;
+        }
+
+        .res-output {
+            font-size: 20px;
+            font-weight: 900;
+            color: #00e5ff;
+            font-family: monospace;
+        }
+
+        .res-output span {
+            font-size: 11px;
+            color: #64828f;
+        }
+
+        @media(max-width: 1100px) {
+            .res-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media(max-width: 650px) {
+            .res-grid { grid-template-columns: 1fr; }
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            padding:
+                35px 7%;
+
+            border-top:
+                1px solid rgba(255,255,255,.07);
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            color:
+                #526b76;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1px;
+        }
+
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:1000px) {
+
+            .hero-status {
+                display:
+                    none;
+            }
+
+            .status-grid {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+            .energy-panel {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .lower-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .disaster-content {
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+
+        @media(max-width:600px) {
+
+            nav {
+                padding:
+                    0 5%;
+            }
+
+            .hero {
+                padding:
+                    120px 7% 70px;
+            }
+
+            .hero h1 {
+                letter-spacing:
+                    -3px;
+            }
+
+            main {
+                padding:
+                    70px 6%;
+            }
+
+            .status-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .flow {
+                justify-content:
+                    flex-start;
+            }
+
+            footer {
+                flex-direction:
+                    column;
+
+                gap:
+                    12px;
+            }
+
+            .side-menu {
+                width:
+                    85%;
+            }
+        }
+
+        /* =====================================================
+           NCPOR SHOWCASE HUD & POWER FLOW ENHANCEMENTS
+        ===================================================== */
+        .showcase-hud-bar {
+            position: fixed;
+            top: 78px;
+            left: 0;
+            right: 0;
+            z-index: 90;
+            background: rgba(3, 14, 25, 0.92);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+            padding: 8px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            font-size: 12px;
+        }
+
+        .station-selector-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .station-flag-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            font-weight: 600;
+            color: #61eaff;
+            letter-spacing: 0.5px;
+        }
+
+        .station-select-dropdown {
+            background: #061928;
+            color: #ffffff;
+            border: 1px solid #00e5ff;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .station-select-dropdown:hover {
+            box-shadow: 0 0 18px rgba(0, 229, 255, 0.4);
+            border-color: #42ffb5;
+        }
+
+        .weather-chips-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .weather-chip {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a5d8ff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+        }
+
+        .weather-chip strong {
+            color: #ffffff;
+        }
+
+        .scenario-pill-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .scenario-label {
+            font-size: 10px;
+            color: #849ca9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            margin-right: 2px;
+        }
+
+        .scenario-btn {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            color: #61eaff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .scenario-btn:hover {
+            background: #00e5ff;
+            color: #020b13;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+        }
+
+        .scenario-btn.active {
+            background: #00e5ff;
+            color: #020b13;
+            box-shadow: 0 0 14px rgba(0, 229, 255, 0.6);
+        }
+
+        .hero {
+            padding-top: 155px !important;
+        }
+
+        /* Synoptic Microgrid Power Flow Panel */
+        .synoptic-flow-panel {
+            background: rgba(4, 18, 30, 0.78);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 35px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(0, 229, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .synoptic-flow-panel::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00e5ff, #42ffb5, #ffd166, transparent);
+        }
+
+        .synoptic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .synoptic-canvas-container {
+            width: 100%;
+            height: 360px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(2, 22, 38, 0.95), rgba(1, 10, 18, 0.98));
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        #powerFlowCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .synoptic-kpi-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .synoptic-kpi-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 14px;
+        }
+
+        .synoptic-kpi-title {
+            font-size: 10px;
+            color: #708892;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .synoptic-kpi-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 3px;
+        }
+
+        /* Showcase Tour Button */
+        .showcase-tour-fab {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #00e5ff, #0077ff);
+            color: #020b13;
+            font-weight: 800;
+            padding: 13px 20px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+        .showcase-tour-fab:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.9);
+        }
+
+        .showcase-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 11, 18, 0.88);
+            backdrop-filter: blur(12px);
+            z-index: 2500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .showcase-modal {
+            background: #051a2c;
+            border: 2px solid #00e5ff;
+            border-radius: 18px;
+            padding: 28px;
+            max-width: 640px;
+            width: 100%;
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);
+            position: relative;
+        }
+
+        /* LIVE DYNAMIC CHARTS GRID */
+        .polaris-charts-section {
+            margin-top: 35px;
+            margin-bottom: 35px;
+        }
+        .polaris-charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 18px;
+        }
+        .polaris-chart-card {
+            background: rgba(4, 18, 30, 0.75);
+            border: 1px solid rgba(0, 229, 255, 0.18);
+            border-radius: 14px;
+            padding: 18px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .polaris-chart-card:hover {
+            border-color: rgba(0, 229, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .polaris-chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 8px;
+        }
+        .polaris-chart-title {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .polaris-chart-badge {
+            font-size: 10px;
+            font-family: monospace;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: rgba(0, 229, 255, 0.1);
+            color: #61eaff;
+            border: 1px solid rgba(0, 229, 255, 0.25);
+        }
+        .polaris-chart-canvas-box {
+            position: relative;
+            height: 180px;
+            width: 100%;
+        }
+    </style>
+    <script src="/static/chart.min.js"></script>
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDE MENU
+    ===================================================== -->
+
+    <div
+        class="overlay"
+        id="overlay">
+    </div>
+
+
+    <aside
+        class="side-menu"
+        id="sideMenu">
+
+
+        <div
+            class="close-menu"
+            onclick="closeMenu()">
+
+            ×
+
+        </div>
+
+
+        <h2>
+            POLARIS
+        </h2>
+
+
+        <div class="side-subtitle">
+            STATION CONTROL SYSTEM • 19 VIEWS
+        </div>
+
+        <div class="menu-item" onclick="goHome()">
+            <span>🏠 Main Station Console</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+        <div class="menu-item" onclick="window.location.href='/'">
+            <span>📊 Detailed Telemetry Charts & Twin</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+        <div class="menu-item" onclick="goRenewable()">
+            <span>🌿 Part 1: Renewable Overview</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+        <div class="menu-item" onclick="goSupport()">
+            <span>⛽ Part 2: Backup & Energy Support</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+        <div class="menu-item" onclick="window.location.href='totalfleet.html'">
+            <span>⚡ Total Fleet Real-Time Grid</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+        <div class="menu-item" onclick="openAdmin()">
+            <span>🛠️ Admin Control Dashboard</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+        <div class="menu-item" onclick="openDisaster()">
+            <span>🌪️ Disaster & Weather Management</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+        <div class="side-subtitle" style="margin-top:20px;margin-bottom:10px;">
+            12 INDIVIDUAL MICROGRID RESOURCES
+        </div>
+
+        <div class="menu-item" onclick="window.location.href='solar.html'">
+            <span>☀️ 01. Solar PV Array</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='wind.html'">
+            <span>💨 02. Wind Turbines</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='hydro.html'">
+            <span>💧 03. Hydropower Plant</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='geothermal.html'">
+            <span>🌋 04. Geothermal Energy</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='marine.html'">
+            <span>≈ 05. Marine Wave/Tidal</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='biomass.html'">
+            <span>♨ 06. Biomass / Biogas</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='solarthermal.html'">
+            <span>◉ 07. Solar Thermal</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='hydrogen.html'">
+            <span>H₂ 08. Hydrogen Fuel Cell</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='battery.html'">
+            <span>🔋 09. LiFePO4 BESS Storage</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='generator.html'">
+            <span>⚙️ 10. Diesel Backup Generator</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='chp.html'">
+            <span>♨️ 11. CHP Cogeneration</span>
+            <span class="menu-arrow">→</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='passive-solar.html'">
+            <span>⌂ 12. Passive Solar Efficiency</span>
+            <span class="menu-arrow">→</span>
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         NAVBAR
+    ===================================================== -->
+
+    <nav>
+
+        <div class="logo" style="cursor: pointer;" onclick="window.location.href='index.html'">
+
+            <div class="logo-orbit"></div>
+
+            <div>
+                <span style="letter-spacing: 2px;">POLARIS</span>
+                <span style="display:block; font-size:9px; color:#61eaff; font-weight:normal; letter-spacing:1px;">NCPOR POLAR AI GRID</span>
+            </div>
+
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button onclick="window.location.href='renewable.html'" class="scenario-btn" style="background:rgba(66,255,181,0.12); border-color:#42ffb5; color:#42ffb5;">🌿 Part 1: Renewable</button>
+            <button onclick="window.location.href='nonrenewable.html'" class="scenario-btn" style="background:rgba(255,209,102,0.12); border-color:#ffd166; color:#ffd166;">⛽ Part 2: Backup</button>
+            <button onclick="window.location.href='totalfleet.html'" class="scenario-btn">⚡ 12-Resource Fleet</button>
+            <button onclick="openDisaster()" class="scenario-btn">🌪️ Disaster Lab</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+            <button class="scenario-btn active" onclick="startShowcaseTour()" style="background:linear-gradient(135deg, #00e5ff, #0077ff); color:#020b13; border:none; padding:7px 14px; font-weight:800;">▶ Showcase Tour</button>
+            <button
+                class="menu-button"
+                onclick="openMenu()">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+        </div>
+
+    </nav>
+
+    <!-- =====================================================
+         NCPOR EXECUTIVE SHOWCASE HUD BAR
+    ===================================================== -->
+    <div class="showcase-hud-bar">
+        <div class="station-selector-group">
+            <div class="station-flag-badge">
+                <span>🇮🇳</span>
+                <span id="hudStationAgency">NCPOR • MoES INDIA</span>
+            </div>
+            <select id="stationSelect" onchange="switchStation(this.value)" class="station-select-dropdown" title="Select Indian Polar Research Station">
+                <option value="bharati" selected>Bharati Station (-69.41°S, 76.19°E) — Larsemann Hills</option>
+                <option value="maitri">Maitri Station (-70.77°S, 11.73°E) — Schirmacher Oasis</option>
+                <option value="himadri">Himadri Station (+78.92°N, 11.93°E) — Ny-Ålesund, Arctic</option>
+            </select>
+        </div>
+
+        <div class="weather-chips-group">
+            <div class="weather-chip" title="Live Ambient Polar Temperature">
+                🌡️ Temp: <strong id="hudTemp">--°C</strong>
+            </div>
+            <div class="weather-chip" title="Katabatic Wind Velocity">
+                💨 Wind: <strong id="hudWind">-- m/s</strong> (<span id="hudWindKmh">-- km/h</span>)
+            </div>
+            <div class="weather-chip" title="Solar Irradiance Flux">
+                ☀️ Solar: <strong id="hudSolar">-- W/m²</strong>
+            </div>
+            <div class="weather-chip" title="Atmospheric Cloud Cover">
+                ☁️ Cloud: <strong id="hudCloud">28%</strong>
+            </div>
+            <div class="weather-chip" title="Polar Weather Condition">
+                ❄️ <strong id="hudCondition">Partly Cloudy</strong>
+            </div>
+            <div class="weather-chip" style="border-color:#42ffb5; color:#42ffb5;" title="Active Telemetry Mode">
+                <span class="live-dot" style="width:7px; height:7px; margin-right:3px;"></span>
+                <strong id="hudFeedBadge">NCPOR LIVE FEED</strong>
+            </div>
+        </div>
+
+        <div class="scenario-pill-group">
+            <span class="scenario-label">SHOWCASE SCENARIOS:</span>
+            <button class="scenario-btn" onclick="triggerScenario('solar_peak')">☀️ Solar Peak</button>
+            <button class="scenario-btn" onclick="triggerScenario('blizzard')">🌪️ Katabatic Blizzard</button>
+            <button class="scenario-btn" onclick="triggerScenario('deep_freeze')">❄️ -38°C Freeze</button>
+            <button class="scenario-btn" onclick="triggerScenario('flood')">💧 Glacial Flood</button>
+            <button class="scenario-btn" onclick="triggerScenario('tsunami')">🌊 Coastal Surge</button>
+            <button class="scenario-btn" onclick="triggerScenario('normal')">↺ Normal Baseline</button>
+        </div>
+    </div>
+
+
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <header class="hero">
+
+
+        <div class="hero-image"></div>
+
+
+        <div class="hero-content">
+
+
+            <div class="live-label">
+
+                <span class="live-dot"></span>
+
+                <span id="heroStationTitle">NCPOR // BHARATI RESEARCH STATION (EAST ANTARCTICA)</span>
+
+            </div>
+
+
+            <h1>
+
+                POWERING<br>
+
+                <span>THE POLAR.</span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                An AI-driven smart energy management system
+                designed to intelligently predict, optimize
+                and distribute energy across remote polar
+                research stations.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+
+                <a
+                    href="#dashboard"
+                    class="button button-primary">
+
+                    Explore Station →
+
+                </a>
+
+
+                <button
+                    class="button"
+                    onclick="openAdmin()">
+
+                    Admin Login
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- HERO STATUS -->
+
+        <div class="hero-status">
+
+
+            <div class="status-heading">
+
+                STATION STATUS
+
+            </div>
+
+
+            <div
+                class="status-value"
+                id="heroStatus">
+
+                98.7%
+
+            </div>
+
+
+            <div class="status-good" id="heroMissionStatus">
+                ● NOMINAL
+            </div>
+            <div id="heroMissionReason" style="font-size: 10px; color: #8ba2b5; margin-top: 4px; max-width: 140px; text-align: right; line-height: 1.2;">
+                Grid balanced; clean generation normal.
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD
+    ===================================================== -->
+
+    <main id="dashboard">
+
+
+        <div class="section-label">
+
+            LIVE STATION INTELLIGENCE
+
+        </div>
+
+
+        <h2 class="section-title">
+
+            Station Overview
+
+        </h2>
+
+
+        <p class="section-description">
+            Real-time energy status, AI decisions and
+            system health for the polar research station.
+        </p>
+
+        <!-- =====================================================
+             NEW WAY: SYNOPTIC MICROGRID POWER FLOW CANVAS
+        ===================================================== -->
+        <div class="synoptic-flow-panel">
+            <div class="synoptic-header">
+                <div>
+                    <div class="section-label" style="margin-bottom:4px;">INTERACTIVE ELECTRICAL BUS MATRIX</div>
+                    <h3 style="font-size: 22px; font-weight: bold; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+                        <span>⚡ Synoptic Microgrid Power Flow</span>
+                        <span id="activeStationBadge" style="font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(0, 229, 255, 0.15); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.3);">NCPOR BHARATI</span>
+                    </h3>
+                    <p style="color: #708892; font-size: 12px; margin-top: 3px;">
+                        Real-time particle kinematics representing active kW power transfers between Clean Renewables, AI Dispatch Core, Storage, Emergency Genset, and Station Life-Support Buses.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <div class="weather-chip" style="border-color: #ffd166; color: #ffd166;">
+                        <span>⚡ Frequency:</span> <strong id="gridFreq">50.00 Hz</strong>
+                    </div>
+                    <div class="weather-chip" style="border-color: #42ffb5; color: #42ffb5;">
+                        <span>🔌 AC Bus:</span> <strong id="gridVolt">400.2 V</strong>
+                    </div>
+                    <button class="scenario-btn" onclick="toggleFlowAnimation()" id="toggleFlowBtn" style="padding: 6px 12px;">⏸ Pause Flow</button>
+                </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="synoptic-canvas-container">
+                <canvas id="powerFlowCanvas"></canvas>
+            </div>
+
+            <!-- Real-time Synoptic KPI Bar -->
+            <div class="synoptic-kpi-bar">
+                <div class="synoptic-kpi-card" style="border-left: 3px solid #42ffb5;">
+                    <div class="synoptic-kpi-title">Clean Renewable Power</div>
+                    <div class="synoptic-kpi-value" id="kpiCleanKw" style="color: #42ffb5;">0.0 kW</div>
+                    <div style="font-size: 10px; color: #849ca9; margin-top: 2px;">Solar + Wind + Hydro Baselines</div>
+                </div>
+
+                <div class="synoptic-kpi-card" style="border-left: 3px solid #61eaff;">
+                    <div class="synoptic-kpi-title">LiFePO4 BESS Dispatch</div>
+                    <div class="synoptic-kpi-value" id="kpiBatKw" style="color: #61eaff;">0.0 kW</div>
+                    <div style="font-size: 10px; color: #849ca9; margin-top: 2px;" id="kpiBatStatus">Standby Buffer</div>
+                </div>
+
+                <div class="synoptic-kpi-card" style="border-left: 3px solid #ffd166;">
+                    <div class="synoptic-kpi-title">Non-Renewable Generator</div>
+                    <div class="synoptic-kpi-value" id="kpiGenKw" style="color: #ffd166;">0.0 kW</div>
+                    <div style="font-size: 10px; color: #849ca9; margin-top: 2px;" id="kpiGenStatus">Fossil Genset Standby</div>
+                </div>
+
+                <div class="synoptic-kpi-card" style="border-left: 3px solid #ff7b72;">
+                    <div class="synoptic-kpi-title">Station Critical Load</div>
+                    <div class="synoptic-kpi-value" id="kpiLoadKw" style="color: #ffffff;">0.0 kW</div>
+                    <div style="font-size: 10px; color: #849ca9; margin-top: 2px;">Life Support, Labs & Habitat</div>
+                </div>
+
+                <div class="synoptic-kpi-card" style="border-left: 3px solid #c084ff;">
+                    <div class="synoptic-kpi-title">Carbon Avoided Rate</div>
+                    <div class="synoptic-kpi-value" id="kpiCo2Rate" style="color: #c084ff;">0.0 kg/hr</div>
+                    <div style="font-size: 10px; color: #849ca9; margin-top: 2px;">Clean Displacement Velocity</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             LIVE DYNAMIC CHARTS & ANALYTICS
+        ===================================================== -->
+        <section class="polaris-charts-section">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:10px;">
+                <div>
+                    <div class="section-label">REAL-TIME TIME-SERIES TELEMETRY</div>
+                    <h3 style="font-size: 20px; font-weight: bold; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+                        <span>📈 Dynamic Energy & Weather Waves</span>
+                        <span style="font-size: 10px; padding: 2px 7px; border-radius: 4px; background: rgba(66, 255, 181, 0.15); color: #42ffb5; border: 1px solid rgba(66, 255, 181, 0.3);">LIVE UPDATING</span>
+                    </h3>
+                </div>
+                <div style="font-size: 11px; color: #708892; font-family: monospace;">
+                    Data Refresh: <span style="color: #00e5ff;">1200ms</span> • Dynamic Variance: <span style="color: #42ffb5;">ACTIVE</span>
+                </div>
+            </div>
+
+            <div class="polaris-charts-grid">
+                <!-- Chart 1: Generation Waves -->
+                <div class="polaris-chart-card">
+                    <div class="polaris-chart-header">
+                        <div class="polaris-chart-title">
+                            <span>☀️💨</span>
+                            <span>Clean Generation vs Fossil (kW)</span>
+                        </div>
+                        <span class="polaris-chart-badge" id="badge-gen-val">0.0 kW</span>
+                    </div>
+                    <div class="polaris-chart-canvas-box">
+                        <canvas id="polaris-chart-generation"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Grid Supply vs Demand -->
+                <div class="polaris-chart-card">
+                    <div class="polaris-chart-header">
+                        <div class="polaris-chart-title">
+                            <span>⚡⚖️</span>
+                            <span>Grid Supply vs Demand (kW)</span>
+                        </div>
+                        <span class="polaris-chart-badge" id="badge-demand-val" style="color:#ffd166; border-color:rgba(255,209,102,0.3);">0.0 kW</span>
+                    </div>
+                    <div class="polaris-chart-canvas-box">
+                        <canvas id="polaris-chart-balance"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Polar Environmental Conditions -->
+                <div class="polaris-chart-card">
+                    <div class="polaris-chart-header">
+                        <div class="polaris-chart-title">
+                            <span>❄️🌬️</span>
+                            <span>NCPOR Weather (Temp & Wind)</span>
+                        </div>
+                        <span class="polaris-chart-badge" id="badge-weather-val" style="color:#61eaff; border-color:rgba(97,234,255,0.3);">-16°C</span>
+                    </div>
+                    <div class="polaris-chart-canvas-box">
+                        <canvas id="polaris-chart-weather"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 4: LiFePO4 Battery SOC & Thermal State -->
+                <div class="polaris-chart-card">
+                    <div class="polaris-chart-header">
+                        <div class="polaris-chart-title">
+                            <span>🔋🌡️</span>
+                            <span>BESS Storage SOC & Temp</span>
+                        </div>
+                        <span class="polaris-chart-badge" id="badge-battery-val" style="color:#42ffb5; border-color:rgba(66,255,181,0.3);">70%</span>
+                    </div>
+                    <div class="polaris-chart-canvas-box">
+                        <canvas id="polaris-chart-battery"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================
+             STATS
+        ================================================= -->
+        <div class="status-grid">
+
+
+            <div class="stat-card">
+                <div class="stat-name">
+                    CURRENT DEMAND
+                </div>
+                <div
+                    class="stat-value"
+                    id="demand">
+                    68 kW
+                </div>
+                <div class="stat-change" id="demandCondition">
+                    ● STABLE
+                </div>
+                <div style="font-size: 11px; color: #8ba2b5; margin-top: 5px; display: flex; justify-content: space-between; font-weight: 500;">
+                    <span>Crit: <b id="demandCritical" style="color:#00e5ff;">0.0 kW</b></span>
+                    <span>Non-Crit: <b id="demandNonCritical" style="color:#ffd166;">0.0 kW</b></span>
+                </div>
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-name">
+
+                    RENEWABLE SHARE
+
+                </div>
+
+
+                <div
+                    class="stat-value"
+                    id="renewableShare">
+
+                    74%
+
+                </div>
+
+
+                <div class="stat-change">
+
+                    ↑ OPTIMAL
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-name">
+
+                    BATTERY SOC
+
+                </div>
+
+
+                <div
+                    class="stat-value"
+                    id="batterySoc">
+
+                    70%
+
+                </div>
+
+
+                <div class="stat-change">
+
+                    ● READY
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-name">
+
+                    CO₂ AVOIDED
+
+                </div>
+
+
+                <div
+                    class="stat-value"
+                    id="co2">
+
+                    2.4 T
+
+                </div>
+
+
+                <div class="stat-change">
+
+                    ↑ TODAY
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ENERGY + AI
+        ================================================= -->
+
+        <div class="energy-panel">
+
+
+            <!-- CURRENT ENERGY -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <h3>
+                        Current Energy Source
+                    </h3>
+
+
+                    <div class="online">
+
+                        ● ONLINE
+
+                    </div>
+
+                </div>
+
+
+                <div class="current-source">
+
+
+                    <div
+                        class="source-icon"
+                        id="sourceIcon">
+
+                        ☀️
+
+                    </div>
+
+
+                    <div class="source-info">
+
+
+                        <h2 id="sourceName">
+
+                            Solar PV
+
+                        </h2>
+
+
+                        <p id="sourceType">
+
+                            AI-modeled renewable source
+
+                        </p>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="power-output">
+
+
+                    <div class="power-number">
+
+                        <span id="powerValue">
+                            174
+                        </span>
+
+                        <span>
+                            kW
+                        </span>
+
+                    </div>
+
+
+                    <div class="energy-progress">
+
+                        <div
+                            class="energy-fill"
+                            id="energyFill">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- AI -->
+
+            <div class="panel ai-panel">
+
+                <div class="ai-orb" id="aiOrb">
+                    AI
+                </div>
+
+                <h3>
+                    AI PPO & 24H FORECAST
+                </h3>
+
+                <p id="aiStrategyText">
+                    Predicting generation, monitoring demand, and executing real-time priority optimization across all 12 resources.
+                </p>
+
+                <div style="margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; font-size: 11px; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="color: #61eaff; font-weight: bold;">⚡ AI DISPATCH:</span>
+                        <span id="aiActionTitle" style="color: #42ffb5; font-weight: bold; background: rgba(66,255,181,0.15); padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(66,255,181,0.3);">OPTIMAL DISPATCH</span>
+                    </div>
+                    <div id="aiActionReason" style="color: #dce5e8; font-size: 11px; margin-bottom: 6px; line-height: 1.3;">
+                        Equilibrium maintained across polar microgrid buses.
+                    </div>
+                    <div style="color: #8ba2b5; font-size: 10px; margin-bottom: 4px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 4px;">
+                        <span>Recommended Mix:</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #a5d8ff;">
+                        <span>1. Primary: <b id="aiRecPrimary" style="color:#42ffb5;">Wind</b></span>
+                        <span>2. Secondary: <b id="aiRecSecondary" style="color:#ffd166;">Solar</b></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #a5d8ff; margin-top: 3px;">
+                        <span>3. Buffer: <b id="aiRecTertiary" style="color:#72f4ff;">Storage</b></span>
+                        <span>Conf: <b id="aiRecConf" style="color:#c084ff;">82%</b></span>
+                    </div>
+                </div>
+
+                <div class="auto-mode" id="aiModeBadge">
+                    ● AUTOMATIC OPTIMIZATION ACTIVE
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ENERGY PRIORITY
+        ================================================= -->
+
+        <div class="flow-panel">
+
+
+            <div class="section-label">
+
+                OPTIMIZER LOGIC
+
+            </div>
+
+
+            <h3
+                style="font-size:25px; margin-bottom:10px;">
+
+                Energy Priority Flow
+
+            </h3>
+
+
+            <p
+                style="color:#708892; font-size:12px; margin-bottom:15px;">
+
+                The system prioritizes available energy
+                sources before moving toward backup supply.
+
+            </p>
+
+
+            <div class="flow">
+
+                <div class="flow-node" onclick="window.location.href='solar.html'" style="cursor:pointer;" title="Click to inspect Solar PV details">
+                    <div class="flow-number">01</div>
+                    <div class="flow-icon">☀️</div>
+                    <div class="flow-name">Solar PV</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='wind.html'" style="cursor:pointer;" title="Click to inspect Wind Turbine details">
+                    <div class="flow-number">02</div>
+                    <div class="flow-icon">≋</div>
+                    <div class="flow-name">Wind</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='hydro.html'" style="cursor:pointer;" title="Click to inspect Hydropower details">
+                    <div class="flow-number">03</div>
+                    <div class="flow-icon">💧</div>
+                    <div class="flow-name">Hydro</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='geothermal.html'" style="cursor:pointer;" title="Click to inspect Geothermal details">
+                    <div class="flow-number">04</div>
+                    <div class="flow-icon">🌋</div>
+                    <div class="flow-name">Geothermal</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='marine.html'" style="cursor:pointer;" title="Click to inspect Marine Energy details">
+                    <div class="flow-number">05</div>
+                    <div class="flow-icon">≈</div>
+                    <div class="flow-name">Marine</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='biomass.html'" style="cursor:pointer;" title="Click to inspect Biomass details">
+                    <div class="flow-number">06</div>
+                    <div class="flow-icon">♨</div>
+                    <div class="flow-name">Biomass</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='solarthermal.html'" style="cursor:pointer;" title="Click to inspect Solar Thermal details">
+                    <div class="flow-number">07</div>
+                    <div class="flow-icon">◉</div>
+                    <div class="flow-name">Solar Thermal</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='hydrogen.html'" style="cursor:pointer;" title="Click to inspect Hydrogen Fuel Cell details">
+                    <div class="flow-number">08</div>
+                    <div class="flow-icon">H₂</div>
+                    <div class="flow-name">H₂ Fuel Cell</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='battery.html'" style="cursor:pointer;" title="Click to inspect Battery Storage details">
+                    <div class="flow-number">09</div>
+                    <div class="flow-icon">🔋</div>
+                    <div class="flow-name">Battery</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='generator.html'" style="cursor:pointer;" title="Click to inspect Diesel Generator details">
+                    <div class="flow-number">10</div>
+                    <div class="flow-icon">⚙️</div>
+                    <div class="flow-name">Diesel Gen</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='chp.html'" style="cursor:pointer;" title="Click to inspect CHP details">
+                    <div class="flow-number">11</div>
+                    <div class="flow-icon">♨️</div>
+                    <div class="flow-name">CHP Cogen</div>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-node" onclick="window.location.href='passive-solar.html'" style="cursor:pointer;" title="Click to inspect Passive Solar details">
+                    <div class="flow-number">12</div>
+                    <div class="flow-icon">⌂</div>
+                    <div class="flow-name">Passive Solar</div>
+                </div>
+
+        </div>
+
+        <!-- =================================================
+             12-RESOURCE MICROGRID FLEET SUITE
+        ================================================= -->
+        <section style="margin-top: 35px;">
+            <div class="section-label">
+                COMPLETE 12-RESOURCE MATRIX
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px;">
+                <div>
+                    <h3 style="font-size: 26px; font-weight: bold;">
+                        12 Subsystem Microgrid Fleet
+                    </h3>
+                    <p style="color: #6f8792; font-size: 12px; margin-top: 4px;">
+                        Interactive digital twin representation of every renewable generator, storage unit, backup plant, and efficiency measure. Click any card to launch its dedicated sub-view.
+                    </p>
+                </div>
+                <div style="font-size: 11px; font-family: monospace; color: #42ffb5; background: rgba(66,255,181,0.08); border: 1px solid rgba(66,255,181,0.25); padding: 5px 12px; border-radius: 8px;">
+                    ● 12 / 12 Subsystems Synced
+                </div>
+            </div>
+
+            <div class="res-grid" id="resGrid">
+                <!-- 01. Solar -->
+                <a href="solar.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">☀️</div>
+                        <span class="res-badge clean">RENEWABLE</span>
+                    </div>
+                    <div class="res-name">Solar PV Array</div>
+                    <div class="res-desc">Bifacial polar albedo generation with cold temperature efficiency bonus.</div>
+                    <div class="res-output"><span id="res-out-solar">0.0</span> <span>kW / 300kW</span></div>
+                </a>
+
+                <!-- 02. Wind -->
+                <a href="wind.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">≋</div>
+                        <span class="res-badge clean">RENEWABLE</span>
+                    </div>
+                    <div class="res-name">Wind Turbines</div>
+                    <div class="res-desc">Dual wind turbine installation with high-wind storm cut-out protection.</div>
+                    <div class="res-output"><span id="res-out-wind">0.0</span> <span>kW / 300kW</span></div>
+                </a>
+
+                <!-- 03. Hydro -->
+                <a href="hydro.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">💧</div>
+                        <span class="res-badge clean">RENEWABLE</span>
+                    </div>
+                    <div class="res-name">Hydropower Plant</div>
+                    <div class="res-desc">Glacial melt run-of-river turbine generating stable clean baseload.</div>
+                    <div class="res-output"><span id="res-out-hydro">90.0</span> <span>kW / 200kW</span></div>
+                </a>
+
+                <!-- 04. Geothermal -->
+                <a href="geothermal.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">🌋</div>
+                        <span class="res-badge clean">RENEWABLE</span>
+                    </div>
+                    <div class="res-name">Geothermal Well</div>
+                    <div class="res-desc">Deep sub-surface volcanic geothermal loop delivering invariant thermal-electric power.</div>
+                    <div class="res-output"><span id="res-out-geothermal">95.0</span> <span>kW / 100kW</span></div>
+                </a>
+
+                <!-- 05. Marine -->
+                <a href="marine.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">≈</div>
+                        <span class="res-badge clean">RENEWABLE</span>
+                    </div>
+                    <div class="res-name">Marine Energy</div>
+                    <div class="res-desc">Sub-ice coastal tidal and wave current converter.</div>
+                    <div class="res-output"><span id="res-out-marine">20.0</span> <span>kW / 50kW</span></div>
+                </a>
+
+                <!-- 06. Biomass -->
+                <a href="biomass.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">♨</div>
+                        <span class="res-badge clean">RENEWABLE</span>
+                    </div>
+                    <div class="res-name">Biomass / Biogas</div>
+                    <div class="res-desc">Organic station waste gasification and biogas anaerobic digester.</div>
+                    <div class="res-output"><span id="res-out-biomass">55.0</span> <span>kW / 60kW</span></div>
+                </a>
+
+                <!-- 07. Solar Thermal -->
+                <a href="solarthermal.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">◉</div>
+                        <span class="res-badge clean">RENEWABLE</span>
+                    </div>
+                    <div class="res-name">Solar Thermal</div>
+                    <div class="res-desc">Vacuum tube collectors for direct building habitat hydronic heating.</div>
+                    <div class="res-output"><span id="res-out-solarthermal">18.0</span> <span>kW / 30kW</span></div>
+                </a>
+
+                <!-- 08. Hydrogen -->
+                <a href="hydrogen.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">H₂</div>
+                        <span class="res-badge storage">STORAGE</span>
+                    </div>
+                    <div class="res-name">Hydrogen Fuel Cell</div>
+                    <div class="res-desc">Zero-emission seasonal PEM electrolyzer and pressurized fuel cell buffer.</div>
+                    <div class="res-output"><span id="res-out-hydrogen">0.0</span> <span>kW / 50kW</span></div>
+                </a>
+
+                <!-- 09. Battery -->
+                <a href="battery.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">🔋</div>
+                        <span class="res-badge storage">STORAGE</span>
+                    </div>
+                    <div class="res-name">LiFePO4 BESS Storage</div>
+                    <div class="res-desc">2000 kWh containerized thermal-managed battery energy storage system.</div>
+                    <div class="res-output"><span id="res-out-battery">0.0</span> <span>kW / 100kW</span></div>
+                </a>
+
+                <!-- 10. Diesel -->
+                <a href="generator.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">⚙️</div>
+                        <span class="res-badge backup">BACKUP</span>
+                    </div>
+                    <div class="res-name">Diesel Backup Gen</div>
+                    <div class="res-desc">Cold-hardened synchronous generator used strictly as emergency failover.</div>
+                    <div class="res-output"><span id="res-out-generator">0.0</span> <span>kW / 100kW</span></div>
+                </a>
+
+                <!-- 11. CHP -->
+                <a href="chp.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">♨️</div>
+                        <span class="res-badge backup">BACKUP</span>
+                    </div>
+                    <div class="res-name">CHP Cogeneration</div>
+                    <div class="res-desc">Combined heat and power unit providing 88% overall thermal-electric efficiency.</div>
+                    <div class="res-output"><span id="res-out-chp">0.0</span> <span>kW / 60kW</span></div>
+                </a>
+
+                <!-- 12. Passive Solar -->
+                <a href="passive-solar.html" class="res-card">
+                    <div class="res-card-head">
+                        <div class="res-icon">⌂</div>
+                        <span class="res-badge clean">EFFICIENCY</span>
+                    </div>
+                    <div class="res-name">Passive Solar & Eff.</div>
+                    <div class="res-desc">Aerogel architectural insulation reducing peak station heating load by ~10%.</div>
+                    <div class="res-output"><span id="res-out-passive">10.0</span> <span>kW Saved</span></div>
+                </a>
+            </div>
+        </section>
+
+
+
+        <!-- =================================================
+             BATTERY + NOTIFICATIONS
+        ================================================= -->
+
+        <div class="lower-grid">
+
+
+            <!-- BATTERY -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <h3>
+                        Battery Storage
+                    </h3>
+
+
+                    <div class="online">
+
+                        READY
+
+                    </div>
+
+                </div>
+
+
+                <div class="battery-visual">
+
+
+                    <div class="battery">
+
+                        <div
+                            class="battery-level"
+                            id="batteryLevel">
+                        </div>
+
+                    </div>
+
+
+                    <div class="battery-details">
+                        <h3 id="batteryLarge">70%</h3>
+                        <p id="batteryLargeStatus" style="color: #42ffb5; font-weight: 600; letter-spacing: 1px;">STATE OF CHARGE</p>
+                        <p id="batteryStoredText">Stored: 140.0 kWh / 200 kWh</p>
+                        <p id="batterySohText">SOH: 98% (LiFePO4)</p>
+                        <p id="batteryFloorText">Safety floor: 15%</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- NOTIFICATIONS -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <h3>
+                        System Notifications
+                    </h3>
+
+                    <div class="online">
+                        LIVE
+                    </div>
+
+                </div>
+
+
+                <div class="notification">
+
+                    <div class="notification-dot"></div>
+
+                    <div class="notification-text">
+
+                        Solar generation operating normally.
+
+                        <span class="notification-time">
+                            Just now
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="notification">
+
+                    <div class="notification-dot"></div>
+
+                    <div class="notification-text">
+
+                        AI optimization running automatically.
+
+                        <span class="notification-time">
+                            1 min ago
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="notification">
+
+                    <div class="notification-dot"></div>
+
+                    <div class="notification-text">
+
+                        Battery reserve within safe operating range.
+
+                        <span class="notification-time">
+                            3 min ago
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             DISASTER MANAGEMENT
+        ================================================= -->
+
+        <section
+            class="disaster-section"
+            id="disaster">
+
+
+            <div class="disaster-header">
+
+
+                <div>
+
+                    <div class="section-label">
+
+                        ENVIRONMENTAL INTELLIGENCE
+
+                    </div>
+
+
+                    <h2
+                        style="font-size:28px;">
+
+                        Disaster Management
+
+                    </h2>
+
+                </div>
+
+
+                <div class="disaster-status">
+
+                    ● NO ACTIVE THREAT
+
+                </div>
+
+
+            </div>
+
+
+            <div class="disaster-content">
+
+
+                <div class="disaster-card">
+
+                    <div class="disaster-icon">
+                        🌊
+                    </div>
+
+                    <h4>
+                        Flood
+                    </h4>
+
+                    <p>
+
+                        AI monitors predicted flood
+                        conditions and prepares the
+                        energy system for hydropower
+                        derating.
+
+                    </p>
+
+                </div>
+
+
+                <div class="disaster-card">
+
+                    <div class="disaster-icon">
+                        🌪️
+                    </div>
+
+                    <h4>
+                        Storm
+                    </h4>
+
+                    <p>
+
+                        Predicted storms can trigger
+                        source derating and battery
+                        pre-charge preparation.
+
+                    </p>
+
+                </div>
+
+
+                <div class="disaster-card">
+
+                    <div class="disaster-icon">
+                        🌊
+                    </div>
+
+                    <h4>
+                        Tsunami
+                    </h4>
+
+                    <p>
+
+                        Coastal energy resources can
+                        be automatically reduced while
+                        stored energy is preserved.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+    <footer>
+
+
+        <div>
+
+            POLARIS • SMART ENERGY MANAGEMENT
+
+        </div>
+
+
+        <div>
+
+            AI × IOT × OPTIMIZATION × POLAR RESEARCH
+
+        </div>
+
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ===================================================== -->
+
+    <script>
+
+
+        /* ============================================
+           MENU
+        ============================================ */
+
+        const sideMenu =
+            document.getElementById("sideMenu");
+
+        const overlay =
+            document.getElementById("overlay");
+
+
+        function openMenu() {
+
+            sideMenu.classList.add("active");
+
+            overlay.classList.add("active");
+
+        }
+
+
+        function closeMenu() {
+
+            sideMenu.classList.remove("active");
+
+            overlay.classList.remove("active");
+
+        }
+
+
+        overlay.addEventListener(
+            "click",
+            closeMenu
+        );
+
+
+
+        /* ============================================
+           NAVIGATION
+        ============================================ */
+
+        function goHome() {
+
+            window.location.href =
+                "index.html";
+
+        }
+
+
+        function goRenewable() {
+
+            window.location.href =
+                "renewable.html";
+
+        }
+
+
+        function goSupport() {
+
+            window.location.href =
+                "nonrenewable.html";
+
+        }
+
+
+        function openAdmin() {
+
+            window.location.href =
+                "admin.html";
+
+        }
+
+
+        function openDisaster() {
+
+            window.location.href =
+                "disaster.html";
+
+        }
+
+
+
+        /* ============================================
+           ADMIN LOGIN DEMO
+        ============================================ */
+
+        document
+            .querySelector(".button-primary");
+
+
+
+        /* ============================================
+           DEMO ENERGY SOURCES
+        ============================================ */
+
+        const sources = [
+
+            {
+                name: "Solar PV",
+                icon: "☀️",
+                type: "AI-modeled renewable source",
+                power: 174
+            },
+
+            {
+                name: "Wind",
+                icon: "≋",
+                type: "AI-modeled renewable source",
+                power: 128
+            },
+
+            {
+                name: "Hydropower",
+                icon: "💧",
+                type: "Renewable generation",
+                power: 90
+            },
+
+            {
+                name: "Battery",
+                icon: "🔋",
+                type: "Energy storage",
+                power: 72
+            }
+
+        ];
+
+
+        let sourceIndex = 0;
+
+
+
+        /* ============================================
+           SOURCE ROTATION
+        ============================================ */
+
+        function updateSource() {
+
+            const source =
+                sources[sourceIndex];
+
+
+            document
+                .getElementById("sourceName")
+                .textContent =
+                source.name;
+
+
+            document
+                .getElementById("sourceIcon")
+                .textContent =
+                source.icon;
+
+
+            document
+                .getElementById("sourceType")
+                .textContent =
+                source.type;
+
+
+            document
+                .getElementById("powerValue")
+                .textContent =
+                source.power;
+
+
+            document
+                .getElementById("energyFill")
+                .style.width =
+                Math.min(source.power / 2.5, 100)
+                + "%";
+
+
+            sourceIndex++;
+
+            if (
+                sourceIndex >= sources.length
+            ) {
+
+                sourceIndex = 0;
+
+            }
+
+        }
+
+
+        setInterval(
+            updateSource,
+            7000
+        );
+
+        /* =====================================================
+           POLARIS DYNAMIC LIVE CHARTS INITIALIZATION
+        ===================================================== */
+        const MAX_POINTS = 20;
+        let chartGen = null;
+        let chartBalance = null;
+        let chartWeather = null;
+        let chartBattery = null;
+
+        function initPolarisCharts() {
+            if (typeof Chart === "undefined") return;
+
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: "top",
+                        labels: { color: "#94a3b8", boxWidth: 10, font: { size: 10, family: "monospace" } }
+                    },
+                    tooltip: { mode: "index", intersect: false }
+                },
+                scales: {
+                    x: { display: false, grid: { display: false } },
+                    y: {
+                        grid: { color: "rgba(255, 255, 255, 0.05)" },
+                        ticks: { color: "#78909c", font: { size: 9, family: "monospace" } }
+                    }
+                }
+            };
+
+            // 1. Generation Chart
+            const ctxGen = document.getElementById("polaris-chart-generation");
+            if (ctxGen) {
+                chartGen = new Chart(ctxGen.getContext("2d"), {
+                    type: "line",
+                    data: {
+                        labels: [],
+                        datasets: [
+                            { label: "Solar PV (kW)", borderColor: "#ffd166", backgroundColor: "rgba(255, 209, 102, 0.1)", fill: true, data: [], borderWidth: 2, tension: 0.35 },
+                            { label: "Wind Turbines (kW)", borderColor: "#61eaff", backgroundColor: "rgba(97, 234, 255, 0.1)", fill: true, data: [], borderWidth: 2, tension: 0.35 },
+                            { label: "Diesel Genset (kW)", borderColor: "#ff9f43", data: [], borderWidth: 1.5, borderDash: [4, 4], tension: 0.2 }
+                        ]
+                    },
+                    options: commonOptions
+                });
+            }
+
+            // 2. Supply vs Demand Chart
+            const ctxBal = document.getElementById("polaris-chart-balance");
+            if (ctxBal) {
+                chartBalance = new Chart(ctxBal.getContext("2d"), {
+                    type: "line",
+                    data: {
+                        labels: [],
+                        datasets: [
+                            { label: "Total Supply (kW)", borderColor: "#42ffb5", backgroundColor: "rgba(66, 255, 181, 0.12)", fill: true, data: [], borderWidth: 2, tension: 0.35 },
+                            { label: "Station Demand (kW)", borderColor: "#ffd166", data: [], borderWidth: 2, tension: 0.35 }
+                        ]
+                    },
+                    options: commonOptions
+                });
+            }
+
+            // 3. Environmental Conditions Chart
+            const ctxWea = document.getElementById("polaris-chart-weather");
+            if (ctxWea) {
+                const weaOptions = JSON.parse(JSON.stringify(commonOptions));
+                weaOptions.scales.y1 = {
+                    position: "right",
+                    grid: { display: false },
+                    ticks: { color: "#61eaff", font: { size: 9, family: "monospace" } }
+                };
+                chartWeather = new Chart(ctxWea.getContext("2d"), {
+                    type: "line",
+                    data: {
+                        labels: [],
+                        datasets: [
+                            { label: "Outside Temp (°C)", borderColor: "#ff7b72", data: [], borderWidth: 2, tension: 0.35, yAxisID: "y" },
+                            { label: "Wind Speed (m/s)", borderColor: "#61eaff", backgroundColor: "rgba(97, 234, 255, 0.1)", fill: true, data: [], borderWidth: 2, tension: 0.35, yAxisID: "y1" }
+                        ]
+                    },
+                    options: weaOptions
+                });
+            }
+
+            // 4. Battery Storage Chart
+            const ctxBat = document.getElementById("polaris-chart-battery");
+            if (ctxBat) {
+                const batOptions = JSON.parse(JSON.stringify(commonOptions));
+                batOptions.scales.y1 = {
+                    position: "right",
+                    grid: { display: false },
+                    ticks: { color: "#ffd166", font: { size: 9, family: "monospace" } }
+                };
+                chartBattery = new Chart(ctxBat.getContext("2d"), {
+                    type: "line",
+                    data: {
+                        labels: [],
+                        datasets: [
+                            { label: "BESS SOC (%)", borderColor: "#42ffb5", backgroundColor: "rgba(66, 255, 181, 0.15)", fill: true, data: [], borderWidth: 2.2, tension: 0.35, yAxisID: "y" },
+                            { label: "Battery Temp (°C)", borderColor: "#ffd166", data: [], borderWidth: 1.5, tension: 0.2, yAxisID: "y1" }
+                        ]
+                    },
+                    options: batOptions
+                });
+            }
+        }
+
+        function pushPoint(chart, label, values) {
+            if (!chart) return;
+            chart.data.labels.push(label);
+            values.forEach((v, i) => {
+                if (chart.data.datasets[i]) chart.data.datasets[i].data.push(v);
+            });
+            if (chart.data.labels.length > MAX_POINTS) {
+                chart.data.labels.shift();
+                chart.data.datasets.forEach(ds => ds.data.shift());
+            }
+            chart.update("none");
+        }
+
+        function updatePolarisCharts(telemetry, metrics) {
+            const now = new Date();
+            const timeLabel = now.getHours().toString().padStart(2, "0") + ":" +
+                              now.getMinutes().toString().padStart(2, "0") + ":" +
+                              now.getSeconds().toString().padStart(2, "0");
+
+            // Update badge text values
+            const bGen = document.getElementById("badge-gen-val");
+            if (bGen) bGen.textContent = (metrics.solarKw + metrics.windKw).toFixed(1) + " kW";
+
+            const bDem = document.getElementById("badge-demand-val");
+            if (bDem) bDem.textContent = metrics.loadKw.toFixed(1) + " kW";
+
+            const bWea = document.getElementById("badge-weather-val");
+            if (bWea) bWea.textContent = metrics.tempC.toFixed(1) + "°C • " + metrics.windMps.toFixed(1) + "m/s";
+
+            const bBat = document.getElementById("badge-battery-val");
+            if (bBat) bBat.textContent = metrics.soc.toFixed(0) + "%";
+
+            // Push data points into Chart.js
+            pushPoint(chartGen, timeLabel, [metrics.solarKw, metrics.windKw, metrics.genKw]);
+            pushPoint(chartBalance, timeLabel, [metrics.totalGenKw, metrics.loadKw]);
+            pushPoint(chartWeather, timeLabel, [metrics.tempC, metrics.windMps]);
+            pushPoint(chartBattery, timeLabel, [metrics.soc, metrics.batTemp]);
+        }
+
+        // Initialize charts when DOM is ready
+        setTimeout(initPolarisCharts, 200);
+
+        /* ============================================
+           LIVE DATA FROM REAL-TIME STATION, AI & OPTIMIZER
+        ============================================ */
+
+        async function updateLiveData() {
+            try {
+                const res = await fetch('/api/status');
+                if (!res.ok) return;
+                const json = await res.json();
+                const d = json.data || {};
+                
+                const demand = (d.total_station_load_kw || 65.0).toFixed(1);
+                const critLoad = (d.critical_load_kw || 38.0).toFixed(1);
+                const nonCritLoad = (d.non_critical_load_kw || d.flexible_load_kw || 27.0).toFixed(1);
+                const energyCondition = d.energy_condition || "NORMAL";
+                const renewable = (d.renewable_percentage || 70.0).toFixed(1);
+                const battery = Math.round(d.battery_soc_pct || 70);
+                const storedKwh = (d.battery_stored_kwh || (battery * 2.0)).toFixed(1);
+                const capKwh = d.battery_capacity_kwh || 200.0;
+                const batStatus = d.battery_status || (d.battery_power_kw > 0.1 ? "CHARGING" : (d.battery_power_kw < -0.1 ? "DISCHARGING" : "STANDBY"));
+                const co2 = ((d.part_1_renewable ? d.part_1_renewable.co2_offset_kg : 0) / 1000.0 + 1.2).toFixed(2);
+                
+                const elDemand = document.getElementById("demand");
+                if (elDemand) elDemand.textContent = demand + " kW";
+
+                const elCrit = document.getElementById("demandCritical");
+                if (elCrit) elCrit.textContent = critLoad + " kW";
+
+                const elNonCrit = document.getElementById("demandNonCritical");
+                if (elNonCrit) elNonCrit.textContent = nonCritLoad + " kW";
+
+                const elCond = document.getElementById("demandCondition");
+                if (elCond) {
+                    elCond.textContent = "● " + energyCondition;
+                    if (energyCondition === "ENERGY DEFICIT") {
+                        elCond.style.color = "#ff4d4f";
+                    } else if (energyCondition === "CRITICAL LOAD PRIORITY") {
+                        elCond.style.color = "#ffa940";
+                    } else if (energyCondition === "NON-CRITICAL LOAD REDUCTION") {
+                        elCond.style.color = "#ffd166";
+                    } else {
+                        elCond.style.color = "#42ffb5";
+                    }
+                }
+
+                const elRen = document.getElementById("renewableShare");
+                if (elRen) elRen.textContent = renewable + "%";
+
+                const elBat = document.getElementById("batterySoc");
+                if (elBat) elBat.textContent = battery + "%";
+
+                const elCo2 = document.getElementById("co2");
+                if (elCo2) elCo2.textContent = co2 + " T";
+
+                const elBatLg = document.getElementById("batteryLarge");
+                if (elBatLg) elBatLg.textContent = battery + "%";
+
+                const elBatLgStat = document.getElementById("batteryLargeStatus");
+                if (elBatLgStat) elBatLgStat.textContent = `STATUS: ${batStatus}`;
+
+                const elBatStored = document.getElementById("batteryStoredText");
+                if (elBatStored) elBatStored.textContent = `Stored: ${storedKwh} kWh / ${capKwh} kWh`;
+
+                const elBatSoh = document.getElementById("batterySohText");
+                if (elBatSoh) elBatSoh.textContent = `SOH: ${d.part_1_renewable?.battery_health_pct || 98}% (LiFePO4)`;
+
+                const elBatFloor = document.getElementById("batteryFloorText");
+                if (elBatFloor) elBatFloor.textContent = `Safety floor: 15% • Flow: ${d.battery_power_kw ? d.battery_power_kw.toFixed(1) : '0.0'} kW`;
+
+                const elBatLvl = document.getElementById("batteryLevel");
+                if (elBatLvl) elBatLvl.style.height = Math.min(100, Math.max(5, battery)) + "%";
+
+                const elHealth = document.getElementById("heroStatus");
+                if (elHealth) elHealth.textContent = (d.integration_metrics && d.integration_metrics.twin_health_score !== undefined) ? d.integration_metrics.twin_health_score + "%" : "--%";
+
+                // Sync 12-Resource Matrix values
+                const pSolar = (d.solar_power_kw || 0.0).toFixed(1);
+                const pWind = (d.wind_power_kw || 0.0).toFixed(1);
+                const pBat = Math.abs(d.battery_power_kw || 0.0).toFixed(1);
+                const pGen = (d.generator_power_kw || 0.0).toFixed(1);
+
+                const elOutSol = document.getElementById("res-out-solar");
+                if (elOutSol) elOutSol.textContent = pSolar;
+
+                const elOutWnd = document.getElementById("res-out-wind");
+                if (elOutWnd) elOutWnd.textContent = pWind;
+
+                const elOutBat = document.getElementById("res-out-battery");
+                if (elOutBat) elOutBat.textContent = pBat;
+
+                const elOutGen = document.getElementById("res-out-generator");
+                if (elOutGen) elOutGen.textContent = pGen;
+
+                // Sync AI Forecast Recommendations & Strategy
+                const aiFc = d.ai_forecast || {};
+                const rec = aiFc.active_recommendation || {};
+                if (rec.primary && rec.primary.name) {
+                    const elPrim = document.getElementById("aiRecPrimary");
+                    if (elPrim) elPrim.textContent = `${rec.primary.name} (${rec.primary.value_kw || pWind}kW)`;
+                }
+                if (rec.secondary && rec.secondary.name) {
+                    const elSec = document.getElementById("aiRecSecondary");
+                    if (elSec) elSec.textContent = `${rec.secondary.name} (${rec.secondary.value_kw || pSolar}kW)`;
+                }
+                if (rec.tertiary && rec.tertiary.name) {
+                    const elTert = document.getElementById("aiRecTertiary");
+                    if (elTert) elTert.textContent = `${rec.tertiary.name} (${rec.tertiary.value_kw || 90}kW)`;
+                }
+                if (aiFc.model_confidence) {
+                    const elConf = document.getElementById("aiRecConf");
+                    if (elConf) elConf.textContent = `${Math.round(aiFc.model_confidence.demand || 82)}%`;
+                }
+                if (rec.strategy) {
+                    const elStrat = document.getElementById("aiStrategyText");
+                    if (elStrat) elStrat.textContent = `Mode: ${d.control_mode || "AI_PPO"} — Strategy: ${rec.strategy}. Dispatching optimal energy flow while maintaining zero critical loss.`;
+                }
+
+                // Bind AI Dispatch Action & Reason dynamically
+                const elAiTitle = document.getElementById("aiActionTitle");
+                if (elAiTitle) {
+                    elAiTitle.textContent = d.ai_action_name || "OPTIMAL DISPATCH";
+                }
+                const elAiReason = document.getElementById("aiActionReason");
+                if (elAiReason) {
+                    elAiReason.textContent = d.ai_action_reason || "Equilibrium maintained across polar microgrid buses.";
+                }
+
+                // Mission Status Indicator (NOMINAL / DEGRADED / CRITICAL / OFFLINE)
+                const elMission = document.getElementById("heroMissionStatus");
+                const elMissionReason = document.getElementById("heroMissionReason");
+                const cond = d.energy_condition || "NORMAL";
+                const genTotal = d.total_generation_kw || 0;
+                const loadTotal = d.total_station_load_kw !== undefined ? d.total_station_load_kw : 0;
+                const pGenOnline = (d.generator_power_kw || 0) > 0.5;
+
+                if (elMission) {
+                    if (cond === "ENERGY DEFICIT" || (d.critical_load_supplied_pct !== undefined && d.critical_load_supplied_pct < 100)) {
+                        elMission.textContent = "● CRITICAL";
+                        elMission.className = "status-good";
+                        elMission.style.background = "rgba(255, 77, 79, 0.2)";
+                        elMission.style.borderColor = "#ff4d4f";
+                        elMission.style.color = "#ff4d4f";
+                        if (elMissionReason) elMissionReason.textContent = "Power deficit on bus; critical load priority active.";
+                    } else if (cond === "NON-CRITICAL LOAD REDUCTION" || pGenOnline || (d.battery_soc_pct && d.battery_soc_pct < 20)) {
+                        elMission.textContent = "● DEGRADED";
+                        elMission.className = "status-good";
+                        elMission.style.background = "rgba(255, 209, 102, 0.2)";
+                        elMission.style.borderColor = "#ffd166";
+                        elMission.style.color = "#ffd166";
+                        if (elMissionReason) {
+                            elMissionReason.textContent = pGenOnline ? "Fossil backup genset dispatched." : "Non-critical loads reduced to preserve reserves.";
+                        }
+                    } else {
+                        elMission.textContent = "● NOMINAL";
+                        elMission.className = "status-good";
+                        elMission.style.background = "";
+                        elMission.style.borderColor = "";
+                        elMission.style.color = "";
+                        if (elMissionReason) elMissionReason.textContent = "Renewable equilibrium; zero critical load shedding.";
+                    }
+                }
+
+                // Sync live resource numbers into the sources rotation
+                if (d.solar_power_kw !== undefined) sources[0].power = Math.round(d.solar_power_kw);
+                if (d.wind_power_kw !== undefined) sources[1].power = Math.round(d.wind_power_kw);
+                if (d.battery_power_kw !== undefined) sources[3].power = Math.round(Math.abs(d.battery_power_kw));
+
+                // Update Showcase Top HUD & Polar Weather
+                const st = d.station || {};
+                const dyn = d.dynamic_input_stream || {};
+                const tempVal = dyn.temperature_c !== undefined ? dyn.temperature_c : (d.temperature_c !== undefined ? d.temperature_c : null);
+                const windVal = dyn.wind_speed_m_s !== undefined ? dyn.wind_speed_m_s : (d.wind_speed_m_s !== undefined ? d.wind_speed_m_s : null);
+                const windKmh = windVal !== null ? (windVal * 3.6).toFixed(1) : null;
+                const solVal = dyn.solar_irradiance_w_m2 !== undefined ? dyn.solar_irradiance_w_m2 : (d.solar_irradiance_w_m2 !== undefined ? d.solar_irradiance_w_m2 : null);
+                const cloudVal = dyn.cloud_cover !== undefined ? Math.round(dyn.cloud_cover * 100) : (d.cloud_cover !== undefined ? Math.round(d.cloud_cover * 100) : null);
+                const condVal = dyn.weather_condition || d.weather_condition || "Standby";
+
+                const elHudTemp = document.getElementById("hudTemp");
+                if (elHudTemp) elHudTemp.textContent = tempVal !== null ? tempVal + "°C" : "--°C";
+
+                const elHudWind = document.getElementById("hudWind");
+                if (elHudWind) elHudWind.textContent = windVal !== null ? windVal + " m/s" : "-- m/s";
+
+                const elHudWindKmh = document.getElementById("hudWindKmh");
+                if (elHudWindKmh) elHudWindKmh.textContent = windKmh !== null ? windKmh + " km/h" : "-- km/h";
+
+                const elHudSolar = document.getElementById("hudSolar");
+                if (elHudSolar) elHudSolar.textContent = solVal !== null ? Math.round(solVal) + " W/m²" : "-- W/m²";
+
+                const elHudCloud = document.getElementById("hudCloud");
+                if (elHudCloud) elHudCloud.textContent = cloudVal + "%";
+
+                const elHudCond = document.getElementById("hudCondition");
+                if (elHudCond) elHudCond.textContent = condVal;
+
+                // Explicit Telemetry Data State Indicator
+                const elHudFeed = document.getElementById("hudFeedBadge");
+                if (elHudFeed) {
+                    const mode = dyn.feed_mode || "DYNAMIC_SYNTHETIC";
+                    const status = dyn.feed_status || "ACTIVE";
+                    if (mode === "REAL_WORLD_LIVE" || mode === "LIVE_API") {
+                        elHudFeed.textContent = "● REAL WORLD LIVE DATA";
+                        elHudFeed.parentElement.style.borderColor = "#42ffb5";
+                        elHudFeed.parentElement.style.color = "#42ffb5";
+                    } else if (mode === "OPERATOR_OVERRIDE" || d.manual_override) {
+                        elHudFeed.textContent = "● OPERATOR OVERRIDE";
+                        elHudFeed.parentElement.style.borderColor = "#ffd166";
+                        elHudFeed.parentElement.style.color = "#ffd166";
+                    } else {
+                        elHudFeed.textContent = "● SIMULATION";
+                        elHudFeed.parentElement.style.borderColor = "#00e5ff";
+                        elHudFeed.parentElement.style.color = "#00e5ff";
+                    }
+                }
+
+                // Station titles & select sync
+                if (st.name) {
+                    const elHeroTitle = document.getElementById("heroStationTitle");
+                    if (elHeroTitle) elHeroTitle.textContent = "NCPOR // " + st.name.toUpperCase() + " (" + (st.continent || "ANTARCTICA").toUpperCase() + ")";
+
+                    const elActiveBadge = document.getElementById("activeStationBadge");
+                    if (elActiveBadge) elActiveBadge.textContent = "NCPOR " + (st.name.replace("Research Station", "").trim()).toUpperCase();
+
+                    const elSelect = document.getElementById("stationSelect");
+                    if (elSelect && st.id && elSelect.value !== st.id) {
+                        elSelect.value = st.id;
+                    }
+                }
+
+                // Synoptic Microgrid KPI Bar
+                const renTotal = d.renewable_power_kw || (parseFloat(pSolar) + parseFloat(pWind));
+                const elKpiClean = document.getElementById("kpiCleanKw");
+                if (elKpiClean) elKpiClean.textContent = renTotal.toFixed(1) + " kW";
+
+                const elKpiBat = document.getElementById("kpiBatKw");
+                const batFlow = d.battery_power_kw || 0.0;
+                if (elKpiBat) elKpiBat.textContent = (batFlow >= 0 ? "+" : "-") + Math.abs(batFlow).toFixed(1) + " kW";
+
+                const elKpiBatStat = document.getElementById("kpiBatStatus");
+                if (elKpiBatStat) {
+                    if (batFlow > 0.5) elKpiBatStat.textContent = "Charging Surplus (SOC " + battery + "%)";
+                    else if (batFlow < -0.5) elKpiBatStat.textContent = "Discharging Reserve (SOC " + battery + "%)";
+                    else elKpiBatStat.textContent = "Standby Buffer (SOC " + battery + "%)";
+                }
+
+                const elKpiGen = document.getElementById("kpiGenKw");
+                if (elKpiGen) elKpiGen.textContent = pGen + " kW";
+
+                const elKpiGenStat = document.getElementById("kpiGenStatus");
+                if (elKpiGenStat) {
+                    elKpiGenStat.textContent = parseFloat(pGen) > 0.1 ? "Fossil Genset Dispatched" : "Fossil Genset Standby (0 Fuel Burn)";
+                }
+
+                const elKpiLoad = document.getElementById("kpiLoadKw");
+                if (elKpiLoad) elKpiLoad.textContent = demand + " kW";
+
+                const elKpiCo2 = document.getElementById("kpiCo2Rate");
+                if (elKpiCo2) {
+                    const cleanRate = (renTotal * 0.28 * 2.68).toFixed(1);
+                    elKpiCo2.textContent = cleanRate + " kg/hr";
+                }
+
+                // High speed live dynamic microgrid electrical jitters (Frequency & AC Bus Voltage)
+                const freqEl = document.getElementById("gridFreq");
+                if (freqEl) {
+                    const baseFreq = 50.0 + (Math.random() * 0.04 - 0.02);
+                    freqEl.textContent = baseFreq.toFixed(2) + " Hz";
+                }
+                const voltEl = document.getElementById("gridVolt");
+                if (voltEl) {
+                    const baseVolt = 400.0 + (Math.random() * 1.6 - 0.8);
+                    voltEl.textContent = baseVolt.toFixed(1) + " V";
+                }
+
+                // Extract Hydro power from 12 modeled resources or telemetry
+                const hydroResource = (d.modeled_resources_12 || []).find(r => r.id === "hydro");
+                const pHydro = hydroResource ? hydroResource.output_kw : (d.hydro_power_kw || 90.0);
+                const pHydroStr = Number(pHydro).toFixed(1);
+
+                const elOutHydro = document.getElementById("res-out-hydro");
+                if (elOutHydro) elOutHydro.textContent = pHydroStr;
+
+                if (sources && sources[2]) sources[2].power = Math.round(Number(pHydro));
+
+                // Update active scenario
+                const scen = json.active_scenario || d.active_scenario || "normal";
+                synopticState.activeScenario = scen;
+
+                // Update canvas node powers
+                synopticState.solarKw = parseFloat(pSolar);
+                synopticState.windKw = parseFloat(pWind);
+                synopticState.hydroKw = parseFloat(pHydroStr);
+                synopticState.batKw = batFlow;
+                synopticState.genKw = parseFloat(pGen);
+                synopticState.loadKw = parseFloat(demand);
+                synopticState.cleanKw = renTotal + parseFloat(pHydroStr);
+
+                // Update Live Dynamic Charts
+                updatePolarisCharts(d, {
+                    solarKw: parseFloat(pSolar),
+                    windKw: parseFloat(pWind),
+                    genKw: parseFloat(pGen),
+                    loadKw: parseFloat(demand),
+                    totalGenKw: d.total_generation_kw || (parseFloat(pSolar) + parseFloat(pWind) + parseFloat(pGen)),
+                    tempC: parseFloat(tempVal),
+                    windMps: parseFloat(windVal),
+                    soc: parseFloat(battery),
+                    batTemp: d.battery_temperature_c || 15.0
+                });
+
+            } catch (err) {
+                console.warn("Live feed fetch warning:", err);
+            }
+        }
+
+        updateLiveData();
+        setInterval(updateLiveData, 1200);
+
+        /* =====================================================
+           NCPOR STATION SWITCHER
+        ===================================================== */
+        async function switchStation(stationId) {
+            try {
+                const res = await fetch('/api/stations/select', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ station: stationId })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    showNotification("Station Switched: " + (data.station.name || stationId));
+                    updateLiveData();
+                }
+            } catch (e) {
+                console.error("Failed to switch station:", e);
+            }
+        }
+
+        /* =====================================================
+           SHOWCASE SCENARIO CONTROLLER
+        ===================================================== */
+        async function triggerScenario(scenarioName) {
+            document.querySelectorAll(".scenario-btn").forEach(btn => btn.classList.remove("active"));
+            const targetBtn = event && event.target;
+            if (targetBtn && targetBtn.classList) targetBtn.classList.add("active");
+
+            try {
+                const res = await fetch('/api/showcase/scenario', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ scenario: scenarioName })
+                });
+                if (res.ok) {
+                    const d = await res.json();
+                    showNotification(d.data.message || ("Scenario Applied: " + scenarioName));
+                    updateLiveData();
+                }
+            } catch (e) {
+                console.error("Failed to trigger scenario:", e);
+            }
+        }
+
+        function showNotification(msg) {
+            let toast = document.getElementById("showcaseToast");
+            if (!toast) {
+                toast = document.createElement("div");
+                toast.id = "showcaseToast";
+                toast.style.cssText = "position:fixed; top:135px; right:25px; z-index:9999; background:#061b2e; border:1px solid #00e5ff; color:#61eaff; padding:12px 20px; border-radius:10px; box-shadow:0 0 25px rgba(0,229,255,0.5); font-size:12px; font-weight:bold; transition:all 0.3s; opacity:0; pointer-events:none;";
+                document.body.appendChild(toast);
+            }
+            toast.textContent = "⚡ " + msg;
+            toast.style.opacity = "1";
+            toast.style.transform = "translateY(0)";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+            }, 3200);
+        }
+
+        /* =====================================================
+           SYNOPTIC MICROGRID POWER FLOW PARTICLE KINEMATICS
+        ===================================================== */
+        const canvas = document.getElementById("powerFlowCanvas");
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let flowAnimationRunning = true;
+
+        const synopticState = {
+            solarKw: 0.0,
+            windKw: 0.0,
+            hydroKw: 0.0,
+            batKw: 0.0,
+            genKw: 0.0,
+            loadKw: 0.0,
+            cleanKw: 0.0,
+            activeScenario: "normal"
+        };
+
+        const particles = [];
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        setTimeout(resizeCanvas, 100);
+
+        function toggleFlowAnimation() {
+            flowAnimationRunning = !flowAnimationRunning;
+            const btn = document.getElementById("toggleFlowBtn");
+            if (btn) btn.textContent = flowAnimationRunning ? "⏸ Pause Flow" : "▶ Resume Flow";
+            if (flowAnimationRunning) requestAnimationFrame(renderPowerFlow);
+        }
+
+        function createParticle(fromNode, toNode, color, speed) {
+            let mult = 1.0;
+            if (synopticState.activeScenario === "blizzard") mult = 1.5;
+            else if (synopticState.activeScenario === "deep_freeze") mult = 0.8;
+            else if (synopticState.activeScenario === "solar_peak") mult = 1.25;
+
+            return {
+                x: fromNode.x,
+                y: fromNode.y,
+                from: fromNode,
+                to: toNode,
+                progress: 0,
+                speed: speed * mult * (0.006 + Math.random() * 0.004),
+                color: color,
+                size: 2.5 + Math.random() * 2
+            };
+        }
+
+        function renderPowerFlow() {
+            if (!canvas || !ctx || !flowAnimationRunning) return;
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            // Define synoptic topology coordinates with Hydropower integrated
+            const nodes = {
+                solar: { x: w * 0.12, y: h * 0.20, label: "Solar Array", icon: "☀️", kw: synopticState.solarKw, color: "#ffd166" },
+                hydro: { x: w * 0.12, y: h * 0.48, label: "Hydropower", icon: "💧", kw: synopticState.hydroKw, color: "#2db6a3" },
+                wind: { x: w * 0.12, y: h * 0.76, label: "Wind Turbines", icon: "💨", kw: synopticState.windKw, color: "#61eaff" },
+                cleanBus: { x: w * 0.32, y: h * 0.50, label: "Renewable Hub", icon: "🌿", kw: synopticState.cleanKw, color: "#42ffb5" },
+                aiCore: { x: w * 0.50, y: h * 0.50, label: "AI Dispatch Core", icon: "🧠", kw: synopticState.loadKw, color: "#00e5ff" },
+                battery: { x: w * 0.50, y: h * 0.82, label: "LiFePO4 Storage", icon: "🔋", kw: Math.abs(synopticState.batKw), color: "#72f4ff" },
+                generator: { x: w * 0.50, y: h * 0.18, label: "Diesel Genset", icon: "⚙️", kw: synopticState.genKw, color: synopticState.genKw > 0.5 ? "#ff9f43" : "#576574" },
+                stationBus: { x: w * 0.72, y: h * 0.50, label: "Station Microgrid Bus", icon: "⚡", kw: synopticState.loadKw, color: "#ffffff" },
+                lifeSupport: { x: w * 0.88, y: h * 0.28, label: "Life Support & Heat", icon: "🏥", kw: (synopticState.loadKw * 0.58).toFixed(1), color: "#ff7b72" },
+                scienceLabs: { x: w * 0.88, y: h * 0.72, label: "Polar Science Labs", icon: "🔬", kw: (synopticState.loadKw * 0.42).toFixed(1), color: "#c084ff" }
+            };
+
+            // Draw circuit lines
+            ctx.lineWidth = 2;
+            function drawLine(n1, n2, strokeStyle, dashed = false) {
+                ctx.beginPath();
+                if (dashed) ctx.setLineDash([6, 6]);
+                else ctx.setLineDash([]);
+                ctx.strokeStyle = strokeStyle;
+                ctx.moveTo(n1.x, n1.y);
+                ctx.lineTo(n2.x, n2.y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // Power wires
+            drawLine(nodes.solar, nodes.cleanBus, "rgba(255, 209, 102, 0.35)");
+            drawLine(nodes.hydro, nodes.cleanBus, "rgba(45, 182, 163, 0.45)");
+            drawLine(nodes.wind, nodes.cleanBus, "rgba(97, 234, 255, 0.35)");
+            drawLine(nodes.cleanBus, nodes.aiCore, "rgba(66, 255, 181, 0.5)");
+            drawLine(nodes.generator, nodes.aiCore, synopticState.genKw > 0.5 ? "rgba(255, 159, 67, 0.6)" : "rgba(87, 101, 116, 0.2)", true);
+            drawLine(nodes.battery, nodes.aiCore, "rgba(114, 244, 255, 0.45)");
+            drawLine(nodes.aiCore, nodes.stationBus, "rgba(0, 229, 255, 0.6)");
+            drawLine(nodes.stationBus, nodes.lifeSupport, "rgba(255, 123, 114, 0.5)");
+            drawLine(nodes.stationBus, nodes.scienceLabs, "rgba(192, 132, 255, 0.5)");
+
+            // Spawn particles based on real-time kW
+            if (Math.random() < 0.35 && synopticState.solarKw > 2.0) {
+                particles.push(createParticle(nodes.solar, nodes.cleanBus, "#ffd166", Math.min(3, synopticState.solarKw / 40)));
+            }
+            if (Math.random() < 0.35 && synopticState.hydroKw > 2.0) {
+                particles.push(createParticle(nodes.hydro, nodes.cleanBus, "#2db6a3", Math.min(3, synopticState.hydroKw / 30)));
+            }
+            if (Math.random() < 0.35 && synopticState.windKw > 2.0) {
+                particles.push(createParticle(nodes.wind, nodes.cleanBus, "#61eaff", Math.min(3, synopticState.windKw / 40)));
+            }
+            if (Math.random() < 0.45 && synopticState.cleanKw > 5.0) {
+                particles.push(createParticle(nodes.cleanBus, nodes.aiCore, "#42ffb5", 1.5));
+            }
+            // Battery particle direction
+            if (Math.random() < 0.25 && Math.abs(synopticState.batKw) > 1.0) {
+                if (synopticState.batKw > 0) {
+                    particles.push(createParticle(nodes.aiCore, nodes.battery, "#72f4ff", 1.2)); // charging
+                } else {
+                    particles.push(createParticle(nodes.battery, nodes.aiCore, "#72f4ff", 1.5)); // discharging
+                }
+            }
+            // Generator particles
+            if (synopticState.genKw > 1.0 && Math.random() < 0.3) {
+                particles.push(createParticle(nodes.generator, nodes.aiCore, "#ff9f43", 1.8));
+            }
+            // Station load particles
+            if (Math.random() < 0.4) {
+                particles.push(createParticle(nodes.aiCore, nodes.stationBus, "#00e5ff", 1.6));
+            }
+            if (Math.random() < 0.3) {
+                particles.push(createParticle(nodes.stationBus, nodes.lifeSupport, "#ff7b72", 1.4));
+            }
+            if (Math.random() < 0.3) {
+                particles.push(createParticle(nodes.stationBus, nodes.scienceLabs, "#c084ff", 1.4));
+            }
+
+            // Update & draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.progress += p.speed;
+                p.x = p.from.x + (p.to.x - p.from.x) * p.progress;
+                p.y = p.from.y + (p.to.y - p.from.y) * p.progress;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                if (p.progress >= 1.0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // Draw Node Badges
+            for (const key in nodes) {
+                const n = nodes[key];
+                // Outer circle
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, 24, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(4, 18, 30, 0.9)";
+                ctx.strokeStyle = n.color;
+                ctx.lineWidth = 2;
+                ctx.shadowColor = n.color;
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                // Icon
+                ctx.font = "16px sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = "#ffffff";
+                ctx.fillText(n.icon, n.x, n.y - 1);
+
+                // Label below
+                ctx.font = "bold 10px sans-serif";
+                ctx.fillStyle = "#ffffff";
+                ctx.fillText(n.label, n.x, n.y + 35);
+
+                // kW below
+                ctx.font = "bold 11px monospace";
+                ctx.fillStyle = n.color;
+                ctx.fillText(n.kw + " kW", n.x, n.y + 48);
+            }
+
+            requestAnimationFrame(renderPowerFlow);
+        }
+        requestAnimationFrame(renderPowerFlow);
+
+        /* =====================================================
+           INTERACTIVE SHOWCASE TOUR WORKFLOW
+        ===================================================== */
+        let tourStep = 0;
+        const tourSteps = [
+            {
+                title: "1. NCPOR Indian Polar Stations Telemetry",
+                desc: "POLARIS monitors and streams live telemetry from India's official National Centre for Polar and Ocean Research stations: Bharati Station (-69.41°S, 76.19°E) in Larsemann Hills, Maitri Station (-70.77°S, 11.73°E) in Schirmacher Oasis, and Himadri in the Arctic.",
+                action: () => {
+                    const el = document.querySelector(".showcase-hud-bar");
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            },
+            {
+                title: "2. Synoptic Microgrid Power Flow & Kinematics",
+                desc: "Observe the live particle kinematics. Clean energy generated by Solar PV, Wind Turbines, and Hydro flows into the AI PPO Dispatch Core. Surplus energy charges the LiFePO4 BESS storage, while fossil diesel generators remain shut down in standby.",
+                action: () => {
+                    const el = document.querySelector(".synoptic-flow-panel");
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            },
+            {
+                title: "3. Extreme Katabatic Blizzard Simulation",
+                desc: "We now trigger an extreme 35 m/s Antarctic Katabatic Blizzard. The AI controller detects turbine cut-out safety limits, balances the microgrid with LiFePO4 battery discharge, and guarantees life support continuity without blackouts.",
+                action: () => {
+                    triggerScenario('blizzard');
+                }
+            },
+            {
+                title: "4. Two-Part Energy Architecture (Renewable vs Backup)",
+                desc: "POLARIS separates energy into Part 1 (Clean Renewable Assets) and Part 2 (Auxiliary Fossil Backup), continuously measuring fuel burn rate, liters of diesel unburned, and total carbon avoided trajectory.",
+                action: () => {
+                    const el = document.querySelector(".status-grid");
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            },
+            {
+                title: "5. Complete 12-Resource Microgrid Matrix",
+                desc: "POLARIS models and operates all 12 individual polar microgrid resources, including Geothermal, Marine Tidal, Biomass, Hydrogen Fuel Cells, Solar Thermal, and CHP Cogeneration. Click any card to view deep telemetry.",
+                action: () => {
+                    triggerScenario('normal');
+                    const el = document.querySelector(".flow-panel");
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            }
+        ];
+
+        function startShowcaseTour() {
+            tourStep = 0;
+            const overlay = document.getElementById("showcaseModalOverlay");
+            if (overlay) overlay.style.display = "flex";
+            renderTourStep();
+        }
+
+        function closeShowcaseTour() {
+            const overlay = document.getElementById("showcaseModalOverlay");
+            if (overlay) overlay.style.display = "none";
+        }
+
+        function nextTourStep() {
+            tourStep++;
+            if (tourStep >= tourSteps.length) {
+                closeShowcaseTour();
+                showNotification("Showcase Tour Completed! You can now freely explore all views.");
+            } else {
+                renderTourStep();
+            }
+        }
+
+        function renderTourStep() {
+            const s = tourSteps[tourStep];
+            document.getElementById("tourStepNumber").textContent = `STEP ${tourStep + 1} OF ${tourSteps.length}`;
+            document.getElementById("tourStepTitle").textContent = s.title;
+            document.getElementById("tourStepDesc").textContent = s.desc;
+            s.action();
+        }
+
+    </script>
+
+    <!-- Floating Showcase Tour Button -->
+    <button class="showcase-tour-fab" onclick="startShowcaseTour()">
+        <span>🎙️</span>
+        <span>SHOWCASE TOUR</span>
+    </button>
+
+    <!-- Showcase Tour Modal -->
+    <div class="showcase-modal-overlay" id="showcaseModalOverlay">
+        <div class="showcase-modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span id="tourStepNumber" style="font-size:11px; font-weight:bold; color:#00e5ff; letter-spacing:1px; text-transform:uppercase;">STEP 1 OF 5</span>
+                <span onclick="closeShowcaseTour()" style="cursor:pointer; font-size:22px; color:#849ca9;">×</span>
+            </div>
+            <h2 id="tourStepTitle" style="font-size:20px; font-weight:bold; color:#ffffff; margin-bottom:12px;">NCPOR Indian Polar Stations Telemetry</h2>
+            <p id="tourStepDesc" style="font-size:13px; color:#a5d8ff; line-height:1.6; margin-bottom:24px;">
+                Explore real-time telemetry from Indian Antarctic research stations.
+            </p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <button onclick="closeShowcaseTour()" class="scenario-btn" style="padding:8px 16px;">Exit Tour</button>
+                <button onclick="nextTourStep()" class="scenario-btn active" style="padding:9px 20px; font-weight:bold; background:linear-gradient(135deg, #00e5ff, #0077ff); color:#020b13; border:none;">Next Step →</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,1915 @@
+{
+  "generated_at_ist": "2026-09-10T11:38:25.332189+05:30",
+  "weather_source": "polar_station_live_feed",
+  "forecast": [
+    {
+      "timestamp_ist": "2026-09-10T11:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -17.0,
+        "wind_speed_mps": 9.3,
+        "cloud_cover_pct": 41.8,
+        "solar_irradiance_wm2": 109.3,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 17.11,
+        "wind": 158.43,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 198.56,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 158.4,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 248.4,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T12:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -14.8,
+        "wind_speed_mps": 4.8,
+        "cloud_cover_pct": 56.1,
+        "solar_irradiance_wm2": 94.0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 11.3,
+        "wind": 58.09,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 196.04,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Wind",
+          "value_kw": 58.1,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Solar Thermal",
+          "value_kw": 30.0,
+          "category": "clean renewable"
+        },
+        "coverage_kw": 284.4,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (69.4 kW) vs demand (196.0 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T12:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T12:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (94.0 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-10T12:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T12:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T13:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -16.3,
+        "wind_speed_mps": 7.1,
+        "cloud_cover_pct": 30.9,
+        "solar_irradiance_wm2": 50.5,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 13.58,
+        "wind": 105.77,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 197.22,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 105.8,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Solar Thermal",
+          "value_kw": 30.0,
+          "category": "clean renewable"
+        },
+        "coverage_kw": 225.8,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (50.5 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-10T13:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T13:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T14:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -16.7,
+        "wind_speed_mps": 10.0,
+        "cloud_cover_pct": 21.8,
+        "solar_irradiance_wm2": 68.2,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 13.57,
+        "wind": 126.98,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 197.37,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 127.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 217.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (68.2 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-10T14:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T14:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T15:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -13.0,
+        "wind_speed_mps": 0.7,
+        "cloud_cover_pct": 43.2,
+        "solar_irradiance_wm2": 51.7,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 8.2,
+        "wind": 0.0,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 186.58,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Solar Thermal",
+          "value_kw": 30.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Solar PV",
+          "value_kw": 8.2,
+          "category": "clean renewable"
+        },
+        "coverage_kw": 223.2,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": "storm",
+      "risk_alerts": [
+        {
+          "risk_level": "CRITICAL",
+          "affected_resource": "Wind and Solar PV",
+          "explanation": "Storm forecast. Resources affected: Wind, Solar PV.",
+          "confidence_pct": 85,
+          "expected_window": "15:00-15:59 IST"
+        },
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Wind",
+          "explanation": "Wind speed (0.7 m/s) below cut-in speed (3 m/s). Wind turbines will not generate power.",
+          "confidence_pct": 95,
+          "expected_window": "2026-09-10T15:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T15:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (8.2 kW) vs demand (186.6 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T15:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T15:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (51.7 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-10T15:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T15:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T16:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -19.3,
+        "wind_speed_mps": 6.3,
+        "cloud_cover_pct": 8.8,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 111.17,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 198.73,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 111.2,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 201.2,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (0 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-10T16:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T16:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T17:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -18.2,
+        "wind_speed_mps": 3.3,
+        "cloud_cover_pct": 0,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 11.01,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 196.69,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Wind",
+          "value_kw": 11.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 251.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (11.0 kW) vs demand (196.7 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T17:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T17:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T18:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -20.6,
+        "wind_speed_mps": 8.3,
+        "cloud_cover_pct": 12.3,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 94.28,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 191.43,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 94.3,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 279.3,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (94.3 kW) vs demand (191.4 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T18:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T18:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T19:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -18.5,
+        "wind_speed_mps": 0,
+        "cloud_cover_pct": 25.2,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 0.0,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 190.68,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "tertiary": {
+          "name": "Biomass",
+          "value_kw": 55.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 240.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Wind",
+          "explanation": "Wind speed (0 m/s) below cut-in speed (3 m/s). Wind turbines will not generate power.",
+          "confidence_pct": 95,
+          "expected_window": "2026-09-10T19:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T19:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (0.0 kW) vs demand (190.7 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T19:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T19:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T20:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -21.7,
+        "wind_speed_mps": 2.6,
+        "cloud_cover_pct": 25.5,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 0.0,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 190.89,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "tertiary": {
+          "name": "Biomass",
+          "value_kw": 55.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 240.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Wind",
+          "explanation": "Wind speed (2.6 m/s) below cut-in speed (3 m/s). Wind turbines will not generate power.",
+          "confidence_pct": 95,
+          "expected_window": "2026-09-10T20:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T20:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (0.0 kW) vs demand (190.9 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T20:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T20:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T21:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -17.8,
+        "wind_speed_mps": 3.8,
+        "cloud_cover_pct": 6.1,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 26.97,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 0,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 188.38,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "not available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Wind",
+          "value_kw": 27.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 212.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (27.0 kW) vs demand (188.4 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T21:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T21:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Diesel",
+          "explanation": "Diesel Unavailable is not available during 21:00-22:59 IST (scheduled maintenance window).",
+          "confidence_pct": 100,
+          "expected_window": "21:00-22:59 IST"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T22:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -21.1,
+        "wind_speed_mps": 1.6,
+        "cloud_cover_pct": 25.3,
+        "solar_irradiance_wm2": 27.3,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 0.0,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 0,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 185.35,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "not available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "tertiary": {
+          "name": "Biomass",
+          "value_kw": 55.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 240.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Wind",
+          "explanation": "Wind speed (1.6 m/s) below cut-in speed (3 m/s). Wind turbines will not generate power.",
+          "confidence_pct": 95,
+          "expected_window": "2026-09-10T22:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T22:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (0.0 kW) vs demand (185.3 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T22:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T22:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Diesel",
+          "explanation": "Diesel Unavailable is not available during 21:00-22:59 IST (scheduled maintenance window).",
+          "confidence_pct": 100,
+          "expected_window": "21:00-22:59 IST"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-10T23:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -22.2,
+        "wind_speed_mps": 5.1,
+        "cloud_cover_pct": 0,
+        "solar_irradiance_wm2": 14.8,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 75.44,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 183.0,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Wind",
+          "value_kw": 75.4,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 260.4,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (75.4 kW) vs demand (183.0 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-10T23:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-10T23:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T00:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -22.1,
+        "wind_speed_mps": 4.3,
+        "cloud_cover_pct": 73.9,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 2.47
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 106.44,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 183.34,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 106.4,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 196.4,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Solar PV",
+          "explanation": "Heavy snowfall (2.47 mm) may cover solar panels and reduce output.",
+          "confidence_pct": 80,
+          "expected_window": "2026-09-11T00:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T00:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T01:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -23.7,
+        "wind_speed_mps": 4.6,
+        "cloud_cover_pct": 77.2,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0.5
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 74.04,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 185.7,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Wind",
+          "value_kw": 74.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 259.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (74.0 kW) vs demand (185.7 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-11T01:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T01:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T02:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -20.4,
+        "wind_speed_mps": 16.6,
+        "cloud_cover_pct": 59.2,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 0,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 181.22,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "not available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 185.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (0.0 kW) vs demand (181.2 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-11T02:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T02:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Wind",
+          "explanation": "Wind Unavailable is not available during 02:00-03:59 IST (scheduled maintenance window).",
+          "confidence_pct": 100,
+          "expected_window": "02:00-03:59 IST"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T03:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -21.4,
+        "wind_speed_mps": 16.1,
+        "cloud_cover_pct": 76.0,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0.83
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 0,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 186.04,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "not available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "tertiary": {
+          "name": "Biomass",
+          "value_kw": 55.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 240.0,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (0.0 kW) vs demand (186.0 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-11T03:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T03:38:19.774837+05:30"
+        },
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Wind",
+          "explanation": "Wind Unavailable is not available during 02:00-03:59 IST (scheduled maintenance window).",
+          "confidence_pct": 100,
+          "expected_window": "02:00-03:59 IST"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T04:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -20.9,
+        "wind_speed_mps": 9.1,
+        "cloud_cover_pct": 54.9,
+        "solar_irradiance_wm2": 56.3,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 68.41,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 189.54,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Wind",
+          "value_kw": 68.4,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "Geothermal",
+          "value_kw": 95.0,
+          "category": "steady baseload"
+        },
+        "coverage_kw": 253.4,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": "flood",
+      "risk_alerts": [
+        {
+          "risk_level": "CRITICAL",
+          "affected_resource": "Hydropower",
+          "explanation": "Flood forecast. Resources affected: Hydropower.",
+          "confidence_pct": 85,
+          "expected_window": "04:00-04:59 IST"
+        },
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Station Demand",
+          "explanation": "Low predicted renewable generation (68.4 kW) vs demand (189.5 kW). Deficit may require backup sources.",
+          "confidence_pct": 75,
+          "expected_window": "2026-09-11T04:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T04:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T05:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -21.3,
+        "wind_speed_mps": 11.7,
+        "cloud_cover_pct": 52.5,
+        "solar_irradiance_wm2": 0,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 276.42,
+        "hydropower": 0,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 194.7,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "not available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 276.4,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 276.4,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Hydro",
+          "explanation": "Hydro Unavailable is not available during 05:00-05:59 IST (scheduled maintenance window).",
+          "confidence_pct": 100,
+          "expected_window": "05:00-05:59 IST"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T06:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -21.6,
+        "wind_speed_mps": 10.7,
+        "cloud_cover_pct": 82.2,
+        "solar_irradiance_wm2": 42.2,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 0.0,
+        "wind": 258.65,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 0,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 200.04,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "not available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 258.6,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 258.6,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "High cloud cover (82.2%) will significantly reduce solar generation.",
+          "confidence_pct": 90,
+          "expected_window": "2026-09-11T06:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T06:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T07:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -19.3,
+        "wind_speed_mps": 13.6,
+        "cloud_cover_pct": 69.3,
+        "solar_irradiance_wm2": 61.9,
+        "snowfall_mm": 2.51
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 4.87,
+        "wind": 288.66,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 207.46,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 288.7,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 288.7,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "HIGH",
+          "affected_resource": "Solar PV",
+          "explanation": "Heavy snowfall (2.51 mm) may cover solar panels and reduce output.",
+          "confidence_pct": 80,
+          "expected_window": "2026-09-11T07:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T07:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T08:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -17.1,
+        "wind_speed_mps": 14.9,
+        "cloud_cover_pct": 68.8,
+        "solar_irradiance_wm2": 39.5,
+        "snowfall_mm": 1.39
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 2.93,
+        "wind": 251.77,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 203.05,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 251.8,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 251.8,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": "tsunami",
+      "risk_alerts": [
+        {
+          "risk_level": "CRITICAL",
+          "affected_resource": "Marine Energy and Wind",
+          "explanation": "Tsunami forecast. Resources affected: Marine Energy, Wind.",
+          "confidence_pct": 85,
+          "expected_window": "08:00-08:59 IST"
+        },
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (39.5 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-11T08:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T08:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T09:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -14.4,
+        "wind_speed_mps": 12.7,
+        "cloud_cover_pct": 63.2,
+        "solar_irradiance_wm2": 51.7,
+        "snowfall_mm": 1.94
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 12.05,
+        "wind": 225.67,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 199.91,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 225.7,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 225.7,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (51.7 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-11T09:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T09:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    },
+    {
+      "timestamp_ist": "2026-09-11T10:38:19.774837+05:30",
+      "weather": {
+        "temperature_c": -15.9,
+        "wind_speed_mps": 9.6,
+        "cloud_cover_pct": 57.2,
+        "solar_irradiance_wm2": 62.5,
+        "snowfall_mm": 0
+      },
+      "predicted_generation_kw": {
+        "solar_pv": 5.85,
+        "wind": 153.17,
+        "hydropower": 90,
+        "geothermal": 95,
+        "marine_energy": 50,
+        "biomass_biogas": 55,
+        "solar_thermal": 30,
+        "hydrogen_fuel_cell_available": 50,
+        "battery_available": 1600,
+        "diesel_generator_available": 100,
+        "chp_available": 60
+      },
+      "predicted_demand_kw": 198.19,
+      "availability": {
+        "solar_pv": "available",
+        "wind": "available",
+        "hydropower": "available",
+        "geothermal": "available",
+        "marine_energy": "available",
+        "biomass_biogas": "available",
+        "solar_thermal": "available",
+        "hydrogen_fuel_cell": "available",
+        "battery": "available",
+        "diesel_generator": "available",
+        "chp": "available"
+      },
+      "recommended_resources": {
+        "primary": {
+          "name": "Wind",
+          "value_kw": 153.2,
+          "category": "clean renewable"
+        },
+        "secondary": {
+          "name": "Hydro",
+          "value_kw": 90.0,
+          "category": "clean renewable"
+        },
+        "tertiary": {
+          "name": "-",
+          "value_kw": 0,
+          "category": "-"
+        },
+        "coverage_kw": 243.2,
+        "battery_reserve_ready": true,
+        "strategy": "RENEWABLE-FIRST MIX (demand covered)"
+      },
+      "disaster_forecast": null,
+      "risk_alerts": [
+        {
+          "risk_level": "MEDIUM",
+          "affected_resource": "Solar PV",
+          "explanation": "Low solar irradiance (62.5 W/m2) during active hours reduces solar output.",
+          "confidence_pct": 85,
+          "expected_window": "2026-09-11T10:38:19.774837+05:30",
+          "timestamp_ist": "2026-09-11T10:38:19.774837+05:30"
+        }
+      ],
+      "model_confidence_percent": {
+        "solar": 80.2,
+        "wind": 56.1,
+        "demand": 71.4
+      }
+    }
+  ],
+  "model_metrics": {
+    "solar": {
+      "train": {
+        "mae": 0.12,
+        "rmse": 0.57,
+        "r2": 0.9885
+      },
+      "test": {
+        "mae": 1.15,
+        "rmse": 2.34,
+        "r2": 0.8019
+      },
+      "feature_importance": {
+        "solar_irradiance_wm2": 0.5683,
+        "cloud_cover_pct": 0.2508,
+        "temperature_c": 0.1063,
+        "snowfall_mm": 0.0071,
+        "hour": 0.0115,
+        "month": 0.0,
+        "season_encoded": 0.0,
+        "previous_hour_solar": 0.0155,
+        "is_solar_active": 0.0405
+      }
+    },
+    "wind": {
+      "train": {
+        "mae": 2.52,
+        "rmse": 11.15,
+        "r2": 0.9913
+      },
+      "test": {
+        "mae": 39.12,
+        "rmse": 67.41,
+        "r2": 0.5607
+      },
+      "feature_importance": {
+        "wind_speed_mps": 0.4627,
+        "wind_direction_sin": 0.1332,
+        "wind_direction_cos": 0.021,
+        "temperature_c": 0.1356,
+        "pressure_hpa": 0.0403,
+        "snowfall_mm": 0.0274,
+        "hour": 0.1342,
+        "previous_hour_wind": 0.0456
+      }
+    },
+    "demand": {
+      "train": {
+        "mae": 0.3,
+        "rmse": 1.0,
+        "r2": 0.9774
+      },
+      "test": {
+        "mae": 2.68,
+        "rmse": 3.61,
+        "r2": 0.7138
+      },
+      "feature_importance": {
+        "temperature_c": 0.4776,
+        "feels_like_c": 0.0082,
+        "hour": 0.2203,
+        "day_of_week": 0.0048,
+        "month": 0.0,
+        "snowfall_mm": 0.0086,
+        "weather_severity_score": 0.0498,
+        "previous_hour_demand": 0.1597,
+        "rolling_average_demand": 0.071
+      }
+    }
+  }
+}

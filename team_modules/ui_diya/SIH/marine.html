@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLARIS | Marine Energy</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#080608;
+    color:#f5eee8;
+    overflow-x:hidden;
+}
+
+::selection{
+    background:#ed4d82;
+    color:white;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 38px;
+
+    background:rgba(8,6,8,.88);
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid rgba(237,77,130,.18);
+
+    z-index:1000;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:4px;
+    color:#ed4d82;
+}
+
+.logo span{
+    color:#e7d3b4;
+    font-weight:500;
+}
+
+/* MENU BUTTON */
+
+.menu-btn{
+    width:46px;
+    height:46px;
+
+    border:1px solid rgba(237,77,130,.45);
+    border-radius:12px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    gap:5px;
+
+    cursor:pointer;
+
+    transition:.35s;
+}
+
+.menu-btn span{
+    width:20px;
+    height:2px;
+    background:#f5eee8;
+
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    background:#ed4d82;
+    transform:rotate(-4deg);
+}
+
+.menu-btn:hover span{
+    background:white;
+}
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu{
+    position:fixed;
+
+    top:0;
+    right:-330px;
+
+    width:330px;
+    height:100vh;
+
+    padding:105px 35px;
+
+    background:#110b10;
+
+    border-left:1px solid rgba(237,77,130,.3);
+
+    z-index:999;
+
+    transition:.45s cubic-bezier(.77,0,.18,1);
+
+    box-shadow:-20px 0 70px rgba(0,0,0,.5);
+}
+
+.side-menu.active{
+    right:0;
+}
+
+.side-menu h3{
+    color:#ed4d82;
+    letter-spacing:2px;
+    margin-bottom:28px;
+    font-size:14px;
+}
+
+.side-menu a{
+    display:block;
+
+    padding:15px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    color:#a99fa5;
+
+    text-decoration:none;
+
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:#ed4d82;
+    padding-left:12px;
+}
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+.page-nav{
+    position:sticky;
+
+    top:72px;
+
+    z-index:800;
+
+    display:flex;
+    justify-content:center;
+    gap:32px;
+
+    padding:15px;
+
+    background:rgba(8,6,8,.92);
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid rgba(237,77,130,.12);
+}
+
+.page-nav a{
+    text-decoration:none;
+
+    color:#81777f;
+
+    font-size:13px;
+
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:#ed4d82;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:92vh;
+
+    padding:145px 8% 80px;
+
+    display:grid;
+
+    grid-template-columns:.9fr 1.1fr;
+
+    gap:70px;
+
+    align-items:center;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+    height:700px;
+
+    right:-350px;
+    top:-250px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(237,77,130,.18),
+            transparent 68%
+        );
+
+    filter:blur(15px);
+}
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    left:-250px;
+    bottom:-200px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(231,211,180,.08),
+            transparent 70%
+        );
+}
+
+/* HERO TEXT */
+
+.hero-text{
+    position:relative;
+    z-index:5;
+}
+
+.badge{
+    display:inline-block;
+
+    padding:8px 16px;
+
+    border:1px solid rgba(237,77,130,.45);
+
+    border-radius:30px;
+
+    color:#ed4d82;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:clamp(48px,6vw,84px);
+
+    line-height:.94;
+
+    letter-spacing:-3px;
+
+    margin-bottom:28px;
+}
+
+.hero h1 span{
+    color:#ed4d82;
+}
+
+.hero p{
+    max-width:570px;
+
+    color:#a9a0a5;
+
+    font-size:17px;
+
+    line-height:1.8;
+}
+
+.hero-buttons{
+    display:flex;
+
+    gap:15px;
+
+    margin-top:35px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 23px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.35s;
+}
+
+.btn-primary{
+    background:#ed4d82;
+
+    color:#16070e;
+}
+
+.btn-primary:hover{
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 18px 45px rgba(237,77,130,.25);
+}
+
+.btn-outline{
+    border:1px solid #45373f;
+
+    color:#e7d3b4;
+}
+
+.btn-outline:hover{
+    border-color:#ed4d82;
+
+    color:#ed4d82;
+}
+
+/* =========================================================
+   MARINE VISUAL
+========================================================= */
+
+.marine-scene{
+
+    height:500px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:35px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 25%,
+            rgba(237,77,130,.14),
+            transparent 32%
+        ),
+
+        linear-gradient(
+            180deg,
+            #100b10 0%,
+            #0b080d 38%,
+            #050405 100%
+        );
+
+    border:1px solid #34252d;
+
+    box-shadow:
+        inset 0 0 100px rgba(0,0,0,.55),
+        0 30px 80px rgba(0,0,0,.3);
+}
+
+/* moon */
+
+.moon{
+    position:absolute;
+
+    width:85px;
+    height:85px;
+
+    border-radius:50%;
+
+    right:65px;
+    top:45px;
+
+    background:#e7d3b4;
+
+    box-shadow:
+        0 0 45px rgba(231,211,180,.25);
+}
+
+/* moon shadow */
+
+.moon::after{
+    content:"";
+
+    position:absolute;
+
+    width:75px;
+    height:75px;
+
+    border-radius:50%;
+
+    background:#100b10;
+
+    left:20px;
+    top:-7px;
+}
+
+/* horizon */
+
+.horizon{
+    position:absolute;
+
+    top:205px;
+
+    left:0;
+
+    width:100%;
+
+    height:1px;
+
+    background:#56434d;
+}
+
+/* =========================================================
+   TIDAL WAVES
+========================================================= */
+
+.tidal-wave{
+    position:absolute;
+
+    width:850px;
+    height:145px;
+
+    left:-120px;
+
+    border:3px solid #ed4d82;
+
+    border-left:0;
+    border-right:0;
+
+    border-radius:50%;
+
+    opacity:.45;
+
+    animation:
+        waveMove 6s ease-in-out infinite;
+}
+
+.wave-one{
+    top:230px;
+}
+
+.wave-two{
+    top:275px;
+
+    opacity:.3;
+
+    animation-delay:1s;
+}
+
+.wave-three{
+    top:325px;
+
+    opacity:.18;
+
+    animation-delay:2s;
+}
+
+.wave-four{
+    top:375px;
+
+    opacity:.1;
+
+    animation-delay:3s;
+}
+
+@keyframes waveMove{
+
+    0%,100%{
+        transform:
+            translateX(-35px)
+            scaleY(.88);
+    }
+
+    50%{
+        transform:
+            translateX(35px)
+            scaleY(1.12);
+    }
+}
+
+/* =========================================================
+   UNDERWATER AREA
+========================================================= */
+
+.underwater{
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:245px;
+
+    background:
+        linear-gradient(
+            transparent,
+            #08060a 30%,
+            #050405 100%
+        );
+}
+
+/* seabed */
+
+.seabed{
+    position:absolute;
+
+    bottom:0;
+
+    left:-5%;
+
+    width:110%;
+
+    height:50px;
+
+    background:
+        linear-gradient(
+            175deg,
+            transparent 0 25%,
+            #171016 26% 100%
+        );
+
+    transform:rotate(-2deg);
+}
+
+/* =========================================================
+   TURBINE STRUCTURE
+========================================================= */
+
+.turbine-pole{
+    position:absolute;
+
+    left:50%;
+
+    bottom:0;
+
+    width:8px;
+
+    height:220px;
+
+    transform:translateX(-50%);
+
+    background:
+        linear-gradient(
+            90deg,
+            #3b3035,
+            #c3ad99,
+            #3b3035
+        );
+
+    box-shadow:
+        0 0 20px rgba(231,211,180,.08);
+}
+
+/* turbine */
+
+.turbine{
+    position:absolute;
+
+    left:50%;
+
+    bottom:105px;
+
+    width:125px;
+    height:125px;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    border:8px solid #d1bca8;
+
+    background:#0d0a0d;
+
+    box-shadow:
+        0 0 35px rgba(237,77,130,.16);
+
+    animation:
+        turbineSpin 5s linear infinite;
+
+    z-index:5;
+}
+
+/* turbine blades */
+
+.turbine::before,
+.turbine::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:92px;
+
+    height:8px;
+
+    top:50%;
+    left:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:20px;
+
+    background:#ed4d82;
+}
+
+.turbine::after{
+
+    transform:
+        translate(-50%,-50%)
+        rotate(90deg);
+}
+
+.turbine-center{
+
+    position:absolute;
+
+    width:22px;
+    height:22px;
+
+    border-radius:50%;
+
+    background:#e7d3b4;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    box-shadow:
+        0 0 20px rgba(231,211,180,.35);
+}
+
+@keyframes turbineSpin{
+
+    to{
+        transform:
+            translateX(-50%)
+            rotate(360deg);
+    }
+}
+
+/* =========================================================
+   ENERGY PULSE
+========================================================= */
+
+.energy-line{
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:167px;
+
+    width:260px;
+
+    height:3px;
+
+    background:#ed4d82;
+
+    transform:
+        translateX(0);
+
+    opacity:.7;
+
+    animation:
+        energyPulse 2s linear infinite;
+}
+
+@keyframes energyPulse{
+
+    0%{
+        transform:
+            translateX(-130px)
+            scaleX(.2);
+
+        opacity:0;
+    }
+
+    30%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateX(130px)
+            scaleX(.2);
+
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   BUBBLES
+========================================================= */
+
+.bubble{
+
+    position:absolute;
+
+    bottom:40px;
+
+    width:7px;
+    height:7px;
+
+    border:1px solid #e7d3b4;
+
+    border-radius:50%;
+
+    animation:
+        bubbleRise 5s infinite;
+}
+
+.b1{
+    left:20%;
+    animation-delay:0s;
+}
+
+.b2{
+    left:35%;
+    animation-delay:1.4s;
+}
+
+.b3{
+    left:70%;
+    animation-delay:2.3s;
+}
+
+.b4{
+    left:82%;
+    animation-delay:3.2s;
+}
+
+@keyframes bubbleRise{
+
+    0%{
+        transform:
+            translateY(0)
+            scale(.7);
+
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateY(-210px)
+            scale(1.2);
+
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics{
+
+    padding:40px 8% 85px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:18px;
+}
+
+.metric{
+
+    padding:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #130d12,
+            #0b080b
+        );
+
+    border:1px solid #2c2027;
+
+    border-radius:20px;
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.metric::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:80px;
+    height:80px;
+
+    right:-35px;
+    top:-35px;
+
+    border-radius:50%;
+
+    background:#ed4d82;
+
+    opacity:.05;
+}
+
+.metric:hover{
+
+    transform:
+        translateY(-9px);
+
+    border-color:#ed4d82;
+
+    box-shadow:
+        0 20px 55px rgba(237,77,130,.1);
+}
+
+.metric small{
+
+    color:#80747c;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+.metric strong{
+
+    display:block;
+
+    margin-top:12px;
+
+    color:#ed4d82;
+
+    font-size:31px;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+
+    padding:90px 8%;
+}
+
+.section-title{
+
+    margin-bottom:45px;
+}
+
+.section-title span{
+
+    color:#ed4d82;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+}
+
+.section-title h2{
+
+    font-size:42px;
+
+    margin-top:10px;
+
+    letter-spacing:-1px;
+}
+
+/* =========================================================
+   ENERGY FLOW
+========================================================= */
+
+.flow{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:18px;
+}
+
+.flow-card{
+
+    min-height:245px;
+
+    padding:30px;
+
+    background:#100b10;
+
+    border:1px solid #2b2027;
+
+    border-radius:23px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:.4s;
+}
+
+.flow-card:hover{
+
+    transform:
+        translateY(-10px)
+        scale(1.01);
+
+    border-color:#ed4d82;
+
+    box-shadow:
+        0 25px 60px rgba(237,77,130,.08);
+}
+
+.flow-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:140px;
+    height:140px;
+
+    right:-55px;
+    bottom:-55px;
+
+    border-radius:50%;
+
+    background:#ed4d82;
+
+    opacity:.05;
+}
+
+.flow-number{
+
+    font-size:45px;
+
+    font-weight:900;
+
+    color:#5d4651;
+
+    margin-bottom:20px;
+
+    transition:.3s;
+}
+
+.flow-card:hover .flow-number{
+
+    color:#ed4d82;
+
+}
+
+.flow-card h3{
+
+    margin-bottom:12px;
+}
+
+.flow-card p{
+
+    color:#81777e;
+
+    line-height:1.7;
+
+    font-size:14px;
+}
+
+/* =========================================================
+   ANALYTICS
+========================================================= */
+
+.analytics{
+
+    display:grid;
+
+    grid-template-columns:
+        1.25fr .75fr;
+
+    gap:25px;
+}
+
+.chart-box,
+.capacity-box{
+
+    padding:30px;
+
+    background:#0e0a0e;
+
+    border:1px solid #2b2027;
+
+    border-radius:25px;
+}
+
+/* chart */
+
+.chart{
+
+    height:275px;
+
+    margin-top:30px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:9px;
+}
+
+.bar{
+
+    flex:1;
+
+    min-height:20px;
+
+    border-radius:
+        7px 7px 0 0;
+
+    background:
+        linear-gradient(
+            to top,
+            #68233e,
+            #ed4d82
+        );
+
+    position:relative;
+
+    transition:.45s;
+}
+
+.bar:hover{
+
+    transform:
+        scaleY(1.08);
+
+    filter:
+        brightness(1.25);
+}
+
+.bar span{
+
+    position:absolute;
+
+    top:-24px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    color:#756a72;
+
+    font-size:10px;
+}
+
+/* =========================================================
+   CAPACITY VISUAL
+========================================================= */
+
+.capacity-ring{
+
+    width:210px;
+    height:210px;
+
+    border-radius:50%;
+
+    margin:28px auto;
+
+    background:
+        conic-gradient(
+            #ed4d82 0 72%,
+            #32242c 72% 100%
+        );
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+        0 0 50px rgba(237,77,130,.08);
+}
+
+.capacity-inner{
+
+    width:140px;
+    height:140px;
+
+    border-radius:50%;
+
+    background:#0e0a0e;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+}
+
+.capacity-inner strong{
+
+    font-size:30px;
+
+    color:#e7d3b4;
+}
+
+.capacity-inner small{
+
+    color:#756b71;
+}
+
+/* =========================================================
+   TSUNAMI ALERT
+========================================================= */
+
+.alert-box{
+
+    margin-top:25px;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    border:1px solid rgba(237,77,130,.3);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(237,77,130,.08),
+            rgba(231,211,180,.03)
+        );
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.alert-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.alert-icon{
+
+    width:45px;
+    height:45px;
+
+    border-radius:12px;
+
+    background:#ed4d82;
+
+    color:#16070e;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:21px;
+}
+
+.alert-box strong{
+
+    display:block;
+
+    margin-bottom:5px;
+}
+
+.alert-box p{
+
+    color:#81777e;
+
+    font-size:13px;
+}
+
+/* =========================================================
+   AI SECTION
+========================================================= */
+
+.ai-box{
+
+    padding:42px;
+
+    border-radius:30px;
+
+    border:1px solid #3b2731;
+
+    background:
+
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(237,77,130,.13),
+            transparent 35%
+        ),
+
+        #110b11;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.ai-box::before{
+
+    content:"AI";
+
+    position:absolute;
+
+    right:25px;
+    top:-30px;
+
+    font-size:170px;
+
+    font-weight:900;
+
+    color:white;
+
+    opacity:.025;
+}
+
+.ai-box h2{
+
+    color:#ed4d82;
+
+    margin-bottom:15px;
+}
+
+.ai-box > p{
+
+    color:#a0979d;
+
+    line-height:1.8;
+
+    max-width:850px;
+}
+
+.ai-grid{
+
+    margin-top:28px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+}
+
+.ai-item{
+
+    padding:22px;
+
+    background:#0a070a;
+
+    border:1px solid #292027;
+
+    border-radius:17px;
+
+    transition:.35s;
+}
+
+.ai-item:hover{
+
+    transform:
+        translateY(-6px);
+
+    border-color:#ed4d82;
+}
+
+.ai-item strong{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#e7d3b4;
+}
+
+.ai-item p{
+
+    color:#756c72;
+
+    line-height:1.6;
+
+    font-size:13px;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:45px 8%;
+
+    border-top:1px solid #241a21;
+
+    color:#625960;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:950px){
+
+    .hero{
+
+        grid-template-columns:1fr;
+    }
+
+    .metrics{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .flow{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .analytics{
+
+        grid-template-columns:1fr;
+    }
+
+    .ai-grid{
+
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .navbar{
+
+        padding:0 18px;
+    }
+
+    .logo{
+
+        font-size:17px;
+
+        letter-spacing:2px;
+    }
+
+    .page-nav{
+
+        justify-content:flex-start;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+    }
+
+    .hero{
+
+        padding:
+            125px 5% 55px;
+    }
+
+    .hero h1{
+
+        font-size:52px;
+    }
+
+    .marine-scene{
+
+        height:390px;
+    }
+
+    .moon{
+
+        right:35px;
+    }
+
+    .turbine{
+
+        transform:
+            translateX(-50%)
+            scale(.85);
+    }
+
+    .metrics{
+
+        grid-template-columns:1fr;
+
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    .flow{
+
+        grid-template-columns:1fr;
+    }
+
+    .section{
+
+        padding:
+            65px 5%;
+    }
+
+    .section-title h2{
+
+        font-size:32px;
+    }
+
+    .ai-box{
+
+        padding:28px;
+    }
+
+    footer{
+
+        padding:
+            35px 5%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        POLARIS <span>/ MARINE</span>
+    </div>
+
+    <!-- THREE DASH MENU -->
+    <div class="menu-btn" onclick="toggleMenu()">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div class="side-menu" id="sideMenu">
+
+    <h3>POLARIS NAVIGATION</h3>
+
+    <a href="index.html">
+        ⌂ Home
+    </a>
+
+    <a href="renewable.html">
+        ☀ Renewable Energy
+    </a>
+
+    <a href="nonrenewable.html">
+        ⚡ Backup & Energy Support
+    </a>
+
+    <a href="solar.html">
+        Solar Energy
+    </a>
+
+    <a href="wind.html">
+        Wind Energy
+    </a>
+
+    <a href="hydro.html">
+        Hydropower
+    </a>
+
+    <a href="geothermal.html">
+        Geothermal Energy
+    </a>
+
+    <a href="marine.html">
+        Marine Energy
+    </a>
+
+    <a href="admin.html">
+        Admin Dashboard
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     PAGE NAVIGATION
+===================================================== -->
+
+<div class="page-nav">
+
+    <a href="#overview">
+        Overview
+    </a>
+
+    <a href="#flow">
+        Energy Flow
+    </a>
+
+    <a href="#analytics">
+        Analytics
+    </a>
+
+    <a href="#ai">
+        AI Intelligence
+    </a>
+
+    <a href="renewable.html">
+        ← Renewable
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="overview">
+
+
+    <div class="hero-text">
+
+        <div class="badge">
+            RENEWABLE SOURCE #05
+        </div>
+
+        <h1>
+            Energy from
+            <br>
+            <span>Ocean Motion.</span>
+        </h1>
+
+        <p>
+            Marine energy captures power from tides, waves and
+            ocean currents. POLARIS uses this resource as part
+            of its intelligent renewable energy fleet.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="#flow"
+                class="btn btn-primary"
+            >
+                Explore Energy Flow
+            </a>
+
+            <a
+                href="#analytics"
+                class="btn btn-outline"
+            >
+                View Analytics
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         MARINE ANIMATION
+    ================================================= -->
+
+    <div class="marine-scene">
+
+        <div class="moon"></div>
+
+        <div class="horizon"></div>
+
+        <div class="tidal-wave wave-one"></div>
+
+        <div class="tidal-wave wave-two"></div>
+
+        <div class="tidal-wave wave-three"></div>
+
+        <div class="tidal-wave wave-four"></div>
+
+
+        <div class="underwater"></div>
+
+        <div class="turbine-pole"></div>
+
+        <div class="turbine">
+
+            <div class="turbine-center"></div>
+
+        </div>
+
+        <div class="energy-line"></div>
+
+        <div class="bubble b1"></div>
+
+        <div class="bubble b2"></div>
+
+        <div class="bubble b3"></div>
+
+        <div class="bubble b4"></div>
+
+        <div class="seabed"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     METRICS
+===================================================== -->
+
+<section class="metrics">
+
+
+    <div class="metric">
+
+        <small>
+            INSTALLED CAPACITY
+        </small>
+
+        <strong>
+            50 kW
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            RESOURCE TYPE
+        </small>
+
+        <strong>
+            MARINE
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            ENERGY PRIORITY
+        </small>
+
+        <strong>
+            #05
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            SYSTEM STATUS
+        </small>
+
+        <strong>
+            ONLINE
+        </strong>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     ENERGY FLOW
+===================================================== -->
+
+<section
+    class="section"
+    id="flow"
+>
+
+    <div class="section-title">
+
+        <span>
+            ENERGY CONVERSION
+        </span>
+
+        <h2>
+            Ocean → Motion → Electricity
+        </h2>
+
+    </div>
+
+
+    <div class="flow">
+
+
+        <div class="flow-card">
+
+            <div class="flow-number">
+                01
+            </div>
+
+            <h3>
+                Ocean Movement
+            </h3>
+
+            <p>
+                Tides, waves and ocean currents create
+                continuous movement in the marine environment.
+            </p>
+
+        </div>
+
+
+        <div class="flow-card">
+
+            <div class="flow-number">
+                02
+            </div>
+
+            <h3>
+                Turbine Rotation
+            </h3>
+
+            <p>
+                Moving water applies force to an underwater
+                turbine and creates mechanical motion.
+            </p>
+
+        </div>
+
+
+        <div class="flow-card">
+
+            <div class="flow-number">
+                03
+            </div>
+
+            <h3>
+                Energy Conversion
+            </h3>
+
+            <p>
+                The turbine's mechanical rotation is converted
+                into electrical energy by the generator.
+            </p>
+
+        </div>
+
+
+        <div class="flow-card">
+
+            <div class="flow-number">
+                04
+            </div>
+
+            <h3>
+                Station Supply
+            </h3>
+
+            <p>
+                Generated electricity enters the station's
+                intelligent energy management system.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ANALYTICS
+===================================================== -->
+
+<section
+    class="section"
+    id="analytics"
+>
+
+    <div class="section-title">
+
+        <span>
+            RESOURCE ANALYTICS
+        </span>
+
+        <h2>
+            Marine Generation
+        </h2>
+
+    </div>
+
+
+    <div class="analytics">
+
+
+        <!-- CHART -->
+
+        <div class="chart-box">
+
+            <h3>
+                24-Hour Output
+            </h3>
+
+
+            <div class="chart">
+
+
+                <div
+                    class="bar"
+                    style="height:52%"
+                >
+                    <span>00</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:67%"
+                >
+                    <span>02</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:76%"
+                >
+                    <span>04</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:62%"
+                >
+                    <span>06</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:84%"
+                >
+                    <span>08</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:71%"
+                >
+                    <span>10</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:91%"
+                >
+                    <span>12</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:80%"
+                >
+                    <span>14</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:64%"
+                >
+                    <span>16</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:87%"
+                >
+                    <span>18</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:74%"
+                >
+                    <span>20</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:59%"
+                >
+                    <span>22</span>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- CAPACITY -->
+
+        <div class="capacity-box">
+
+            <h3>
+                Available Capacity
+            </h3>
+
+
+            <div class="capacity-ring">
+
+                <div class="capacity-inner">
+
+                    <div>
+
+                        <strong>
+                            50 kW
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            MAX OUTPUT
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p
+                style="
+                text-align:center;
+                color:#756c72;
+                font-size:13px;
+                "
+            >
+                Installed marine energy capacity
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- TSUNAMI RESPONSE -->
+
+    <div class="alert-box">
+
+
+        <div class="alert-left">
+
+            <div class="alert-icon">
+                !
+            </div>
+
+            <div>
+
+                <strong>
+                    Tsunami Response Protocol
+                </strong>
+
+                <p>
+                    During a tsunami event, marine energy is
+                    automatically switched OFF for safety.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <strong
+            style="
+            color:#ed4d82;
+            "
+        >
+            AUTO SWITCH
+        </strong>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     AI INTELLIGENCE
+===================================================== -->
+
+<section
+    class="section"
+    id="ai"
+>
+
+    <div class="ai-box">
+
+
+        <h2>
+            ✦ AI Marine Energy Intelligence
+        </h2>
+
+
+        <p>
+
+            POLARIS continuously evaluates marine energy
+            availability and coordinates it with the rest of
+            the renewable fleet. If marine energy becomes
+            unavailable, the optimizer automatically shifts
+            power to other available sources, battery storage
+            or backup generation.
+
+        </p>
+
+
+        <div class="ai-grid">
+
+
+            <div class="ai-item">
+
+                <strong>
+                    Marine Availability
+                </strong>
+
+                <p>
+                    The optimizer considers the available
+                    marine generation before selecting the
+                    station's energy mix.
+                </p>
+
+            </div>
+
+
+            <div class="ai-item">
+
+                <strong>
+                    Disaster Protection
+                </strong>
+
+                <p>
+                    During the defined tsunami event window,
+                    marine energy is switched OFF automatically.
+                </p>
+
+            </div>
+
+
+            <div class="ai-item">
+
+                <strong>
+                    AUTO MODE
+                </strong>
+
+                <p>
+                    POLARIS automatically selects alternative
+                    resources whenever marine power is unavailable.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div>
+        POLARIS Smart Energy Management
+    </div>
+
+    <div>
+        Marine Energy • 50 kW
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =========================================================
+   THREE DASH MENU
+========================================================= */
+
+function toggleMenu(){
+
+    const menu =
+        document.getElementById("sideMenu");
+
+    menu.classList.toggle("active");
+
+}
+
+
+/* =========================================================
+   DYNAMIC MARINE GENERATION
+========================================================= */
+
+setInterval(function(){
+
+    const bars =
+        document.querySelectorAll(".bar");
+
+    bars.forEach(function(bar){
+
+        const value =
+            45 + Math.random() * 48;
+
+        bar.style.height =
+            value + "%";
+
+    });
+
+},3000);
+
+
+/* =========================================================
+   CLOSE MENU WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener("click",function(event){
+
+    const menu =
+        document.getElementById("sideMenu");
+
+    const button =
+        document.querySelector(".menu-btn");
+
+    if(
+        menu.classList.contains("active") &&
+        !menu.contains(event.target) &&
+        !button.contains(event.target)
+    ){
+
+        menu.classList.remove("active");
+
+    }
+
+});
+
+
+/* =========================================================
+   LIVE CAPACITY RING
+========================================================= */
+
+setInterval(function(){
+
+    const ring =
+        document.querySelector(".capacity-ring");
+
+    const percentage =
+        65 + Math.random() * 15;
+
+    ring.style.background =
+        `conic-gradient(
+            #ed4d82 0 ${percentage}%,
+            #32242c ${percentage}% 100%
+        )`;
+
+},4000);
+
+</script>
+
+</body>
+</html>

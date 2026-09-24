@@ -1,0 +1,3822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLARIS | Backup & Energy Support</title>
+
+
+<style>
+
+/* =========================================================
+   POLARIS
+   BACKUP & ENERGY SUPPORT
+   WARM ORANGE / AMBER THEME
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+
+:root{
+
+    --bg:#0b0805;
+    --bg2:#120d08;
+
+    --card:#171009;
+    --card2:#20150c;
+
+    --orange:#ff8a3d;
+    --orange2:#ffb45c;
+    --amber:#ffc857;
+
+    --gold:#ffe08a;
+
+    --red:#ff5c45;
+
+    --green:#70ffae;
+
+    --white:#fff8ef;
+    --text:#eadfd3;
+    --muted:#998b7d;
+
+    --border:rgba(255,165,80,.18);
+
+    --shadow:
+        0 20px 60px
+        rgba(255,100,20,.15);
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+
+    margin:0;
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(255,138,61,.12),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(255,200,87,.07),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 50% 90%,
+            rgba(255,92,69,.06),
+            transparent 30%
+        ),
+
+        var(--bg);
+
+    color:var(--white);
+
+    overflow-x:hidden;
+
+}
+
+
+/* =========================================================
+   WARM GLOW BACKGROUND
+========================================================= */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:-20%;
+
+    pointer-events:none;
+
+    z-index:-1;
+
+    background:
+
+        radial-gradient(
+            ellipse at 20% 20%,
+            rgba(255,138,61,.10),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            ellipse at 80% 30%,
+            rgba(255,200,87,.07),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            ellipse at 50% 85%,
+            rgba(255,92,69,.06),
+            transparent 35%
+        );
+
+    animation:
+        warmGlow 12s
+        ease-in-out
+        infinite alternate;
+
+}
+
+
+@keyframes warmGlow{
+
+    from{
+
+        transform:
+            translate(-2%,0)
+            scale(1);
+
+    }
+
+    to{
+
+        transform:
+            translate(2%,2%)
+            scale(1.08);
+
+    }
+
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+
+    height:72px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 6%;
+
+    background:
+        rgba(11,8,5,.88);
+
+    backdrop-filter:
+        blur(20px);
+
+    border-bottom:
+        1px solid
+        rgba(255,165,80,.12);
+
+    z-index:1000;
+
+}
+
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:21px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+}
+
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--orange),
+            var(--amber)
+        );
+
+    box-shadow:
+
+        0 0 25px
+        rgba(255,138,61,.35);
+
+    font-size:18px;
+
+}
+
+
+.logo span{
+
+    color:var(--orange2);
+
+}
+
+
+/* =========================================================
+   THREE DASH MENU
+========================================================= */
+
+.menu-btn{
+
+    width:45px;
+    height:45px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.03);
+
+    color:white;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+.menu-btn:hover{
+
+    background:
+        rgba(255,138,61,.15);
+
+    border-color:
+        var(--orange);
+
+    box-shadow:
+
+        0 0 25px
+        rgba(255,138,61,.25);
+
+    transform:
+        rotate(5deg);
+
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.68);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:1500;
+
+}
+
+
+.overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu{
+
+    position:fixed;
+
+    top:0;
+
+    right:-350px;
+
+    width:330px;
+
+    height:100vh;
+
+    padding:
+        90px
+        25px
+        30px;
+
+    background:
+
+        linear-gradient(
+            160deg,
+            #1b1008,
+            #090705
+        );
+
+    border-left:
+        1px solid
+        rgba(255,165,80,.20);
+
+    transition:
+        .4s
+        cubic-bezier(.77,0,.18,1);
+
+    z-index:1600;
+
+}
+
+
+.side-menu.active{
+
+    right:0;
+
+}
+
+
+.close-menu{
+
+    position:absolute;
+
+    top:24px;
+    right:25px;
+
+    border:0;
+
+    background:none;
+
+    color:white;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+}
+
+
+.menu-title{
+
+    margin-bottom:25px;
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:14px;
+
+    color:var(--muted);
+
+    letter-spacing:2px;
+
+}
+
+
+.side-menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:
+        15px
+        16px;
+
+    margin:8px 0;
+
+    border-radius:12px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+
+.side-menu a:hover{
+
+    color:white;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(255,138,61,.16),
+            rgba(255,200,87,.05)
+        );
+
+    transform:
+        translateX(7px);
+
+    box-shadow:
+
+        inset 3px 0
+        var(--orange);
+
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+.page-nav{
+
+    position:sticky;
+
+    top:72px;
+
+    z-index:900;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px;
+
+    background:
+        rgba(11,8,5,.76);
+
+    backdrop-filter:
+        blur(16px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+
+    overflow-x:auto;
+
+}
+
+
+.page-nav a{
+
+    white-space:nowrap;
+
+    padding:
+        9px
+        15px;
+
+    border-radius:20px;
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+.page-nav a:hover,
+.page-nav a.active{
+
+    color:white;
+
+    background:
+        rgba(255,138,61,.13);
+
+    box-shadow:
+
+        0 0 20px
+        rgba(255,138,61,.10);
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    position:relative;
+
+    min-height:600px;
+
+    padding:
+        150px
+        7%
+        90px;
+
+    display:flex;
+
+    align-items:center;
+
+    overflow:hidden;
+
+}
+
+
+/* warm abstract hero */
+
+.hero-image{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(11,8,5,.98) 0%,
+            rgba(11,8,5,.88) 45%,
+            rgba(11,8,5,.45) 100%
+        ),
+
+        radial-gradient(
+            circle at 75% 45%,
+            rgba(255,138,61,.25),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 85% 70%,
+            rgba(255,200,87,.12),
+            transparent 30%
+        );
+
+    opacity:.95;
+
+    z-index:-2;
+
+}
+
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        linear-gradient(
+            120deg,
+            rgba(255,138,61,.10),
+            transparent 45%,
+            rgba(255,200,87,.05)
+        );
+
+    z-index:-1;
+
+}
+
+
+.hero-content{
+
+    max-width:850px;
+
+}
+
+
+.eyebrow{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:
+        8px
+        14px;
+
+    border:
+        1px solid
+        rgba(255,138,61,.28);
+
+    border-radius:30px;
+
+    background:
+        rgba(255,138,61,.06);
+
+    color:var(--orange2);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:22px;
+
+}
+
+
+.status-dot{
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:
+        var(--orange);
+
+    box-shadow:
+
+        0 0 12px
+        var(--orange);
+
+    animation:
+        pulse 1.5s
+        infinite;
+
+}
+
+
+@keyframes pulse{
+
+    50%{
+
+        opacity:.4;
+
+        transform:
+            scale(.7);
+
+    }
+
+}
+
+
+.hero h1{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(45px,7vw,82px);
+
+    line-height:.98;
+
+    letter-spacing:-4px;
+
+    margin-bottom:25px;
+
+}
+
+
+.gradient-text{
+
+    background:
+
+        linear-gradient(
+            90deg,
+            var(--orange2),
+            var(--amber),
+            var(--gold)
+        );
+
+    -webkit-background-clip:text;
+
+    background-clip:text;
+
+    color:transparent;
+
+}
+
+
+.hero p{
+
+    max-width:680px;
+
+    color:var(--text);
+
+    font-size:17px;
+
+    line-height:1.8;
+
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:40px;
+
+}
+
+
+.metric{
+
+    padding:20px;
+
+    border:
+        1px solid
+        rgba(255,165,80,.14);
+
+    background:
+        rgba(23,16,9,.72);
+
+    backdrop-filter:
+        blur(15px);
+
+    border-radius:18px;
+
+    transition:.35s;
+
+}
+
+
+.metric:hover{
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        rgba(255,138,61,.45);
+
+    box-shadow:
+
+        0 20px 50px
+        rgba(255,100,20,.16);
+
+}
+
+
+.metric-label{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    margin-bottom:8px;
+
+}
+
+
+.metric-value{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+
+.metric-value.orange{
+
+    color:
+        var(--orange2);
+
+}
+
+
+.metric-value.green{
+
+    color:
+        var(--green);
+
+}
+
+
+.metric-value.gold{
+
+    color:
+        var(--amber);
+
+}
+
+
+/* =========================================================
+   GENERAL SECTIONS
+========================================================= */
+
+.section{
+
+    padding:
+        90px
+        7%;
+
+}
+
+
+.section-heading{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    gap:30px;
+
+    margin-bottom:35px;
+
+}
+
+
+.section-heading h2{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(30px,4vw,48px);
+
+    letter-spacing:-2px;
+
+}
+
+
+.section-heading p{
+
+    max-width:520px;
+
+    color:var(--muted);
+
+    line-height:1.7;
+
+}
+
+
+.kicker{
+
+    color:
+        var(--orange2);
+
+    font-size:12px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+    margin-bottom:10px;
+
+}
+
+
+/* =========================================================
+   SUPPORT RESOURCE CARDS
+========================================================= */
+
+.resource-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+
+}
+
+
+.resource-card{
+
+    position:relative;
+
+    min-height:310px;
+
+    padding:27px;
+
+    overflow:hidden;
+
+    border:
+        1px solid
+        rgba(255,165,80,.14);
+
+    border-radius:24px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(32,21,12,.94),
+            rgba(13,9,6,.94)
+        );
+
+    transition:
+
+        transform .4s,
+        border .4s,
+        box-shadow .4s;
+
+}
+
+
+.resource-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+
+    height:180px;
+
+    right:-65px;
+
+    top:-65px;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(255,138,61,.20),
+            transparent 70%
+        );
+
+    transition:.4s;
+
+}
+
+
+.resource-card:hover{
+
+    transform:
+        translateY(-10px)
+        rotateX(2deg);
+
+    border-color:
+        rgba(255,138,61,.55);
+
+    box-shadow:
+
+        0 25px 70px
+        rgba(255,100,20,.18);
+
+}
+
+
+.resource-card:hover::before{
+
+    transform:
+        scale(1.7);
+
+}
+
+
+.resource-icon{
+
+    width:60px;
+    height:60px;
+
+    display:grid;
+
+    place-items:center;
+
+    margin-bottom:22px;
+
+    border-radius:17px;
+
+    font-size:28px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,138,61,.18),
+            rgba(255,200,87,.08)
+        );
+
+    border:
+        1px solid
+        rgba(255,165,80,.22);
+
+    transition:.35s;
+
+}
+
+
+.resource-card:hover .resource-icon{
+
+    transform:
+        scale(1.08)
+        rotate(-4deg);
+
+    box-shadow:
+
+        0 0 25px
+        rgba(255,138,61,.18);
+
+}
+
+
+.resource-card:nth-child(1)
+.resource-icon{
+
+    color:
+        var(--orange2);
+
+}
+
+
+.resource-card:nth-child(2)
+.resource-icon{
+
+    color:
+        var(--gold);
+
+}
+
+
+.resource-card:nth-child(3)
+.resource-icon{
+
+    color:
+        var(--orange);
+
+}
+
+
+.resource-card:nth-child(4)
+.resource-icon{
+
+    color:
+        #ff9b67;
+
+}
+
+
+.resource-card:nth-child(5)
+.resource-icon{
+
+    color:
+        #ffd76a;
+
+}
+
+
+.resource-card h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:21px;
+
+    margin-bottom:9px;
+
+}
+
+
+.resource-card p{
+
+    color:var(--muted);
+
+    font-size:13px;
+
+    line-height:1.65;
+
+    margin-bottom:22px;
+
+}
+
+
+.resource-bottom{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    position:absolute;
+
+    bottom:25px;
+
+    left:27px;
+
+    right:27px;
+
+}
+
+
+.capacity{
+
+    font-weight:700;
+
+    color:
+        var(--orange2);
+
+}
+
+
+.explore{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    color:
+        var(--orange2);
+
+    font-size:12px;
+
+    font-weight:800;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+
+.explore:hover{
+
+    color:
+        var(--gold);
+
+    letter-spacing:.8px;
+
+    transform:
+        translateX(4px);
+
+}
+
+
+/* =========================================================
+   BACKUP INTELLIGENCE
+========================================================= */
+
+.backup-panel{
+
+    padding:35px;
+
+    border-radius:28px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,138,61,.10),
+            rgba(255,200,87,.04)
+        );
+
+    border:
+        1px solid
+        rgba(255,165,80,.16);
+
+}
+
+
+.backup-flow{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    overflow-x:auto;
+
+    padding:
+        10px
+        0
+        20px;
+
+}
+
+
+.backup-step{
+
+    min-width:170px;
+
+    padding:20px;
+
+    text-align:center;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    transition:.3s;
+
+}
+
+
+.backup-step:hover{
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        rgba(255,138,61,.45);
+
+    background:
+        rgba(255,138,61,.07);
+
+}
+
+
+.step-number{
+
+    width:30px;
+    height:30px;
+
+    display:grid;
+
+    place-items:center;
+
+    margin:
+        0
+        auto
+        10px;
+
+    border-radius:50%;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--orange),
+            var(--amber)
+        );
+
+    color:#120b05;
+
+    font-size:11px;
+
+    font-weight:900;
+
+}
+
+
+.backup-step strong{
+
+    font-size:14px;
+
+}
+
+
+.backup-step small{
+
+    display:block;
+
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+
+.flow-arrow{
+
+    color:
+        var(--orange2);
+
+    font-size:23px;
+
+}
+
+
+/* =========================================================
+   BATTERY INTELLIGENCE
+========================================================= */
+
+.battery-section{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1.3fr;
+
+    gap:25px;
+
+}
+
+
+.battery-visual{
+
+    min-height:390px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(255,138,61,.13),
+            transparent 55%
+        ),
+
+        rgba(20,13,8,.8);
+
+    border:
+        1px solid
+        rgba(255,165,80,.15);
+
+}
+
+
+.battery{
+
+    width:170px;
+
+    height:270px;
+
+    padding:10px;
+
+    border-radius:20px;
+
+    border:
+        4px solid
+        rgba(255,200,87,.7);
+
+    position:relative;
+
+    box-shadow:
+
+        0 0 50px
+        rgba(255,138,61,.18);
+
+}
+
+
+.battery::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:60px;
+
+    height:13px;
+
+    top:-17px;
+
+    left:51px;
+
+    border-radius:
+        6px
+        6px
+        0
+        0;
+
+    background:
+        var(--amber);
+
+}
+
+
+.battery-level{
+
+    position:absolute;
+
+    left:10px;
+    right:10px;
+    bottom:10px;
+
+    height:70%;
+
+    border-radius:12px;
+
+    background:
+
+        linear-gradient(
+            to top,
+            var(--orange),
+            var(--amber)
+        );
+
+    box-shadow:
+
+        0 0 30px
+        rgba(255,138,61,.28);
+
+    animation:
+        batteryPulse 3s
+        ease-in-out
+        infinite alternate;
+
+}
+
+
+@keyframes batteryPulse{
+
+    from{
+
+        opacity:.78;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+
+.battery-percent{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:2;
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:35px;
+
+    font-weight:800;
+
+    text-shadow:
+        0 2px 10px black;
+
+}
+
+
+.battery-info{
+
+    padding:28px;
+
+    border-radius:28px;
+
+    background:
+        rgba(23,16,9,.78);
+
+    border:
+        1px solid
+        rgba(255,165,80,.14);
+
+}
+
+
+.battery-info h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+}
+
+
+.battery-info > p{
+
+    color:var(--muted);
+
+    line-height:1.7;
+
+    font-size:14px;
+
+    margin-bottom:25px;
+
+}
+
+
+.battery-stats{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:12px;
+
+}
+
+
+.battery-stat{
+
+    padding:17px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+}
+
+
+.battery-stat span{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-bottom:7px;
+
+}
+
+
+.battery-stat strong{
+
+    font-size:19px;
+
+    color:
+        var(--orange2);
+
+}
+
+
+/* =========================================================
+   AI PRE-CHARGE
+========================================================= */
+
+.ai-banner{
+
+    position:relative;
+
+    overflow:hidden;
+
+    margin-top:30px;
+
+    padding:35px;
+
+    border-radius:28px;
+
+    background:
+
+        linear-gradient(
+            110deg,
+            rgba(255,138,61,.13),
+            rgba(255,200,87,.06),
+            rgba(255,92,69,.05)
+        );
+
+    border:
+        1px solid
+        rgba(255,165,80,.20);
+
+}
+
+
+.ai-banner::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:300px;
+
+    height:300px;
+
+    right:-120px;
+
+    top:-150px;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(255,138,61,.18),
+            transparent 70%
+        );
+
+}
+
+
+.ai-banner h3{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:26px;
+
+    margin-bottom:10px;
+
+}
+
+
+.ai-banner p{
+
+    max-width:750px;
+
+    color:var(--text);
+
+    line-height:1.7;
+
+    font-size:14px;
+
+}
+
+
+.ai-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:20px;
+
+    padding:
+        8px
+        13px;
+
+    border-radius:20px;
+
+    background:
+        rgba(112,255,174,.07);
+
+    border:
+        1px solid
+        rgba(112,255,174,.20);
+
+    color:
+        var(--green);
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+/* =========================================================
+   BACKUP ALERT
+========================================================= */
+
+.alert-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+
+}
+
+
+.alert-card{
+
+    padding:23px;
+
+    border-radius:20px;
+
+    background:
+        rgba(23,16,9,.75);
+
+    border:
+        1px solid
+        rgba(255,165,80,.12);
+
+    transition:.3s;
+
+}
+
+
+.alert-card:hover{
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        rgba(255,138,61,.45);
+
+}
+
+
+.alert-icon{
+
+    width:45px;
+
+    height:45px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:13px;
+
+    background:
+        rgba(255,138,61,.10);
+
+    color:
+        var(--orange2);
+
+    font-size:20px;
+
+    margin-bottom:15px;
+
+}
+
+
+.alert-card h4{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    margin-bottom:7px;
+
+}
+
+
+.alert-card p{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+
+/* =========================================================
+   STATUS PANEL
+========================================================= */
+
+.status-panel{
+
+    margin-top:30px;
+
+    padding:30px;
+
+    border-radius:25px;
+
+    background:
+        rgba(23,16,9,.76);
+
+    border:
+        1px solid
+        rgba(255,165,80,.14);
+
+}
+
+
+.status-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:
+        16px
+        0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+
+}
+
+
+.status-row:last-child{
+
+    border-bottom:0;
+
+}
+
+
+.status-source{
+
+    flex:1;
+
+}
+
+
+.status-source strong{
+
+    display:block;
+
+    font-size:14px;
+
+    margin-bottom:4px;
+
+}
+
+
+.status-source span{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+
+.status-pill{
+
+    padding:
+        6px
+        11px;
+
+    border-radius:20px;
+
+    font-size:10px;
+
+    font-weight:800;
+
+}
+
+
+.status-online{
+
+    color:
+        var(--green);
+
+    background:
+        rgba(112,255,174,.08);
+
+    border:
+        1px solid
+        rgba(112,255,174,.18);
+
+}
+
+
+.status-standby{
+
+    color:
+        var(--orange2);
+
+    background:
+        rgba(255,138,61,.08);
+
+    border:
+        1px solid
+        rgba(255,138,61,.18);
+
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta{
+
+    margin-top:70px;
+
+    text-align:center;
+
+    padding:
+        60px
+        20px;
+
+    border-radius:30px;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(255,138,61,.13),
+            transparent 65%
+        );
+
+    border:
+        1px solid
+        rgba(255,165,80,.12);
+
+}
+
+
+.cta h2{
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-size:
+        clamp(30px,5vw,50px);
+
+    margin-bottom:15px;
+
+}
+
+
+.cta p{
+
+    color:var(--muted);
+
+    max-width:600px;
+
+    margin:auto;
+
+    line-height:1.7;
+
+}
+
+
+.cta-button{
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    padding:
+        13px
+        23px;
+
+    border-radius:13px;
+
+    color:#180d05;
+
+    text-decoration:none;
+
+    font-weight:800;
+
+    font-size:13px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--orange),
+            var(--amber)
+        );
+
+    box-shadow:
+
+        0 10px 35px
+        rgba(255,138,61,.22);
+
+    transition:.3s;
+
+}
+
+
+.cta-button:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.03);
+
+    box-shadow:
+
+        0 15px 45px
+        rgba(255,138,61,.35);
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:
+        40px
+        7%;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.06);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+
+.footer-logo{
+
+    color:
+        var(--orange2);
+
+    font-family:
+        'Space Grotesk',
+        sans-serif;
+
+    font-weight:700;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .resource-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .metrics{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .battery-section{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .alert-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .navbar{
+
+        padding:
+            0 20px;
+
+    }
+
+
+    .hero{
+
+        padding:
+            130px
+            20px
+            70px;
+
+    }
+
+
+    .hero h1{
+
+        letter-spacing:-2px;
+
+    }
+
+
+    .metrics{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .resource-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .section{
+
+        padding:
+            65px
+            20px;
+
+    }
+
+
+    .section-heading{
+
+        display:block;
+
+    }
+
+
+    .section-heading p{
+
+        margin-top:15px;
+
+    }
+
+
+    .battery-stats{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .alert-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .page-nav{
+
+        justify-content:flex-start;
+
+    }
+
+
+    footer{
+
+        flex-direction:column;
+
+    }
+
+
+    .side-menu{
+
+        width:85%;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ⚡
+        </div>
+
+        POLAR<span>IS</span>
+
+    </div>
+
+
+    <!-- THREE DASH BUTTON -->
+
+    <button
+        class="menu-btn"
+        onclick="openMenu()">
+
+        ☰
+
+    </button>
+
+</nav>
+
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+    class="overlay"
+    id="overlay"
+    onclick="closeMenu()">
+</div>
+
+
+<div
+    class="side-menu"
+    id="sideMenu">
+
+
+    <button
+        class="close-menu"
+        onclick="closeMenu()">
+
+        ×
+
+    </button>
+
+
+    <div class="menu-title">
+
+        POLARIS CONTROL CENTER
+
+    </div>
+
+
+    <a href="index.html">
+        ⌂ &nbsp; Home
+    </a>
+
+
+    <a href="renewable.html">
+        ⚡ &nbsp; Renewable Energy
+    </a>
+
+
+    <a href="nonrenewable.html">
+        ◈ &nbsp; Backup & Energy Support
+    </a>
+
+
+    <a href="admin.html">
+        ◉ &nbsp; Admin Dashboard
+    </a>
+
+
+    <a href="disaster.html">
+        ⚠ &nbsp; Disaster Management
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     PAGE NAVIGATION
+===================================================== -->
+
+<div class="page-nav">
+
+
+    <a
+        href="#overview"
+        class="active">
+
+        Overview
+
+    </a>
+
+
+    <a href="#support">
+
+        Support Resources
+
+    </a>
+
+
+    <a href="#battery">
+
+        Battery
+
+    </a>
+
+
+    <a href="#backup">
+
+        Backup Logic
+
+    </a>
+
+
+    <a href="index.html">
+
+        ← Home
+
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="overview">
+
+
+    <div class="hero-image"></div>
+
+
+    <div class="hero-content">
+
+
+        <div class="eyebrow">
+
+            <span class="status-dot"></span>
+
+            BACKUP & ENERGY SUPPORT • READY
+
+        </div>
+
+
+        <h1>
+
+            Energy
+            <span class="gradient-text">
+                When It Matters.
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            POLARIS protects the research station with
+            intelligent storage, hydrogen systems,
+            backup generators and demand-reduction
+            strategies when renewable generation is
+            insufficient.
+
+        </p>
+
+
+
+        <!-- METRICS -->
+
+        <div class="metrics">
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+
+                    BATTERY SOC
+
+                </div>
+
+                <div
+                    class="metric-value orange">
+
+                    <span id="batterySOC">
+                        70
+                    </span>%
+
+                </div>
+
+            </div>
+
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+
+                    BATTERY CAPACITY
+
+                </div>
+
+                <div
+                    class="metric-value gold">
+
+                    2000 kWh
+
+                </div>
+
+            </div>
+
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+
+                    BACKUP AVAILABLE
+
+                </div>
+
+                <div
+                    class="metric-value green">
+
+                    100%
+
+                </div>
+
+            </div>
+
+
+
+            <div class="metric">
+
+                <div class="metric-label">
+
+                    CURRENT MODE
+
+                </div>
+
+                <div
+                    class="metric-value orange">
+
+                    AUTO
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SUPPORT RESOURCES
+===================================================== -->
+
+<section
+    class="section"
+    id="support">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                ENERGY SUPPORT FLEET
+
+            </div>
+
+
+            <h2>
+
+                Backup & Support Resources
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            These resources provide energy storage,
+            emergency generation and demand reduction
+            when renewable energy cannot fully satisfy
+            station demand.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="resource-grid">
+
+
+
+        <!-- BATTERY -->
+
+        <div class="resource-card">
+
+
+            <div class="resource-icon">
+
+                🔋
+
+            </div>
+
+
+            <h3>
+
+                Battery Energy Storage
+
+            </h3>
+
+
+            <p>
+
+                Stores surplus renewable electricity and
+                supplies the station when generation falls
+                below demand.
+
+            </p>
+
+
+            <div class="resource-bottom">
+
+                <span class="capacity">
+
+                    100 kW / 2000 kWh
+
+                </span>
+
+
+                <a
+                    class="explore"
+                    href="battery.html">
+
+                    EXPLORE →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HYDROGEN -->
+
+        <div class="resource-card">
+
+
+            <div class="resource-icon">
+
+                💧
+
+            </div>
+
+
+            <h3>
+
+                Hydrogen + Fuel Cell
+
+            </h3>
+
+
+            <p>
+
+                Hydrogen storage provides another
+                energy reserve that can be converted
+                back into electricity using a fuel cell.
+
+            </p>
+
+
+            <div class="resource-bottom">
+
+                <span class="capacity">
+
+                    50 kW / 200 kWh
+
+                </span>
+
+
+                <a
+                    class="explore"
+                    href="hydrogen.html">
+
+                    EXPLORE →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- GENERATOR -->
+
+        <div class="resource-card">
+
+
+            <div class="resource-icon">
+
+                ⚡
+
+            </div>
+
+
+            <h3>
+
+                Diesel / Fuel Generator
+
+            </h3>
+
+
+            <p>
+
+                Emergency generation source used only
+                when renewable energy and storage cannot
+                meet the station demand.
+
+            </p>
+
+
+            <div class="resource-bottom">
+
+                <span class="capacity">
+
+                    100 kW
+
+                </span>
+
+
+                <a
+                    class="explore"
+                    href="generator.html">
+
+                    EXPLORE →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CHP -->
+
+        <div class="resource-card">
+
+
+            <div class="resource-icon">
+
+                🔥
+
+            </div>
+
+
+            <h3>
+
+                CHP / Cogeneration
+
+            </h3>
+
+
+            <p>
+
+                Combined heat and power support used as
+                a high-cost last-resort energy source.
+
+            </p>
+
+
+            <div class="resource-bottom">
+
+                <span class="capacity">
+
+                    60 kW
+
+                </span>
+
+
+                <a
+                    class="explore"
+                    href="chp.html">
+
+                    EXPLORE →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PASSIVE SOLAR -->
+
+        <div class="resource-card">
+
+
+            <div class="resource-icon">
+
+                ☀
+
+            </div>
+
+
+            <h3>
+
+                Passive Solar
+
+            </h3>
+
+
+            <p>
+
+                Building-efficiency strategy that reduces
+                station energy demand and decreases the
+                amount of generation required.
+
+            </p>
+
+
+            <div class="resource-bottom">
+
+                <span class="capacity">
+
+                    −10% Demand
+
+                </span>
+
+
+                <a
+                    class="explore"
+                    href="passive-solar.html">
+
+                    EXPLORE →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- INTELLIGENT BACKUP -->
+
+        <div class="resource-card">
+
+
+            <div class="resource-icon">
+
+                ✦
+
+            </div>
+
+
+            <h3>
+
+                Intelligent Backup
+
+            </h3>
+
+
+            <p>
+
+                AI-assisted control automatically chooses
+                the safest available support source while
+                protecting critical loads.
+
+            </p>
+
+
+            <div class="resource-bottom">
+
+                <span class="capacity">
+
+                    AUTO MODE
+
+                </span>
+
+
+                <a
+                    class="explore"
+                    href="#backup">
+
+                    VIEW LOGIC →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BACKUP LOGIC
+===================================================== -->
+
+<section
+    class="section"
+    id="backup">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                AUTONOMOUS CONTROL
+
+            </div>
+
+
+            <h2>
+
+                Intelligent Backup Logic
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            The optimizer continuously checks renewable
+            availability, battery SOC and critical demand
+            before activating expensive backup generation.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="backup-panel">
+
+
+        <div class="backup-flow">
+
+
+            <div class="backup-step">
+
+                <div class="step-number">
+
+                    01
+
+                </div>
+
+                <strong>
+
+                    Renewable Energy
+
+                </strong>
+
+                <small>
+
+                    Use available clean power
+
+                </small>
+
+            </div>
+
+
+            <div class="flow-arrow">
+                →
+            </div>
+
+
+            <div class="backup-step">
+
+                <div class="step-number">
+
+                    02
+
+                </div>
+
+                <strong>
+
+                    Battery
+
+                </strong>
+
+                <small>
+
+                    Discharge when needed
+
+                </small>
+
+            </div>
+
+
+            <div class="flow-arrow">
+                →
+            </div>
+
+
+            <div class="backup-step">
+
+                <div class="step-number">
+
+                    03
+
+                </div>
+
+                <strong>
+
+                    Hydrogen
+
+                </strong>
+
+                <small>
+
+                    Use stored energy reserve
+
+                </small>
+
+            </div>
+
+
+            <div class="flow-arrow">
+                →
+            </div>
+
+
+            <div class="backup-step">
+
+                <div class="step-number">
+
+                    04
+
+                </div>
+
+                <strong>
+
+                    Generator
+
+                </strong>
+
+                <small>
+
+                    Emergency generation
+
+                </small>
+
+            </div>
+
+
+            <div class="flow-arrow">
+                →
+            </div>
+
+
+            <div class="backup-step">
+
+                <div class="step-number">
+
+                    05
+
+                </div>
+
+                <strong>
+
+                    CHP
+
+                </strong>
+
+                <small>
+
+                    Last resort
+
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="ai-status">
+
+            <span class="status-dot"></span>
+
+            AUTO MODE ACTIVE • BACKUP READY
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BATTERY
+===================================================== -->
+
+<section
+    class="section"
+    id="battery">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                ENERGY STORAGE
+
+            </div>
+
+
+            <h2>
+
+                Battery Intelligence
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            The battery acts as the station's primary
+            energy buffer, absorbing renewable surplus
+            and supplying power during shortfalls.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="battery-section">
+
+
+        <!-- BATTERY VISUAL -->
+
+        <div class="battery-visual">
+
+
+            <div class="battery">
+
+
+                <div
+                    class="battery-level"
+                    id="batteryLevel">
+                </div>
+
+
+                <div class="battery-percent">
+
+                    <span id="batteryVisual">
+                        70
+                    </span>%
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BATTERY INFORMATION -->
+
+        <div class="battery-info">
+
+
+            <h3>
+
+                Smart Battery Control
+
+            </h3>
+
+
+            <p>
+
+                POLARIS monitors state of charge,
+                available capacity and operating limits.
+                It can charge from renewable surplus and
+                discharge when station demand exceeds
+                available generation.
+
+            </p>
+
+
+
+            <div class="battery-stats">
+
+
+                <div class="battery-stat">
+
+                    <span>
+                        EFFECTIVE CAPACITY
+                    </span>
+
+                    <strong>
+                        1600 kWh
+                    </strong>
+
+                </div>
+
+
+                <div class="battery-stat">
+
+                    <span>
+                        START SOC
+                    </span>
+
+                    <strong>
+                        70%
+                    </strong>
+
+                </div>
+
+
+                <div class="battery-stat">
+
+                    <span>
+                        MIN SOC
+                    </span>
+
+                    <strong>
+                        20%
+                    </strong>
+
+                </div>
+
+
+                <div class="battery-stat">
+
+                    <span>
+                        MAX POWER
+                    </span>
+
+                    <strong>
+                        100 kW
+                    </strong>
+
+                </div>
+
+
+                <div class="battery-stat">
+
+                    <span>
+                        SOH
+                    </span>
+
+                    <strong>
+                        80%
+                    </strong>
+
+                </div>
+
+
+                <div class="battery-stat">
+
+                    <span>
+                        STATE
+                    </span>
+
+                    <strong id="batteryState">
+
+                        IDLE
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="battery.html"
+                class="cta-button">
+
+                OPEN BATTERY PAGE →
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- AI PRE-CHARGE -->
+
+    <div class="ai-banner">
+
+
+        <h3>
+
+            ✦ AI Pre-Charge Intelligence
+
+        </h3>
+
+
+        <p>
+
+            The AI lookahead system can predict upcoming
+            renewable shortages, unavailable sources and
+            possible disaster conditions. When surplus
+            renewable energy is available, POLARIS can
+            prepare the battery in advance while protecting
+            the required reserve.
+
+        </p>
+
+
+        <div class="ai-status">
+
+            <span class="status-dot"></span>
+
+            AI PRE-CHARGE READY
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BACKUP STATUS
+===================================================== -->
+
+<section
+    class="section"
+    id="status">
+
+
+    <div class="section-heading">
+
+
+        <div>
+
+            <div class="kicker">
+
+                SUPPORT STATUS
+
+            </div>
+
+
+            <h2>
+
+                Backup Availability
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            A simplified view of the current support
+            resources available to the station.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="status-panel">
+
+
+        <!-- BATTERY -->
+
+        <div class="status-row">
+
+
+            <div class="status-source">
+
+                <strong>
+
+                    Battery Energy Storage
+
+                </strong>
+
+                <span>
+
+                    100 kW maximum discharge
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="status-pill status-online">
+
+                ONLINE
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HYDROGEN -->
+
+        <div class="status-row">
+
+
+            <div class="status-source">
+
+                <strong>
+
+                    Hydrogen + Fuel Cell
+
+                </strong>
+
+                <span>
+
+                    50 kW available output
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="status-pill status-online">
+
+                ONLINE
+
+            </div>
+
+        </div>
+
+
+
+        <!-- GENERATOR -->
+
+        <div class="status-row">
+
+
+            <div class="status-source">
+
+                <strong>
+
+                    Diesel / Fuel Generator
+
+                </strong>
+
+                <span>
+
+                    20–100 kW operating range
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="status-pill status-standby">
+
+                STANDBY
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CHP -->
+
+        <div class="status-row">
+
+
+            <div class="status-source">
+
+                <strong>
+
+                    CHP / Cogeneration
+
+                </strong>
+
+                <span>
+
+                    Last-resort backup
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="status-pill status-standby">
+
+                STANDBY
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PASSIVE SOLAR -->
+
+        <div class="status-row">
+
+
+            <div class="status-source">
+
+                <strong>
+
+                    Passive Solar / Efficiency
+
+                </strong>
+
+                <span>
+
+                    Demand reduction strategy
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="status-pill status-online">
+
+                ACTIVE
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CTA -->
+
+    <div class="cta">
+
+
+        <h2>
+
+            Ready for the
+            <span class="gradient-text">
+
+                Unexpected.
+
+            </span>
+
+        </h2>
+
+
+        <p>
+
+            POLARIS does not simply generate energy.
+            It continuously plans for what happens when
+            energy availability changes.
+
+        </p>
+
+
+        <a
+            href="index.html"
+            class="cta-button">
+
+            ← BACK TO POLARIS
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <div class="footer-logo">
+
+        POLARIS ENERGY SYSTEM
+
+    </div>
+
+
+    <div>
+
+        AI-Driven Smart Energy Management
+        • Polar Research Station
+
+    </div>
+
+
+    <div>
+
+        Backup Module • v1.0
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   SIDE MENU
+===================================================== */
+
+function openMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList
+        .add("active");
+
+
+    document
+        .getElementById("overlay")
+        .classList
+        .add("active");
+
+}
+
+
+function closeMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList
+        .remove("active");
+
+
+    document
+        .getElementById("overlay")
+        .classList
+        .remove("active");
+
+}
+
+
+
+/* =====================================================
+   ESCAPE KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+
+            closeMenu();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   DEMO BATTERY VALUES
+===================================================== */
+
+let soc = 70;
+
+
+function updateBattery(){
+
+    const change =
+        Math.random() > 0.5
+        ? 1
+        : -1;
+
+
+    soc += change;
+
+
+    if(soc > 78){
+
+        soc = 78;
+
+    }
+
+
+    if(soc < 62){
+
+        soc = 62;
+
+    }
+
+
+    document
+        .getElementById("batterySOC")
+        .textContent = soc;
+
+
+    document
+        .getElementById("batteryVisual")
+        .textContent = soc;
+
+
+    document
+        .getElementById("batteryLevel")
+        .style.height =
+            soc + "%";
+
+
+    const state =
+        soc < 68
+        ? "DISCHARGING"
+        : soc > 73
+        ? "CHARGING"
+        : "IDLE";
+
+
+    document
+        .getElementById("batteryState")
+        .textContent = state;
+
+}
+
+
+setInterval(
+    updateBattery,
+    3000
+);
+
+
+
+/* =====================================================
+   ACTIVE PAGE NAVIGATION
+===================================================== */
+
+const sections =
+    document.querySelectorAll(
+        "section[id]"
+    );
+
+
+const navLinks =
+    document.querySelectorAll(
+        ".page-nav a"
+    );
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        let current = "";
+
+
+        sections.forEach(
+            section => {
+
+                const sectionTop =
+                    section.offsetTop - 180;
+
+
+                if(
+                    window.scrollY >=
+                    sectionTop
+                ){
+
+                    current =
+                        section.getAttribute(
+                            "id"
+                        );
+
+                }
+
+            }
+        );
+
+
+        navLinks.forEach(
+            link => {
+
+                link.classList.remove(
+                    "active"
+                );
+
+
+                if(
+                    link.getAttribute(
+                        "href"
+                    )
+                    ===
+                    "#" + current
+                ){
+
+                    link.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

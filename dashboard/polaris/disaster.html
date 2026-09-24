@@ -1,0 +1,3937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Disaster Management | POLARIS</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+    background:#05070a;
+
+    color:#f5f7fa;
+
+    overflow-x:hidden;
+}
+
+
+/* =========================================================
+   COLOR SYSTEM
+========================================================= */
+
+:root{
+
+    --bg:#05070a;
+
+    --black:#020305;
+
+    --panel:#0b0f14;
+
+    --panel2:#10161d;
+
+    --white:#f5f7fa;
+
+    --silver:#aeb8c3;
+
+    --muted:#7c8792;
+
+    --line:rgba(255,255,255,.10);
+
+    --emergency:#ff365d;
+
+    --emergency2:#ff7188;
+
+    --warning:#ffc857;
+
+    --safe:#b8ff5c;
+
+    --cyan:#8de7ff;
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+
+    linear-gradient(
+        rgba(255,255,255,.018) 1px,
+        transparent 1px
+    ),
+
+    linear-gradient(
+        90deg,
+        rgba(255,255,255,.018) 1px,
+        transparent 1px
+    );
+
+    background-size:
+    55px 55px;
+
+    pointer-events:none;
+
+    z-index:-4;
+}
+
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    width:650px;
+
+    height:650px;
+
+    top:-300px;
+
+    left:35%;
+
+    border-radius:50%;
+
+    background:
+
+    radial-gradient(
+        circle,
+        rgba(255,54,93,.08),
+        transparent 70%
+    );
+
+    pointer-events:none;
+
+    z-index:-3;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:74px;
+
+    padding:
+    0 6%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:
+    rgba(5,7,10,.88);
+
+    backdrop-filter:
+    blur(18px);
+
+    border-bottom:
+    1px solid rgba(255,255,255,.08);
+
+    z-index:1000;
+}
+
+
+.logo{
+
+    font-size:25px;
+
+    font-weight:1000;
+
+    letter-spacing:3px;
+
+    color:var(--white);
+}
+
+
+.logo span{
+
+    color:var(--emergency);
+}
+
+
+.nav-links{
+
+    display:flex;
+
+    gap:30px;
+}
+
+
+.nav-links a{
+
+    color:#8d98a3;
+
+    text-decoration:none;
+
+    font-size:15px;
+
+    font-weight:800;
+
+    transition:.3s;
+}
+
+
+.nav-links a:hover{
+
+    color:var(--white);
+}
+
+
+/* =========================================================
+   THREE DASH MENU
+========================================================= */
+
+.menu-btn{
+
+    position:fixed;
+
+    top:92px;
+
+    left:25px;
+
+    width:56px;
+
+    height:56px;
+
+    border-radius:14px;
+
+    border:
+    1px solid rgba(255,255,255,.13);
+
+    background:
+    rgba(8,11,15,.96);
+
+    z-index:1100;
+
+    cursor:pointer;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:7px;
+
+    transition:.3s;
+}
+
+
+.menu-btn:hover{
+
+    transform:
+    scale(1.08);
+
+    border-color:
+    var(--emergency);
+
+    box-shadow:
+    0 0 30px
+    rgba(255,54,93,.20);
+}
+
+
+.menu-btn span{
+
+    width:24px;
+
+    height:2px;
+
+    background:
+    var(--white);
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu{
+
+    position:fixed;
+
+    top:0;
+
+    left:-320px;
+
+    width:300px;
+
+    height:100vh;
+
+    padding:
+    115px 32px 30px;
+
+    background:
+    #07090c;
+
+    border-right:
+    1px solid rgba(255,255,255,.10);
+
+    z-index:1050;
+
+    transition:.4s;
+
+    overflow-y:auto;
+}
+
+
+.side-menu.active{
+
+    left:0;
+}
+
+
+.side-menu h2{
+
+    color:
+    var(--emergency);
+
+    font-size:24px;
+
+    letter-spacing:3px;
+
+    margin-bottom:30px;
+}
+
+
+.side-menu a{
+
+    display:block;
+
+    padding:17px 0;
+
+    color:#949da6;
+
+    text-decoration:none;
+
+    font-size:15px;
+
+    border-bottom:
+    1px solid rgba(255,255,255,.05);
+
+    transition:.3s;
+}
+
+
+.side-menu a:hover{
+
+    color:var(--white);
+
+    padding-left:10px;
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+.page-nav{
+
+    margin-top:74px;
+
+    min-height:64px;
+
+    padding:
+    10px 20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:30px;
+
+    background:
+    #080a0e;
+
+    border-bottom:
+    1px solid rgba(255,255,255,.06);
+
+    overflow-x:auto;
+}
+
+
+.page-nav a{
+
+    color:#808b96;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:900;
+
+    white-space:nowrap;
+
+    transition:.3s;
+}
+
+
+.page-nav a:hover{
+
+    color:
+    var(--emergency2);
+}
+
+
+/* =========================================================
+   HERO PHOTO HEADER
+========================================================= */
+
+.hero{
+
+    min-height:760px;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    padding:
+    100px 7% 90px;
+
+    overflow:hidden;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        rgba(2,3,5,.97) 0%,
+        rgba(2,3,5,.82) 38%,
+        rgba(2,3,5,.35) 75%,
+        rgba(2,3,5,.80) 100%
+    ),
+
+    url("https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=85");
+
+    background-size:cover;
+
+    background-position:center;
+}
+
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+    linear-gradient(
+        0deg,
+        #05070a 0%,
+        transparent 55%
+    );
+}
+
+
+.hero-content{
+
+    position:relative;
+
+    z-index:2;
+
+    max-width:900px;
+
+    animation:
+    heroIn 1s ease;
+}
+
+
+.emergency-strip{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:
+    11px 18px;
+
+    border:
+    1px solid
+    rgba(255,54,93,.45);
+
+    border-radius:6px;
+
+    background:
+    rgba(255,54,93,.08);
+
+    color:
+    var(--emergency2);
+
+    font-size:14px;
+
+    font-weight:1000;
+
+    letter-spacing:2px;
+
+    margin-bottom:28px;
+}
+
+
+.alert-dot{
+
+    width:11px;
+
+    height:11px;
+
+    border-radius:50%;
+
+    background:
+    var(--emergency);
+
+    box-shadow:
+    0 0 18px
+    rgba(255,54,93,.9);
+
+    animation:
+    alertBlink 1s infinite;
+}
+
+
+.hero h1{
+
+    font-size:
+    clamp(58px,9vw,112px);
+
+    line-height:.88;
+
+    letter-spacing:-4px;
+
+    margin-bottom:30px;
+}
+
+
+.hero h1 span{
+
+    color:
+    var(--emergency);
+}
+
+
+.hero p{
+
+    max-width:760px;
+
+    color:#c3cad1;
+
+    font-size:21px;
+
+    line-height:1.8;
+
+    margin-bottom:35px;
+}
+
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:16px;
+
+    flex-wrap:wrap;
+}
+
+
+.btn{
+
+    display:inline-block;
+
+    padding:
+    17px 27px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+    font-size:15px;
+
+    font-weight:1000;
+
+    transition:.3s;
+}
+
+
+.btn-primary{
+
+    background:
+    var(--emergency);
+
+    color:white;
+}
+
+
+.btn-primary:hover{
+
+    transform:
+    translateY(-5px);
+
+    box-shadow:
+    0 20px 45px
+    rgba(255,54,93,.25);
+}
+
+
+.btn-secondary{
+
+    border:
+    1px solid rgba(255,255,255,.18);
+
+    color:
+    var(--white);
+
+    background:
+    rgba(0,0,0,.25);
+}
+
+
+.btn-secondary:hover{
+
+    border-color:
+    var(--white);
+
+    background:
+    rgba(255,255,255,.06);
+}
+
+
+/* =========================================================
+   EMERGENCY STATUS BAR
+========================================================= */
+
+.status-bar{
+
+    position:absolute;
+
+    right:7%;
+
+    bottom:90px;
+
+    z-index:3;
+
+    width:320px;
+
+    padding:25px;
+
+    background:
+    rgba(6,8,11,.88);
+
+    backdrop-filter:
+    blur(15px);
+
+    border:
+    1px solid
+    rgba(255,54,93,.30);
+
+    border-radius:12px;
+}
+
+
+.status-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+}
+
+
+.status-title span{
+
+    color:#89949f;
+
+    font-size:13px;
+
+    font-weight:900;
+
+    letter-spacing:1px;
+}
+
+
+.status-title strong{
+
+    color:
+    var(--safe);
+
+    font-size:14px;
+}
+
+
+.status-main{
+
+    font-size:34px;
+
+    font-weight:1000;
+
+    margin-bottom:8px;
+}
+
+
+.status-sub{
+
+    color:#7f8993;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =========================================================
+   INCIDENT RIBBON
+========================================================= */
+
+.incident-ribbon{
+
+    margin:
+    -35px 7% 0;
+
+    position:relative;
+
+    z-index:5;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    background:
+    #0b0f14;
+
+    border:
+    1px solid rgba(255,255,255,.10);
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 25px 70px
+    rgba(0,0,0,.5);
+}
+
+
+.incident-cell{
+
+    padding:25px;
+
+    border-right:
+    1px solid rgba(255,255,255,.07);
+}
+
+
+.incident-cell:last-child{
+
+    border-right:none;
+}
+
+
+.incident-cell small{
+
+    display:block;
+
+    color:#727d88;
+
+    font-size:12px;
+
+    font-weight:900;
+
+    margin-bottom:9px;
+}
+
+
+.incident-cell strong{
+
+    font-size:24px;
+
+    color:var(--white);
+}
+
+
+.incident-cell .danger{
+
+    color:
+    var(--emergency2);
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section{
+
+    padding:
+    120px 7%;
+}
+
+
+.heading{
+
+    max-width:850px;
+
+    margin-bottom:60px;
+}
+
+
+.mini{
+
+    color:
+    var(--emergency2);
+
+    font-size:14px;
+
+    font-weight:1000;
+
+    letter-spacing:2px;
+}
+
+
+.heading h2{
+
+    font-size:
+    clamp(42px,6vw,72px);
+
+    line-height:.98;
+
+    margin:
+    14px 0 22px;
+}
+
+
+.heading p{
+
+    color:#8c969f;
+
+    font-size:18px;
+
+    line-height:1.8;
+}
+
+
+/* =========================================================
+   DISASTER TIMELINE
+========================================================= */
+
+.disaster-board{
+
+    position:relative;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:0;
+
+    border:
+    1px solid rgba(255,255,255,.10);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    background:#080b0f;
+}
+
+
+.disaster-card{
+
+    min-height:530px;
+
+    padding:40px 34px;
+
+    position:relative;
+
+    border-right:
+    1px solid rgba(255,255,255,.08);
+
+    transition:.45s;
+
+    overflow:hidden;
+}
+
+
+.disaster-card:last-child{
+
+    border-right:none;
+}
+
+
+.disaster-card:hover{
+
+    background:
+    #0e1218;
+
+    transform:
+    translateY(-8px);
+
+    z-index:2;
+}
+
+
+.disaster-number{
+
+    font-size:80px;
+
+    font-weight:1000;
+
+    color:
+    rgba(255,255,255,.045);
+
+    line-height:1;
+
+    margin-bottom:20px;
+}
+
+
+.disaster-type{
+
+    display:inline-block;
+
+    padding:
+    8px 12px;
+
+    border-radius:5px;
+
+    background:
+    rgba(255,54,93,.08);
+
+    border:
+    1px solid
+    rgba(255,54,93,.18);
+
+    color:
+    var(--emergency2);
+
+    font-size:12px;
+
+    font-weight:1000;
+
+    letter-spacing:1px;
+
+    margin-bottom:22px;
+}
+
+
+.disaster-card h3{
+
+    font-size:34px;
+
+    margin-bottom:15px;
+}
+
+
+.disaster-time{
+
+    color:
+    var(--warning);
+
+    font-size:15px;
+
+    font-weight:900;
+
+    margin-bottom:25px;
+}
+
+
+.disaster-card p{
+
+    color:#858f99;
+
+    font-size:15px;
+
+    line-height:1.8;
+
+    margin-bottom:30px;
+}
+
+
+.impact{
+
+    padding-top:20px;
+
+    border-top:
+    1px solid rgba(255,255,255,.07);
+}
+
+
+.impact-title{
+
+    color:#68737d;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    letter-spacing:1px;
+
+    margin-bottom:14px;
+}
+
+
+.impact-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:9px 0;
+
+    font-size:14px;
+}
+
+
+.impact-row span{
+
+    color:#838d96;
+}
+
+
+.impact-row strong{
+
+    color:var(--white);
+}
+
+
+/* =========================================================
+   BEFORE DURING AFTER
+========================================================= */
+
+.response-map{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr 1fr;
+
+    gap:18px;
+
+    position:relative;
+}
+
+
+.response-step{
+
+    padding:42px;
+
+    min-height:350px;
+
+    background:
+    linear-gradient(
+        145deg,
+        #0c1116,
+        #070a0d
+    );
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:16px;
+
+    position:relative;
+
+    transition:.4s;
+}
+
+
+.response-step:hover{
+
+    transform:
+    translateY(-10px);
+
+    border-color:
+    rgba(255,54,93,.4);
+}
+
+
+.response-step::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:-30px;
+
+    top:50%;
+
+    width:45px;
+
+    height:2px;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--emergency),
+        transparent
+    );
+}
+
+
+.response-step:last-child::after{
+
+    display:none;
+}
+
+
+.response-label{
+
+    color:
+    var(--emergency2);
+
+    font-size:13px;
+
+    font-weight:1000;
+
+    letter-spacing:2px;
+
+    margin-bottom:20px;
+}
+
+
+.response-step h3{
+
+    font-size:32px;
+
+    margin-bottom:20px;
+}
+
+
+.response-step p{
+
+    color:#828d97;
+
+    font-size:15px;
+
+    line-height:1.8;
+}
+
+
+.response-list{
+
+    margin-top:25px;
+
+    list-style:none;
+}
+
+
+.response-list li{
+
+    padding:10px 0;
+
+    color:#b3bbc3;
+
+    font-size:14px;
+
+    border-bottom:
+    1px solid rgba(255,255,255,.05);
+}
+
+
+.response-list li::before{
+
+    content:"→";
+
+    color:
+    var(--emergency);
+
+    font-weight:1000;
+
+    margin-right:10px;
+}
+
+
+/* =========================================================
+   AUTO SWITCH SYSTEM
+========================================================= */
+
+.switch-layout{
+
+    display:grid;
+
+    grid-template-columns:
+    .7fr 1.3fr;
+
+    gap:25px;
+}
+
+
+.switch-panel{
+
+    padding:40px;
+
+    background:
+    #080b0f;
+
+    border:
+    1px solid rgba(255,255,255,.09);
+
+    border-radius:18px;
+}
+
+
+.switch-panel h3{
+
+    font-size:31px;
+
+    margin-bottom:15px;
+}
+
+
+.switch-panel > p{
+
+    color:#7f8992;
+
+    font-size:15px;
+
+    line-height:1.8;
+
+    margin-bottom:30px;
+}
+
+
+.switch-status{
+
+    padding:20px;
+
+    background:
+    rgba(184,255,92,.04);
+
+    border:
+    1px solid
+    rgba(184,255,92,.16);
+
+    border-radius:10px;
+}
+
+
+.switch-status small{
+
+    display:block;
+
+    color:#66716a;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    margin-bottom:8px;
+}
+
+
+.switch-status strong{
+
+    color:
+    var(--safe);
+
+    font-size:22px;
+}
+
+
+.source-chain{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+}
+
+
+.source{
+
+    display:grid;
+
+    grid-template-columns:
+    55px 1fr 100px;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:18px;
+
+    border-radius:10px;
+
+    background:#0c1116;
+
+    border:
+    1px solid rgba(255,255,255,.06);
+
+    transition:.3s;
+}
+
+
+.source:hover{
+
+    border-color:
+    rgba(255,255,255,.20);
+
+    transform:
+    translateX(8px);
+}
+
+
+.source.active{
+
+    border-color:
+    rgba(184,255,92,.35);
+
+    background:
+    rgba(184,255,92,.035);
+
+    box-shadow:
+    inset 4px 0 0
+    var(--safe);
+}
+
+
+.source-number{
+
+    color:
+    var(--emergency2);
+
+    font-size:13px;
+
+    font-weight:1000;
+}
+
+
+.source h4{
+
+    font-size:17px;
+
+    margin-bottom:5px;
+}
+
+
+.source p{
+
+    color:#69747e;
+
+    font-size:12px;
+}
+
+
+.source-state{
+
+    text-align:right;
+
+    color:#69747e;
+
+    font-size:11px;
+
+    font-weight:1000;
+}
+
+
+.source.active .source-state{
+
+    color:
+    var(--safe);
+}
+
+
+/* =========================================================
+   CRITICAL LOAD PROTECTION
+========================================================= */
+
+.protection{
+
+    display:grid;
+
+    grid-template-columns:
+    .9fr 1.1fr;
+
+    gap:30px;
+
+    align-items:stretch;
+}
+
+
+.protection-main{
+
+    padding:45px;
+
+    background:
+    #0a0e13;
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:20px;
+}
+
+
+.protection-main h3{
+
+    font-size:38px;
+
+    margin-bottom:18px;
+}
+
+
+.protection-main p{
+
+    color:#818c96;
+
+    font-size:16px;
+
+    line-height:1.8;
+
+    margin-bottom:30px;
+}
+
+
+.protection-number{
+
+    font-size:90px;
+
+    line-height:1;
+
+    font-weight:1000;
+
+    color:
+    var(--emergency2);
+}
+
+
+.protection-number span{
+
+    font-size:30px;
+
+    color:#9aa3ab;
+}
+
+
+.load-list{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:14px;
+}
+
+
+.load{
+
+    padding:25px;
+
+    background:
+    #0b1015;
+
+    border:
+    1px solid rgba(255,255,255,.07);
+
+    border-radius:13px;
+
+    transition:.3s;
+}
+
+
+.load:hover{
+
+    transform:
+    translateY(-5px);
+
+    border-color:
+    rgba(255,54,93,.3);
+}
+
+
+.load small{
+
+    color:#68737d;
+
+    font-size:11px;
+
+    font-weight:900;
+}
+
+
+.load strong{
+
+    display:block;
+
+    font-size:25px;
+
+    margin:
+    10px 0;
+
+    color:var(--white);
+}
+
+
+.load span{
+
+    color:
+    var(--safe);
+
+    font-size:12px;
+
+    font-weight:900;
+}
+
+
+/* =========================================================
+   AI PREDICTION
+========================================================= */
+
+.ai-section{
+
+    position:relative;
+
+    background:
+    #06080b;
+
+    border-top:
+    1px solid rgba(255,255,255,.05);
+
+    border-bottom:
+    1px solid rgba(255,255,255,.05);
+}
+
+
+.ai-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:25px;
+}
+
+
+.ai-card{
+
+    padding:40px;
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    background:
+    #0a0e13;
+
+    transition:.35s;
+}
+
+
+.ai-card:hover{
+
+    transform:
+    translateY(-8px);
+
+    border-color:
+    rgba(255,54,93,.35);
+}
+
+
+.ai-card h3{
+
+    font-size:30px;
+
+    margin-bottom:15px;
+}
+
+
+.ai-card p{
+
+    color:#7f8993;
+
+    font-size:15px;
+
+    line-height:1.8;
+}
+
+
+.ai-terminal{
+
+    margin-top:28px;
+
+    background:
+    #020304;
+
+    border:
+    1px solid
+    rgba(184,255,92,.12);
+
+    border-radius:12px;
+
+    padding:25px;
+
+    font-family:
+    "Courier New",
+    monospace;
+
+    color:#a9c779;
+
+    font-size:14px;
+
+    line-height:2;
+}
+
+
+/* =========================================================
+   LIVE INCIDENT FEED
+========================================================= */
+
+.feed{
+
+    border-left:
+    2px solid
+    rgba(255,54,93,.3);
+
+    padding-left:30px;
+}
+
+
+.feed-item{
+
+    position:relative;
+
+    padding:
+    0 0 38px 25px;
+}
+
+
+.feed-item::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-38px;
+
+    top:5px;
+
+    width:13px;
+
+    height:13px;
+
+    border-radius:50%;
+
+    background:
+    var(--emergency);
+
+    box-shadow:
+    0 0 15px
+    rgba(255,54,93,.5);
+}
+
+
+.feed-time{
+
+    color:
+    var(--warning);
+
+    font-size:12px;
+
+    font-weight:1000;
+
+    letter-spacing:1px;
+
+    margin-bottom:8px;
+}
+
+
+.feed-item h4{
+
+    font-size:21px;
+
+    margin-bottom:7px;
+}
+
+
+.feed-item p{
+
+    color:#737e88;
+
+    font-size:14px;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   CONTROL CENTER
+========================================================= */
+
+.control-center{
+
+    padding:45px;
+
+    background:
+    linear-gradient(
+        145deg,
+        #0d1116,
+        #07090c
+    );
+
+    border:
+    1px solid rgba(255,54,93,.20);
+
+    border-radius:22px;
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr 1fr;
+
+    gap:18px;
+}
+
+
+.control{
+
+    padding:25px;
+
+    border-radius:13px;
+
+    background:
+    #090c10;
+
+    border:
+    1px solid rgba(255,255,255,.07);
+}
+
+
+.control small{
+
+    color:#68737c;
+
+    font-size:11px;
+
+    font-weight:1000;
+
+    letter-spacing:1px;
+}
+
+
+.control strong{
+
+    display:block;
+
+    margin-top:10px;
+
+    font-size:28px;
+}
+
+
+.control .safe{
+
+    color:
+    var(--safe);
+}
+
+
+.control .danger{
+
+    color:
+    var(--emergency2);
+}
+
+
+.control .warning{
+
+    color:
+    var(--warning);
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta{
+
+    margin:
+    80px 7% 110px;
+
+    padding:
+    80px 40px;
+
+    text-align:center;
+
+    border-radius:25px;
+
+    border:
+    1px solid
+    rgba(255,54,93,.20);
+
+    background:
+
+    radial-gradient(
+        circle at 50% 0%,
+        rgba(255,54,93,.10),
+        transparent 55%
+    ),
+
+    #090c10;
+}
+
+
+.cta h2{
+
+    font-size:
+    clamp(40px,6vw,70px);
+
+    line-height:1;
+
+    margin-bottom:20px;
+}
+
+
+.cta p{
+
+    max-width:720px;
+
+    margin:
+    0 auto 35px;
+
+    color:#7e8892;
+
+    font-size:17px;
+
+    line-height:1.8;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:
+    45px 7%;
+
+    border-top:
+    1px solid rgba(255,255,255,.06);
+
+    text-align:center;
+
+    color:#555e67;
+
+    font-size:13px;
+
+    line-height:1.8;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes heroIn{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(40px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0);
+    }
+}
+
+
+@keyframes alertBlink{
+
+    0%,100%{
+
+        opacity:1;
+
+        transform:scale(1);
+    }
+
+    50%{
+
+        opacity:.35;
+
+        transform:scale(.75);
+    }
+}
+
+
+@keyframes pulseLine{
+
+    0%{
+
+        opacity:.25;
+
+        transform:scaleX(.7);
+    }
+
+    50%{
+
+        opacity:1;
+
+        transform:scaleX(1);
+    }
+
+    100%{
+
+        opacity:.25;
+
+        transform:scaleX(.7);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .status-bar{
+
+        position:relative;
+
+        right:auto;
+
+        bottom:auto;
+
+        margin-top:40px;
+
+        width:100%;
+    }
+
+
+    .hero{
+
+        align-items:center;
+
+        padding-top:120px;
+    }
+
+
+    .incident-ribbon{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+
+    .incident-cell:nth-child(2){
+
+        border-right:none;
+    }
+
+
+    .incident-cell:nth-child(-n+2){
+
+        border-bottom:
+        1px solid rgba(255,255,255,.07);
+    }
+
+
+    .disaster-board{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .disaster-card{
+
+        min-height:auto;
+
+        border-right:none;
+
+        border-bottom:
+        1px solid rgba(255,255,255,.08);
+    }
+
+
+    .disaster-card:last-child{
+
+        border-bottom:none;
+    }
+
+
+    .response-map{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .response-step::after{
+
+        display:none;
+    }
+
+
+    .switch-layout,
+    .protection{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .control-center{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+
+    .nav-links{
+
+        display:none;
+    }
+
+}
+
+
+@media(max-width:650px){
+
+    .hero{
+
+        min-height:780px;
+
+        padding:
+        100px 5% 70px;
+    }
+
+
+    .hero h1{
+
+        font-size:58px;
+
+        letter-spacing:-2px;
+    }
+
+
+    .hero p{
+
+        font-size:17px;
+    }
+
+
+    .incident-ribbon{
+
+        margin:
+        -20px 5% 0;
+
+        grid-template-columns:1fr;
+    }
+
+
+    .incident-cell{
+
+        border-right:none;
+
+        border-bottom:
+        1px solid rgba(255,255,255,.07);
+    }
+
+
+    .incident-cell:last-child{
+
+        border-bottom:none;
+    }
+
+
+    .section{
+
+        padding:
+        80px 5%;
+    }
+
+
+    .heading h2{
+
+        font-size:44px;
+    }
+
+
+    .disaster-card{
+
+        padding:32px 25px;
+    }
+
+
+    .response-step{
+
+        padding:30px;
+    }
+
+
+    .switch-panel{
+
+        padding:30px;
+    }
+
+
+    .source{
+
+        grid-template-columns:
+        40px 1fr;
+    }
+
+
+    .source-state{
+
+        display:none;
+    }
+
+
+    .load-list{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .protection-main{
+
+        padding:30px;
+    }
+
+
+    .protection-number{
+
+        font-size:70px;
+    }
+
+
+    .ai-grid{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .control-center{
+
+        grid-template-columns:1fr;
+
+        padding:25px;
+    }
+
+
+    .cta{
+
+        margin:
+        40px 5% 70px;
+
+        padding:
+        55px 25px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        POLAR<span>IS</span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="renewable.html">
+            Renewable Energy
+        </a>
+
+        <a href="nonrenewable.html">
+            Backup Support
+        </a>
+
+        <a href="admin.html">
+            Admin
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     THREE DASH MENU
+========================================================= -->
+
+<button
+class="menu-btn"
+onclick="toggleMenu()">
+
+    <span></span>
+    <span></span>
+    <span></span>
+
+</button>
+
+
+
+<div
+class="side-menu"
+id="sideMenu">
+
+    <h2>
+        POLARIS
+    </h2>
+
+
+    <a href="index.html">
+        ⌂ Home
+    </a>
+
+
+    <a href="renewable.html">
+        Renewable Energy
+    </a>
+
+
+    <a href="totalfleet.html">
+        Total Renewable Fleet
+    </a>
+
+
+    <a href="nonrenewable.html">
+        Backup & Energy Support
+    </a>
+
+
+    <a href="backup-intelligence.html">
+        Intelligent Backup
+    </a>
+
+
+    <a href="battery.html">
+        Battery Storage
+    </a>
+
+
+    <a href="hydrogen.html">
+        Hydrogen + Fuel Cell
+    </a>
+
+
+    <a href="generator.html">
+        Diesel / Fuel Generator
+    </a>
+
+
+    <a href="chp.html">
+        CHP / Cogeneration
+    </a>
+
+
+    <a href="passive-solar.html">
+        Passive Solar
+    </a>
+
+
+    <a href="disaster.html">
+        Disaster Management
+    </a>
+
+
+    <a href="admin.html">
+        Admin Dashboard
+    </a>
+
+</div>
+
+
+
+<!-- =========================================================
+     PAGE NAV
+========================================================= -->
+
+<div class="page-nav">
+
+    <a href="#overview">
+        Command Center
+    </a>
+
+    <a href="#events">
+        Disaster Events
+    </a>
+
+    <a href="#response">
+        Response Plan
+    </a>
+
+    <a href="#switch">
+        Auto Switching
+    </a>
+
+    <a href="#protection">
+        Critical Loads
+    </a>
+
+    <a href="#ai">
+        AI Prediction
+    </a>
+
+</div>
+
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section
+class="hero"
+id="overview">
+
+
+    <div class="hero-content">
+
+
+        <div class="emergency-strip">
+
+            <div class="alert-dot"></div>
+
+            DISASTER MANAGEMENT SYSTEM
+
+        </div>
+
+
+        <h1>
+
+            WHEN NATURE<br>
+
+            <span>CHANGES.</span>
+
+        </h1>
+
+
+        <p>
+
+            POLARIS continuously monitors disaster conditions
+            and automatically adapts the station's energy
+            strategy. When a source is damaged or unavailable,
+            the system shifts power to the best available
+            alternative while protecting critical operations.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+            href="#events"
+            class="btn btn-primary">
+
+                View Disaster Protocols
+
+            </a>
+
+
+            <a
+            href="#switch"
+            class="btn btn-secondary">
+
+                See Auto Switching
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="status-bar">
+
+        <div class="status-title">
+
+            <span>
+                STATION STATUS
+            </span>
+
+            <strong>
+                ● ONLINE
+            </strong>
+
+        </div>
+
+
+        <div class="status-main">
+            AUTO MODE
+        </div>
+
+
+        <div class="status-sub">
+
+            Disaster response monitoring is active.
+            Energy routing will automatically adapt
+            if a monitored source becomes unavailable.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     INCIDENT RIBBON
+========================================================= -->
+
+<div class="incident-ribbon">
+
+
+    <div class="incident-cell">
+
+        <small>
+            MONITORING
+        </small>
+
+        <strong class="danger">
+            24 / 7
+        </strong>
+
+    </div>
+
+
+    <div class="incident-cell">
+
+        <small>
+            RESPONSE MODE
+        </small>
+
+        <strong>
+            AUTO
+        </strong>
+
+    </div>
+
+
+    <div class="incident-cell">
+
+        <small>
+            CRITICAL LOAD
+        </small>
+
+        <strong>
+            55 kW
+        </strong>
+
+    </div>
+
+
+    <div class="incident-cell">
+
+        <small>
+            AI LOOKAHEAD
+        </small>
+
+        <strong>
+            4 HOURS
+        </strong>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     DISASTER EVENTS
+========================================================= -->
+
+<section
+class="section"
+id="events">
+
+
+    <div class="heading">
+
+        <div class="mini">
+            INCIDENT PROTOCOLS
+        </div>
+
+
+        <h2>
+
+            Three disasters.<br>
+            Three different responses.
+
+        </h2>
+
+
+        <p>
+
+            POLARIS does not use one fixed emergency strategy.
+            Each event changes specific energy resources, and
+            AUTO MODE compensates using the remaining system.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="disaster-board">
+
+
+        <!-- FLOOD -->
+
+        <article class="disaster-card" style="cursor: pointer;" title="Click to simulate Flood scenario" onclick="triggerDisasterScenario('flood')">
+
+
+            <div class="disaster-number">
+                01
+            </div>
+
+
+            <div class="disaster-type">
+                HYDRO IMPACT
+            </div>
+
+
+            <h3>
+                FLOOD
+            </h3>
+
+
+            <div class="disaster-time">
+                04:00 — 04:59
+            </div>
+
+
+            <p>
+
+                Flood conditions significantly reduce
+                hydropower availability. The hydro resource
+                is derated while the optimizer looks for
+                alternative supply.
+
+            </p>
+
+
+            <div class="impact">
+
+                <div class="impact-title">
+                    RESOURCE IMPACT
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Hydropower
+                    </span>
+
+                    <strong>
+                        10%
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Solar
+                    </span>
+
+                    <strong>
+                        Available
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Battery
+                    </span>
+
+                    <strong>
+                        Support
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        AUTO MODE
+                    </span>
+
+                    <strong>
+                        ACTIVE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- TSUNAMI -->
+
+        <article class="disaster-card" style="cursor: pointer;" title="Click to simulate Tsunami scenario" onclick="triggerDisasterScenario('tsunami')">
+
+
+            <div class="disaster-number">
+                02
+            </div>
+
+
+            <div class="disaster-type">
+                MARINE + WIND IMPACT
+            </div>
+
+
+            <h3>
+                TSUNAMI
+            </h3>
+
+
+            <div class="disaster-time">
+                08:00 — 08:59
+            </div>
+
+
+            <p>
+
+                Marine energy is completely disabled while
+                wind generation is reduced to 15%.
+                The system immediately compensates using
+                other available sources.
+
+            </p>
+
+
+            <div class="impact">
+
+                <div class="impact-title">
+                    RESOURCE IMPACT
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Marine
+                    </span>
+
+                    <strong>
+                        OFF
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Wind
+                    </span>
+
+                    <strong>
+                        15%
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Battery
+                    </span>
+
+                    <strong>
+                        SUPPORT
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        AUTO MODE
+                    </span>
+
+                    <strong>
+                        ACTIVE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- STORM -->
+
+        <article class="disaster-card" style="cursor: pointer;" title="Click to simulate Storm scenario" onclick="triggerDisasterScenario('storm')">
+
+
+            <div class="disaster-number">
+                03
+            </div>
+
+
+            <div class="disaster-type">
+                WIND + SOLAR IMPACT
+            </div>
+
+
+            <h3>
+                STORM
+            </h3>
+
+
+            <div class="disaster-time">
+                15:00 — 15:59
+            </div>
+
+
+            <p>
+
+                Storm conditions reduce wind generation to
+                15% and solar generation to 40%.
+                POLARIS recalculates the energy balance
+                and protects the station reserve.
+
+            </p>
+
+
+            <div class="impact">
+
+                <div class="impact-title">
+                    RESOURCE IMPACT
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Wind
+                    </span>
+
+                    <strong>
+                        15%
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Solar
+                    </span>
+
+                    <strong>
+                        40%
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        Storage
+                    </span>
+
+                    <strong>
+                        SUPPORT
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-row">
+
+                    <span>
+                        AUTO MODE
+                    </span>
+
+                    <strong>
+                        ACTIVE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     RESPONSE PLAN
+========================================================= -->
+
+<section
+class="section"
+id="response">
+
+
+    <div class="heading">
+
+        <div class="mini">
+            EMERGENCY RESPONSE
+        </div>
+
+
+        <h2>
+
+            Detect.<br>
+            Adapt. Protect.
+
+        </h2>
+
+
+        <p>
+
+            The disaster-management layer works together
+            with the AI optimizer instead of operating as
+            a separate system.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="response-map">
+
+
+        <div class="response-step">
+
+
+            <div class="response-label">
+                PHASE 01
+            </div>
+
+
+            <h3>
+                DETECT
+            </h3>
+
+
+            <p>
+
+                The system identifies a disaster condition
+                or source degradation through incoming station
+                and resource data.
+
+            </p>
+
+
+            <ul class="response-list">
+
+                <li>
+                    Monitor source status
+                </li>
+
+                <li>
+                    Detect derating
+                </li>
+
+                <li>
+                    Check station demand
+                </li>
+
+                <li>
+                    Identify critical loads
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <div class="response-step">
+
+
+            <div class="response-label">
+                PHASE 02
+            </div>
+
+
+            <h3>
+                ADAPT
+            </h3>
+
+
+            <p>
+
+                AI recalculates the energy balance and
+                selects the best available combination
+                of renewable generation and storage.
+
+            </p>
+
+
+            <ul class="response-list">
+
+                <li>
+                    Recalculate supply
+                </li>
+
+                <li>
+                    Shift energy source
+                </li>
+
+                <li>
+                    Preserve battery reserve
+                </li>
+
+                <li>
+                    Pre-charge when possible
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <div class="response-step">
+
+
+            <div class="response-label">
+                PHASE 03
+            </div>
+
+
+            <h3>
+                PROTECT
+            </h3>
+
+
+            <p>
+
+                Critical station operations remain the
+                highest priority. Non-critical demand can
+                be reduced during severe shortages.
+
+            </p>
+
+
+            <ul class="response-list">
+
+                <li>
+                    Heating protected
+                </li>
+
+                <li>
+                    Communication protected
+                </li>
+
+                <li>
+                    Medical protected
+                </li>
+
+                <li>
+                    Shed non-critical loads
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     AUTO SWITCHING
+========================================================= -->
+
+<section
+class="section"
+id="switch">
+
+
+    <div class="heading">
+
+        <div class="mini">
+            AUTO MODE
+        </div>
+
+
+        <h2>
+
+            The station doesn't wait
+            for someone to switch it.
+
+        </h2>
+
+
+        <p>
+
+            When a source fails or becomes severely limited,
+            POLARIS automatically searches for the next best
+            available energy path.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="switch-layout">
+
+
+        <div class="switch-panel">
+
+
+            <h3>
+                AI Routing Logic
+            </h3>
+
+
+            <p>
+
+                The optimizer evaluates availability,
+                demand, battery reserve and source priority
+                before dispatching backup power.
+
+            </p>
+
+
+            <div class="switch-status">
+
+                <small>
+                    CURRENT MODE
+                </small>
+
+                <strong>
+                    ● AUTO RESPONSE ENABLED
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="switch-panel">
+
+
+            <h3>
+                Energy Shift Chain
+            </h3>
+
+
+            <div class="source-chain">
+
+
+                <div class="source active">
+
+                    <div class="source-number">
+                        01
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Renewable Sources
+                        </h4>
+
+                        <p>
+                            Use available clean generation
+                        </p>
+
+                    </div>
+
+                    <div class="source-state">
+                        PRIMARY
+                    </div>
+
+                </div>
+
+
+                <div class="source">
+
+                    <div class="source-number">
+                        02
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Battery
+                        </h4>
+
+                        <p>
+                            Short-term reserve response
+                        </p>
+
+                    </div>
+
+                    <div class="source-state">
+                        BACKUP
+                    </div>
+
+                </div>
+
+
+                <div class="source">
+
+                    <div class="source-number">
+                        03
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Hydrogen
+                        </h4>
+
+                        <p>
+                            Stored energy support
+                        </p>
+
+                    </div>
+
+                    <div class="source-state">
+                        RESERVE
+                    </div>
+
+                </div>
+
+
+                <div class="source">
+
+                    <div class="source-number">
+                        04
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Diesel Generator
+                        </h4>
+
+                        <p>
+                            Emergency electrical backup
+                        </p>
+
+                    </div>
+
+                    <div class="source-state">
+                        EMERGENCY
+                    </div>
+
+                </div>
+
+
+                <div class="source">
+
+                    <div class="source-number">
+                        05
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            CHP
+                        </h4>
+
+                        <p>
+                            Last-resort support
+                        </p>
+
+                    </div>
+
+                    <div class="source-state">
+                        LAST
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CRITICAL LOAD PROTECTION
+========================================================= -->
+
+<section
+class="section"
+id="protection">
+
+
+    <div class="heading">
+
+        <div class="mini">
+            STATION PROTECTION
+        </div>
+
+
+        <h2>
+
+            Critical operations<br>
+            come first.
+
+        </h2>
+
+
+        <p>
+
+            During a severe shortage, POLARIS prioritizes
+            essential station operations before non-critical
+            loads.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="protection">
+
+
+        <div class="protection-main">
+
+
+            <h3>
+                Protected Demand
+            </h3>
+
+
+            <p>
+
+                These critical loads together require
+                approximately 55 kW and are prioritized
+                by the optimizer.
+
+            </p>
+
+
+            <div class="protection-number">
+
+                55<span> kW</span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="load-list">
+
+
+            <div class="load">
+
+                <small>
+                    CRITICAL
+                </small>
+
+                <strong>
+                    40 kW
+                </strong>
+
+                <span>
+                    ✓ HEATING
+                </span>
+
+            </div>
+
+
+            <div class="load">
+
+                <small>
+                    CRITICAL
+                </small>
+
+                <strong>
+                    10 kW
+                </strong>
+
+                <span>
+                    ✓ COMMUNICATION
+                </span>
+
+            </div>
+
+
+            <div class="load">
+
+                <small>
+                    CRITICAL
+                </small>
+
+                <strong>
+                    5 kW
+                </strong>
+
+                <span>
+                    ✓ MEDICAL
+                </span>
+
+            </div>
+
+
+            <div class="load">
+
+                <small>
+                    NON-CRITICAL
+                </small>
+
+                <strong>
+                    25 kW
+                </strong>
+
+                <span>
+                    REDUCIBLE
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     AI PREDICTION
+========================================================= -->
+
+<section
+class="section ai-section"
+id="ai">
+
+
+    <div class="heading">
+
+        <div class="mini">
+            AI DISASTER INTELLIGENCE
+        </div>
+
+
+        <h2>
+
+            Don't just react.<br>
+            Prepare before it happens.
+
+        </h2>
+
+
+        <p>
+
+            The AI pre-charge system can look ahead by
+            up to the configured planning horizon and
+            prepare battery reserve for expected shortages,
+            unavailable sources and disaster windows.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="ai-grid">
+
+
+        <div class="ai-card">
+
+
+            <h3>
+                Pre-Charge Intelligence
+            </h3>
+
+
+            <p>
+
+                When the system expects a future deficit,
+                it can use available renewable surplus
+                to charge the battery before the shortage
+                arrives.
+
+            </p>
+
+
+            <div class="ai-terminal">
+
+                > LOOKAHEAD: 4 HOURS<br>
+
+                > FUTURE EVENT SCAN: ACTIVE<br>
+
+                > SURPLUS ENERGY: CHECKED<br>
+
+                > BATTERY RESERVE: PROTECTED<br>
+
+                > PRE-CHARGE: READY
+
+            </div>
+
+        </div>
+
+
+
+        <div class="ai-card">
+
+
+            <h3>
+                Adaptive Disaster Logic
+            </h3>
+
+
+            <p>
+
+                If the expected event changes the available
+                generation, the optimizer recalculates the
+                energy balance and changes the dispatch plan.
+
+            </p>
+
+
+            <div class="ai-terminal">
+
+                > SOURCE FAILURE DETECTED<br>
+
+                > ENERGY BALANCE RECALCULATING...<br>
+
+                > CRITICAL LOADS: PROTECTED<br>
+
+                > BEST BACKUP: SELECTED<br>
+
+                > AUTO SWITCH: READY
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     INCIDENT FEED
+========================================================= -->
+
+<section class="section">
+
+
+    <div class="heading">
+
+        <div class="mini">
+            INCIDENT TIMELINE
+        </div>
+
+
+        <h2>
+            What happens during an event?
+        </h2>
+
+
+        <p>
+
+            A simplified live-style view of how POLARIS
+            would respond to a changing disaster condition.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="feed">
+
+
+        <div class="feed-item">
+
+            <div class="feed-time">
+                T + 00:00
+            </div>
+
+            <h4>
+                Disaster condition detected
+            </h4>
+
+            <p>
+                Resource availability and station demand
+                are immediately evaluated.
+            </p>
+
+        </div>
+
+
+        <div class="feed-item">
+
+            <div class="feed-time">
+                T + 00:05
+            </div>
+
+            <h4>
+                Energy balance recalculated
+            </h4>
+
+            <p>
+                AI determines the expected supply deficit
+                and checks available reserves.
+            </p>
+
+        </div>
+
+
+        <div class="feed-item">
+
+            <div class="feed-time">
+                T + 00:10
+            </div>
+
+            <h4>
+                Source switching initiated
+            </h4>
+
+            <p>
+                The best available energy path is selected
+                automatically.
+            </p>
+
+        </div>
+
+
+        <div class="feed-item">
+
+            <div class="feed-time">
+                T + 00:15
+            </div>
+
+            <h4>
+                Critical loads protected
+            </h4>
+
+            <p>
+                Heating, communication and medical loads
+                remain prioritized.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     LIVE CONTROL CENTER
+========================================================= -->
+
+<section class="section">
+
+
+    <div class="heading">
+
+        <div class="mini">
+            LIVE CONTROL CENTER
+        </div>
+
+
+        <h2>
+            Emergency system status.
+        </h2>
+
+    </div>
+
+
+
+    <div class="control-center">
+
+
+        <div class="control">
+
+            <small>
+                DISASTER MONITOR
+            </small>
+
+            <strong class="safe">
+                ACTIVE
+            </strong>
+
+        </div>
+
+
+        <div class="control">
+
+            <small>
+                AUTO SWITCH
+            </small>
+
+            <strong class="safe">
+                ENABLED
+            </strong>
+
+        </div>
+
+
+        <div class="control">
+
+            <small>
+                CRITICAL LOADS
+            </small>
+
+            <strong class="safe">
+                PROTECTED
+            </strong>
+
+        </div>
+
+
+        <div class="control">
+
+            <small>
+                BATTERY RESERVE
+            </small>
+
+            <strong id="batteryStatus" class="safe">
+                70%
+            </strong>
+
+        </div>
+
+
+        <div class="control">
+
+            <small>
+                CURRENT DEMAND
+            </small>
+
+            <strong id="demandStatus">
+                90 kW
+            </strong>
+
+        </div>
+
+
+        <div class="control">
+
+            <small>
+                ACTIVE BACKUP
+            </small>
+
+            <strong id="backupStatus" class="warning">
+                NONE
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<div class="cta">
+
+
+    <h2>
+
+        The environment can change.
+        The station doesn't have to stop.
+
+    </h2>
+
+
+    <p>
+
+        POLARIS combines disaster awareness,
+        AI prediction, automatic source switching,
+        storage and critical-load protection into
+        one resilient energy-management system.
+
+    </p>
+
+
+    <a
+    href="backup-intelligence.html"
+    class="btn btn-primary">
+
+        Open Intelligent Backup
+
+    </a>
+
+</div>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    POLARIS • AI-DRIVEN SMART ENERGY MANAGEMENT SYSTEM
+
+    <br>
+
+    DISASTER MANAGEMENT • AUTO MODE • RESILIENT ENERGY CONTROL
+
+</footer>
+
+
+
+<script>
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function toggleMenu(){
+
+    document
+    .getElementById("sideMenu")
+    .classList
+    .toggle("active");
+
+}
+
+
+/* =========================================================
+   LIVE SYSTEM SIMULATION
+========================================================= */
+
+let battery = 70;
+
+
+async function updateSystem(){
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+
+        battery = d.battery_soc_pct !== undefined ? Number(d.battery_soc_pct) : null;
+        const demand = d.total_station_load_kw !== undefined ? Number(d.total_station_load_kw) : null;
+
+        const elBat = document.getElementById("batteryStatus");
+        if (elBat) elBat.textContent = battery !== null ? Math.round(battery) + "%" : "--%";
+
+        const elDem = document.getElementById("demandStatus");
+        if (elDem) elDem.textContent = demand !== null ? demand.toFixed(1) + " kW" : "-- kW";
+
+        // Backup system status
+        const elBackup = document.getElementById("backupStatus");
+        if (elBackup) {
+            if (d.generator_power_kw > 0.1) {
+                elBackup.textContent = "DIESEL GEN";
+            } else if (Math.abs(d.battery_power_kw || 0) > 0.1) {
+                elBackup.textContent = "BATTERY BESS";
+            } else {
+                elBackup.textContent = "CLEAN RENEWABLE";
+            }
+        }
+    } catch (e) {
+        console.warn("Disaster status notice:", e);
+    }
+}
+
+async function triggerDisasterScenario(name) {
+    try {
+        const res = await fetch('/api/showcase/scenario', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({scenario: name})
+        });
+        const data = await res.json();
+        console.log("Triggered disaster scenario:", data);
+        await updateSystem();
+        const sub = document.querySelector(".status-sub");
+        if (sub && data.data && data.data.message) {
+            sub.textContent = data.data.message;
+            sub.style.color = "#ffc857";
+        }
+    } catch (e) {
+        console.error("Disaster scenario error:", e);
+    }
+}
+
+updateSystem();
+
+setInterval(
+    updateSystem,
+    2000
+);
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+const observer =
+new IntersectionObserver(
+
+    entries=>{
+
+        entries.forEach(entry=>{
+
+            if(
+                entry.isIntersecting
+            ){
+
+                entry.target.style.opacity =
+                "1";
+
+                entry.target.style.transform =
+                "translateY(0)";
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold:.12
+    }
+
+);
+
+
+document
+.querySelectorAll(
+    ".incident-ribbon,"+
+    ".disaster-card,"+
+    ".response-step,"+
+    ".switch-panel,"+
+    ".source,"+
+    ".protection-main,"+
+    ".load,"+
+    ".ai-card,"+
+    ".feed-item,"+
+    ".control"
+)
+.forEach(el=>{
+
+    el.style.opacity="0";
+
+    el.style.transform=
+    "translateY(30px)";
+
+    el.style.transition=
+    "opacity .7s ease, transform .7s ease";
+
+    observer.observe(el);
+
+});
+
+</script>
+
+
+</body>
+
+</html>

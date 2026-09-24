@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Total Renewable Fleet | POLARIS</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#050708;
+    color:#f4f7f8;
+    overflow-x:hidden;
+}
+
+/* =========================
+   VARIABLES
+========================= */
+
+:root{
+    --black:#050708;
+    --black2:#0a0e10;
+    --panel:#0d1215;
+    --panel2:#11181c;
+    --cyan:#72f4ff;
+    --cyan2:#c5fbff;
+    --silver:#dce5e8;
+    --muted:#8d9ba1;
+    --line:rgba(114,244,255,.16);
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        radial-gradient(circle at 80% 10%,rgba(114,244,255,.08),transparent 28%),
+        radial-gradient(circle at 10% 80%,rgba(220,229,232,.035),transparent 25%);
+    z-index:-2;
+}
+
+.grid-bg{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    opacity:.16;
+    background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:50px 50px;
+    mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    background:rgba(5,7,8,.78);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    z-index:1000;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:800;
+    letter-spacing:2px;
+    font-size:18px;
+}
+
+.logo-mark{
+    width:34px;
+    height:34px;
+    border:1px solid var(--cyan);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--cyan);
+    box-shadow:0 0 18px rgba(114,244,255,.22);
+}
+
+.menu-btn{
+    width:44px;
+    height:44px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:12px;
+    background:#0b1012;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    transition:.3s;
+}
+
+.menu-btn span{
+    width:20px;
+    height:2px;
+    background:#e9f1f3;
+    border-radius:2px;
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    border-color:var(--cyan);
+    box-shadow:0 0 20px rgba(114,244,255,.15);
+}
+
+.side-menu{
+    position:fixed;
+    top:72px;
+    right:-310px;
+    width:300px;
+    min-height:calc(100vh - 72px);
+    background:rgba(8,11,13,.97);
+    backdrop-filter:blur(20px);
+    border-left:1px solid var(--line);
+    padding:35px 25px;
+    z-index:999;
+    transition:.45s cubic-bezier(.77,0,.18,1);
+}
+
+.side-menu.active{
+    right:0;
+}
+
+.side-menu h3{
+    color:var(--cyan);
+    margin-bottom:25px;
+    letter-spacing:2px;
+}
+
+.side-menu a{
+    display:block;
+    text-decoration:none;
+    color:#c7d0d3;
+    padding:15px 16px;
+    margin:7px 0;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:var(--cyan);
+    background:rgba(114,244,255,.07);
+    transform:translateX(7px);
+}
+
+/* =========================
+   PAGE NAV
+========================= */
+
+.page-nav{
+    position:sticky;
+    top:72px;
+    z-index:800;
+    height:55px;
+    background:rgba(7,10,11,.88);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+}
+
+.page-nav a{
+    text-decoration:none;
+    color:#89979c;
+    font-size:13px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:var(--cyan);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:720px;
+    padding:150px 7% 90px;
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    align-items:center;
+    gap:60px;
+    position:relative;
+}
+
+.hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    border:1px solid rgba(114,244,255,.25);
+    background:rgba(114,244,255,.05);
+    padding:9px 14px;
+    border-radius:100px;
+    color:var(--cyan);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    margin-bottom:22px;
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 12px var(--cyan);
+    animation:pulse 1.5s infinite;
+}
+
+.hero h1{
+    font-size:clamp(48px,6vw,88px);
+    line-height:.98;
+    letter-spacing:-4px;
+    max-width:800px;
+}
+
+.hero h1 span{
+    color:var(--cyan);
+    text-shadow:0 0 35px rgba(114,244,255,.2);
+}
+
+.hero p{
+    color:var(--muted);
+    max-width:640px;
+    line-height:1.8;
+    margin-top:25px;
+    font-size:15px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:14px;
+    margin-top:32px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    text-decoration:none;
+    padding:14px 21px;
+    border-radius:11px;
+    font-size:13px;
+    font-weight:700;
+    transition:.3s;
+}
+
+.btn-main{
+    color:#041012;
+    background:var(--cyan);
+    box-shadow:0 0 25px rgba(114,244,255,.14);
+}
+
+.btn-main:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 35px rgba(114,244,255,.22);
+}
+
+.btn-outline{
+    color:#dce5e8;
+    border:1px solid rgba(255,255,255,.16);
+    background:#0c1113;
+}
+
+.btn-outline:hover{
+    border-color:var(--cyan);
+    color:var(--cyan);
+}
+
+/* =========================
+   FLEET VISUAL
+========================= */
+
+.fleet-visual{
+    height:480px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.core{
+    width:230px;
+    height:230px;
+    border-radius:50%;
+    border:1px solid rgba(114,244,255,.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    box-shadow:
+        0 0 35px rgba(114,244,255,.1),
+        inset 0 0 50px rgba(114,244,255,.05);
+}
+
+.core::before{
+    content:"";
+    position:absolute;
+    inset:22px;
+    border-radius:50%;
+    border:1px dashed rgba(220,229,232,.25);
+    animation:spin 18s linear infinite;
+}
+
+.core::after{
+    content:"";
+    position:absolute;
+    inset:-20px;
+    border-radius:50%;
+    border:1px solid rgba(114,244,255,.12);
+    animation:pulseRing 2.8s infinite;
+}
+
+.core-content{
+    text-align:center;
+    z-index:3;
+}
+
+.core-icon{
+    font-size:42px;
+    margin-bottom:10px;
+    filter:drop-shadow(0 0 15px rgba(114,244,255,.5));
+}
+
+.core-content strong{
+    display:block;
+    font-size:29px;
+}
+
+.core-content small{
+    color:#849298;
+    letter-spacing:2px;
+    font-size:10px;
+}
+
+.orbit{
+    position:absolute;
+    width:380px;
+    height:380px;
+    border:1px solid rgba(220,229,232,.09);
+    border-radius:50%;
+    animation:spin 25s linear infinite;
+}
+
+.orbit2{
+    width:455px;
+    height:455px;
+    border-color:rgba(114,244,255,.08);
+    animation:spinReverse 35s linear infinite;
+}
+
+.source-dot{
+    position:absolute;
+    width:62px;
+    height:62px;
+    border-radius:50%;
+    background:#0b1113;
+    border:1px solid rgba(255,255,255,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    box-shadow:0 0 25px rgba(0,0,0,.4);
+    transition:.3s;
+}
+
+.source-dot:hover{
+    transform:scale(1.18);
+    border-color:var(--cyan);
+    box-shadow:0 0 30px rgba(114,244,255,.22);
+}
+
+.s1{top:15px;left:50%;transform:translateX(-50%);}
+.s2{right:25px;top:125px;}
+.s3{right:55px;bottom:45px;}
+.s4{left:55px;bottom:45px;}
+.s5{left:25px;top:125px;}
+.s6{top:50%;right:-5px;transform:translateY(-50%);}
+.s7{top:50%;left:-5px;transform:translateY(-50%);}
+
+.energy-line{
+    position:absolute;
+    width:100%;
+    height:2px;
+    background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+    opacity:.45;
+    animation:energyMove 2s linear infinite;
+}
+
+/* =========================
+   METRICS
+========================= */
+
+.metrics{
+    padding:25px 7% 80px;
+}
+
+.metric-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.metric{
+    background:linear-gradient(145deg,#0d1316,#080c0e);
+    border:1px solid rgba(255,255,255,.08);
+    padding:25px;
+    border-radius:17px;
+    position:relative;
+    overflow:hidden;
+    transition:.35s;
+}
+
+.metric::before{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    right:-50px;
+    top:-50px;
+    border-radius:50%;
+    background:rgba(114,244,255,.07);
+}
+
+.metric:hover{
+    transform:translateY(-7px);
+    border-color:rgba(114,244,255,.28);
+    box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+.metric-label{
+    color:#7f8d92;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+}
+
+.metric-value{
+    font-size:34px;
+    font-weight:800;
+    margin-top:9px;
+}
+
+.metric-value span{
+    font-size:15px;
+    color:#8d9ba1;
+    font-weight:500;
+}
+
+.metric-desc{
+    color:#69777c;
+    font-size:11px;
+    margin-top:8px;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+    padding:90px 7%;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:30px;
+    margin-bottom:35px;
+}
+
+.eyebrow{
+    color:var(--cyan);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.section h2{
+    font-size:38px;
+    letter-spacing:-1.5px;
+}
+
+.section-intro{
+    color:#7f8d92;
+    max-width:500px;
+    font-size:13px;
+    line-height:1.7;
+}
+
+/* =========================
+   SOURCE CARDS
+========================= */
+
+.source-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.source-card{
+    background:#0b1012;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:24px;
+    min-height:245px;
+    position:relative;
+    overflow:hidden;
+    transition:.4s;
+}
+
+.source-card:hover{
+    transform:translateY(-9px);
+    border-color:rgba(114,244,255,.35);
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+
+.source-card::after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    right:-100px;
+    bottom:-100px;
+    border:1px solid rgba(114,244,255,.12);
+    transition:.4s;
+}
+
+.source-card:hover::after{
+    transform:scale(1.5);
+}
+
+.source-icon{
+    width:55px;
+    height:55px;
+    border-radius:15px;
+    background:#11191c;
+    border:1px solid rgba(255,255,255,.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    margin-bottom:20px;
+}
+
+.source-card h3{
+    font-size:17px;
+}
+
+.source-card p{
+    color:#76848a;
+    font-size:11px;
+    line-height:1.6;
+    margin:9px 0 18px;
+}
+
+.source-status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:#aeb9bd;
+    font-size:11px;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#dce5e8;
+    box-shadow:0 0 10px rgba(220,229,232,.6);
+}
+
+/* =========================
+   ENERGY FLOW
+========================= */
+
+.flow-section{
+    background:#080c0e;
+    border-top:1px solid rgba(255,255,255,.05);
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.flow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:0;
+    margin-top:45px;
+}
+
+.flow-node{
+    width:155px;
+    min-height:125px;
+    background:#0d1316;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    transition:.35s;
+}
+
+.flow-node:hover{
+    transform:translateY(-8px);
+    border-color:var(--cyan);
+}
+
+.flow-number{
+    font-size:11px;
+    color:var(--cyan);
+    letter-spacing:1px;
+}
+
+.flow-node h4{
+    margin-top:12px;
+    font-size:13px;
+}
+
+.flow-node p{
+    color:#718086;
+    font-size:10px;
+    margin-top:7px;
+}
+
+.flow-arrow{
+    color:var(--cyan);
+    font-size:25px;
+    padding:0 10px;
+    animation:arrowPulse 1.5s infinite;
+}
+
+/* =========================
+   ANALYTICS
+========================= */
+
+.analytics{
+    display:grid;
+    grid-template-columns:1.4fr .6fr;
+    gap:20px;
+}
+
+.chart-box,
+.mix-box{
+    background:#0b1012;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:28px;
+}
+
+.box-title{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:30px;
+}
+
+.box-title h3{
+    font-size:16px;
+}
+
+.box-title span{
+    color:#7f8d92;
+    font-size:11px;
+}
+
+.chart{
+    height:230px;
+    display:flex;
+    align-items:end;
+    gap:8px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    padding:10px 0 0;
+}
+
+.bar{
+    flex:1;
+    background:linear-gradient(to top,var(--cyan),rgba(114,244,255,.08));
+    border-radius:5px 5px 0 0;
+    min-height:12px;
+    transition:.5s;
+    position:relative;
+}
+
+.bar:hover{
+    filter:brightness(1.4);
+}
+
+.bar::after{
+    content:"";
+    position:absolute;
+    top:-5px;
+    left:50%;
+    width:4px;
+    height:4px;
+    background:white;
+    border-radius:50%;
+    transform:translateX(-50%);
+}
+
+.hours{
+    display:flex;
+    justify-content:space-between;
+    color:#58666b;
+    font-size:9px;
+    margin-top:10px;
+}
+
+.mix-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.mix-item{
+    display:grid;
+    grid-template-columns:70px 1fr 45px;
+    align-items:center;
+    gap:10px;
+    font-size:11px;
+}
+
+.mix-name{
+    color:#aeb8bb;
+}
+
+.mix-track{
+    height:6px;
+    background:#151d20;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.mix-fill{
+    height:100%;
+    background:var(--cyan);
+    border-radius:10px;
+    animation:fillIn 1.5s ease;
+}
+
+/* =========================
+   AI PANEL
+========================= */
+
+.ai-panel{
+    margin-top:25px;
+    background:
+        linear-gradient(120deg,rgba(114,244,255,.08),transparent 50%),
+        #0b1012;
+    border:1px solid rgba(114,244,255,.18);
+    border-radius:20px;
+    padding:30px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:25px;
+}
+
+.ai-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    border:1px solid rgba(114,244,255,.3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    color:var(--cyan);
+    box-shadow:0 0 25px rgba(114,244,255,.08);
+}
+
+.ai-panel h3{
+    font-size:17px;
+}
+
+.ai-panel p{
+    color:#76848a;
+    font-size:12px;
+    line-height:1.6;
+    margin-top:7px;
+}
+
+.ai-state{
+    padding:10px 14px;
+    border-radius:10px;
+    background:rgba(114,244,255,.08);
+    border:1px solid rgba(114,244,255,.18);
+    color:var(--cyan);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+/* =========================
+   LIVE TERMINAL
+========================= */
+
+.terminal{
+    margin-top:25px;
+    background:#06090a;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:17px;
+    padding:23px;
+    font-family:monospace;
+}
+
+.terminal-head{
+    display:flex;
+    gap:7px;
+    margin-bottom:18px;
+}
+
+.term-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#5c696d;
+}
+
+.terminal-line{
+    font-size:11px;
+    color:#7d8b90;
+    line-height:2;
+}
+
+.terminal-line span{
+    color:var(--cyan);
+}
+
+/* =========================
+   CTA
+========================= */
+
+.cta{
+    margin:40px 7% 100px;
+    padding:55px;
+    border:1px solid rgba(114,244,255,.18);
+    border-radius:24px;
+    text-align:center;
+    background:
+        radial-gradient(circle at center,rgba(114,244,255,.07),transparent 55%),
+        #0a0f11;
+    position:relative;
+    overflow:hidden;
+}
+
+.cta h2{
+    font-size:38px;
+    letter-spacing:-1.5px;
+}
+
+.cta p{
+    color:#77858a;
+    max-width:600px;
+    margin:14px auto 25px;
+    font-size:13px;
+    line-height:1.7;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    border-top:1px solid rgba(255,255,255,.06);
+    padding:30px 7%;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    color:#667378;
+    font-size:11px;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:.4;transform:scale(.7);}
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+@keyframes spinReverse{
+    from{transform:rotate(360deg);}
+    to{transform:rotate(0deg);}
+}
+
+@keyframes pulseRing{
+    0%{transform:scale(.9);opacity:.7;}
+    100%{transform:scale(1.25);opacity:0;}
+}
+
+@keyframes energyMove{
+    0%{transform:translateX(-100%);}
+    100%{transform:translateX(100%);}
+}
+
+@keyframes arrowPulse{
+    0%,100%{opacity:.4;}
+    50%{opacity:1;transform:translateX(4px);}
+}
+
+@keyframes fillIn{
+    from{width:0;}
+}
+
+@media(max-width:1000px){
+
+    .hero{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .hero p{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .source-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .metric-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .analytics{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    .navbar{
+        padding:0 18px;
+    }
+
+    .page-nav{
+        overflow-x:auto;
+        justify-content:flex-start;
+        padding:0 20px;
+        gap:22px;
+    }
+
+    .hero{
+        padding:125px 5% 60px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .fleet-visual{
+        height:390px;
+        transform:scale(.75);
+    }
+
+    .source-grid{
+        grid-template-columns:1fr;
+    }
+
+    .metric-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .section{
+        padding:65px 5%;
+    }
+
+    .section-head{
+        display:block;
+    }
+
+    .section-intro{
+        margin-top:15px;
+    }
+
+    .flow{
+        flex-direction:column;
+    }
+
+    .flow-arrow{
+        transform:rotate(90deg);
+        padding:8px;
+    }
+
+    .ai-panel{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .ai-icon{
+        margin:auto;
+    }
+
+    footer{
+        flex-direction:column;
+    }
+
+    .cta{
+        margin-left:5%;
+        margin-right:5%;
+        padding:40px 20px;
+    }
+
+    .cta h2{
+        font-size:28px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        <div class="logo-mark">⚡</div>
+        POLARIS
+    </div>
+
+    <!-- THREE DASH MENU -->
+    <button class="menu-btn" id="menuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+</nav>
+
+<!-- =========================
+     SIDE MENU
+========================= -->
+
+<div class="side-menu" id="sideMenu">
+
+    <h3>POLARIS MENU</h3>
+
+    <a href="index.html">⌂ Home</a>
+    <a href="renewable.html">◈ Renewable Energy</a>
+    <a href="nonrenewable.html">◉ Backup & Energy Support</a>
+    <a href="admin.html">⚙ Admin Dashboard</a>
+    <a href="disaster.html">⚠ Disaster Management</a>
+
+</div>
+
+<!-- =========================
+     PAGE NAVIGATION
+========================= -->
+
+<div class="page-nav">
+
+    <a href="#overview">Overview</a>
+    <a href="#sources">Fleet Sources</a>
+    <a href="#flow">Energy Flow</a>
+    <a href="#analytics">Analytics</a>
+    <a href="renewable.html">← Renewable Energy</a>
+
+</div>
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero" id="overview">
+
+    <div>
+
+        <div class="hero-tag">
+            <span class="live-dot"></span>
+            <span id="fleetStationBadge">NCPOR // BHARATI & MAITRI EXPEDITION FLEET</span>
+        </div>
+
+        <h1>
+            One Fleet.<br>
+            <span>One Energy System.</span>
+        </h1>
+
+        <p>
+            The complete renewable energy network of the polar research
+            station working together as one intelligent power fleet.
+            POLARIS continuously monitors every source and automatically
+            prioritizes the best available energy.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#sources" class="btn btn-main">
+                Explore Fleet
+            </a>
+
+            <a href="renewable.html" class="btn btn-outline">
+                ← Back to Renewable
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- FLEET VISUAL -->
+
+    <div class="fleet-visual">
+
+        <div class="energy-line"></div>
+
+        <div class="orbit"></div>
+        <div class="orbit orbit2"></div>
+
+        <div class="core">
+
+            <div class="core-content">
+
+                <div class="core-icon">⚡</div>
+
+                <strong id="coreOutput">—</strong>
+
+                <small>LIVE OUTPUT</small>
+
+            </div>
+
+        </div>
+
+
+        <div class="source-dot s1" title="Solar">☀</div>
+        <div class="source-dot s2" title="Wind">≋</div>
+        <div class="source-dot s3" title="Hydro">◒</div>
+        <div class="source-dot s4" title="Geothermal">♨</div>
+        <div class="source-dot s5" title="Marine">≈</div>
+        <div class="source-dot s6" title="Biomass">♨</div>
+        <div class="source-dot s7" title="Solar Thermal">◉</div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     METRICS
+========================= -->
+
+<section class="metrics">
+
+    <div class="metric-grid">
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Installed Capacity
+            </div>
+
+            <div class="metric-value">
+                1,040 <span>kW</span>
+            </div>
+
+            <div class="metric-desc">
+                Total renewable fleet capacity
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Live Generation
+            </div>
+
+            <div class="metric-value">
+                <span id="liveGeneration">—</span>
+                <span>kW</span>
+            </div>
+
+            <div class="metric-desc">
+                Current renewable production
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Fleet Availability
+            </div>
+
+            <div class="metric-value">
+                <span id="availability">—</span>
+                <span>%</span>
+            </div>
+
+            <div class="metric-desc">
+                Sources currently available
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-label">
+                Renewable Share
+            </div>
+
+            <div class="metric-value">
+                <span id="renewableShare">—</span>
+                <span>%</span>
+            </div>
+
+            <div class="metric-desc">
+                Contribution toward station demand
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SOURCES
+========================= -->
+
+<section class="section" id="sources">
+
+    <div class="section-head">
+
+        <div>
+
+            <div class="eyebrow">
+                Fleet Composition
+            </div>
+
+            <h2>Seven Renewable Sources</h2>
+
+        </div>
+
+        <p class="section-intro">
+            Every renewable source has a different role. Together they
+            create a resilient multi-source energy system for the station.
+        </p>
+
+    </div>
+
+
+    <div class="source-grid">
+
+
+        <!-- SOLAR -->
+
+        <a href="solar.html" style="text-decoration:none;color:inherit;">
+
+            <div class="source-card">
+
+                <div class="source-icon">☀</div>
+
+                <h3>Solar PV</h3>
+
+                <p>
+                    Daytime photovoltaic generation with
+                    an installed capacity of 300 kW.
+                </p>
+
+                <div class="source-status">
+                    <span class="status-dot"></span>
+                    ONLINE • 300 kW
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- WIND -->
+
+        <a href="wind.html" style="text-decoration:none;color:inherit;">
+
+            <div class="source-card">
+
+                <div class="source-icon">≋</div>
+
+                <h3>Wind</h3>
+
+                <p>
+                    Wind turbines provide large-scale renewable
+                    generation with 300 kW capacity.
+                </p>
+
+                <div class="source-status">
+                    <span class="status-dot"></span>
+                    ONLINE • 300 kW
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- HYDRO -->
+
+        <a href="hydro.html" style="text-decoration:none;color:inherit;">
+
+            <div class="source-card">
+
+                <div class="source-icon">◒</div>
+
+                <h3>Hydropower</h3>
+
+                <p>
+                    Water-based generation providing approximately
+                    90 kW average output.
+                </p>
+
+                <div class="source-status">
+                    <span class="status-dot"></span>
+                    ONLINE • 200 kW
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- GEOTHERMAL -->
+
+        <a href="geothermal.html" style="text-decoration:none;color:inherit;">
+
+            <div class="source-card">
+
+                <div class="source-icon">♨</div>
+
+                <h3>Geothermal</h3>
+
+                <p>
+                    Stable underground heat generation with
+                    approximately 95 kW average output.
+                </p>
+
+                <div class="source-status">
+                    <span class="status-dot"></span>
+                    ONLINE • 100 kW
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- MARINE -->
+
+        <a href="marine.html" style="text-decoration:none;color:inherit;">
+
+            <div class="source-card">
+
+                <div class="source-icon">≈</div>
+
+                <h3>Marine Energy</h3>
+
+                <p>
+                    Tidal, wave and ocean-current energy
+                    with 50 kW installed capacity.
+                </p>
+
+                <div class="source-status">
+                    <span class="status-dot"></span>
+                    ONLINE • 50 kW
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- BIOMASS -->
+
+        <a href="biomass.html" style="text-decoration:none;color:inherit;">
+
+            <div class="source-card">
+
+                <div class="source-icon">♨</div>
+
+                <h3>Biomass / Biogas</h3>
+
+                <p>
+                    Organic energy conversion providing around
+                    55 kW average output.
+                </p>
+
+                <div class="source-status">
+                    <span class="status-dot"></span>
+                    ONLINE • 60 kW
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- SOLAR THERMAL -->
+
+        <a href="solarthermal.html" style="text-decoration:none;color:inherit;">
+
+            <div class="source-card">
+
+                <div class="source-icon">◉</div>
+
+                <h3>Solar Thermal</h3>
+
+                <p>
+                    Solar heat collection and thermal energy
+                    conversion with 30 kW capacity.
+                </p>
+
+                <div class="source-status">
+                    <span class="status-dot"></span>
+                    ONLINE • 30 kW
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- TOTAL -->
+
+        <div class="source-card">
+
+            <div class="source-icon">⚡</div>
+
+            <h3>Total Fleet</h3>
+
+            <p>
+                All renewable sources combined into one
+                intelligent energy network.
+            </p>
+
+            <div class="source-status">
+                <span class="status-dot"></span>
+                SYSTEM ACTIVE • 1,040 kW
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ENERGY FLOW
+========================= -->
+
+<section class="section flow-section" id="flow">
+
+    <div class="section-head">
+
+        <div>
+
+            <div class="eyebrow">
+                Intelligent Dispatch
+            </div>
+
+            <h2>How the Fleet Works</h2>
+
+        </div>
+
+        <p class="section-intro">
+            POLARIS evaluates available renewable sources and selects
+            the best energy path automatically.
+        </p>
+
+    </div>
+
+
+    <div class="flow">
+
+        <div class="flow-node">
+
+            <div class="flow-number">
+                01
+            </div>
+
+            <h4>Monitor</h4>
+
+            <p>
+                Sensors report source conditions.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">→</div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-number">
+                02
+            </div>
+
+            <h4>Predict</h4>
+
+            <p>
+                AI forecasts generation and demand.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">→</div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-number">
+                03
+            </div>
+
+            <h4>Optimize</h4>
+
+            <p>
+                Energy sources are prioritized.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">→</div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-number">
+                04
+            </div>
+
+            <h4>Dispatch</h4>
+
+            <p>
+                Power is sent to station loads.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">→</div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-number">
+                05
+            </div>
+
+            <h4>Protect</h4>
+
+            <p>
+                System reacts automatically to failures.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ANALYTICS
+========================= -->
+
+<section class="section" id="analytics">
+
+    <div class="section-head">
+
+        <div>
+
+            <div class="eyebrow">
+                Fleet Analytics
+            </div>
+
+            <h2>Generation Intelligence</h2>
+
+        </div>
+
+        <p class="section-intro">
+            A live-style demonstration of renewable fleet generation
+            across a 24-hour operating period.
+        </p>
+
+    </div>
+
+
+    <div class="analytics">
+
+        <!-- CHART -->
+
+        <div class="chart-box">
+
+            <div class="box-title">
+
+                <h3>24-Hour Fleet Generation</h3>
+
+                <span>kW</span>
+
+            </div>
+
+            <div class="chart" id="chart"></div>
+
+            <div class="hours">
+
+                <span>00</span>
+                <span>04</span>
+                <span>08</span>
+                <span>12</span>
+                <span>16</span>
+                <span>20</span>
+                <span>24</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- MIX -->
+
+        <div class="mix-box">
+
+            <div class="box-title">
+
+                <h3>Fleet Capacity Mix</h3>
+
+                <span>kW</span>
+
+            </div>
+
+
+            <div class="mix-list">
+
+                <div class="mix-item">
+
+                    <span class="mix-name">Solar</span>
+
+                    <div class="mix-track">
+                        <div class="mix-fill" style="width:100%"></div>
+                    </div>
+
+                    <span>300</span>
+
+                </div>
+
+
+                <div class="mix-item">
+
+                    <span class="mix-name">Wind</span>
+
+                    <div class="mix-track">
+                        <div class="mix-fill" style="width:100%"></div>
+                    </div>
+
+                    <span>300</span>
+
+                </div>
+
+
+                <div class="mix-item">
+
+                    <span class="mix-name">Hydro</span>
+
+                    <div class="mix-track">
+                        <div class="mix-fill" style="width:67%"></div>
+                    </div>
+
+                    <span>200</span>
+
+                </div>
+
+
+                <div class="mix-item">
+
+                    <span class="mix-name">Geo</span>
+
+                    <div class="mix-track">
+                        <div class="mix-fill" style="width:33%"></div>
+                    </div>
+
+                    <span>100</span>
+
+                </div>
+
+
+                <div class="mix-item">
+
+                    <span class="mix-name">Marine</span>
+
+                    <div class="mix-track">
+                        <div class="mix-fill" style="width:17%"></div>
+                    </div>
+
+                    <span>50</span>
+
+                </div>
+
+
+                <div class="mix-item">
+
+                    <span class="mix-name">Biomass</span>
+
+                    <div class="mix-track">
+                        <div class="mix-fill" style="width:20%"></div>
+                    </div>
+
+                    <span>60</span>
+
+                </div>
+
+
+                <div class="mix-item">
+
+                    <span class="mix-name">Thermal</span>
+
+                    <div class="mix-track">
+                        <div class="mix-fill" style="width:10%"></div>
+                    </div>
+
+                    <span>30</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI -->
+
+    <div class="ai-panel">
+
+        <div class="ai-icon">
+            ✦
+        </div>
+
+        <div>
+
+            <h3>
+                AI Fleet Intelligence
+            </h3>
+
+            <p>
+                The optimizer continuously compares generation,
+                demand, source availability and predicted conditions.
+                If one source becomes unavailable, the fleet automatically
+                shifts toward the next best available source.
+            </p>
+
+        </div>
+
+        <div class="ai-state">
+            AUTO MODE ACTIVE
+        </div>
+
+    </div>
+
+
+    <!-- TERMINAL -->
+
+    <div class="terminal">
+
+        <div class="terminal-head">
+
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+
+        </div>
+
+        <div class="terminal-line">
+            <span>[POLARIS]</span> Fleet monitoring initialized...
+        </div>
+
+        <div class="terminal-line">
+            <span>[ENERGY]</span> Renewable sources detected: 7
+        </div>
+
+        <div class="terminal-line">
+            <span>[OPTIMIZER]</span> Automatic source prioritization enabled
+        </div>
+
+        <div class="terminal-line">
+            <span>[AI]</span> Forecast engine running
+        </div>
+
+        <div class="terminal-line">
+            <span>[STATUS]</span> All renewable resources operational
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CTA
+========================= -->
+
+<section class="cta">
+
+    <h2>
+        The Fleet Is Always Thinking.
+    </h2>
+
+    <p>
+        From sunlight and wind to water, underground heat and biomass,
+        POLARIS combines multiple renewable resources into one resilient
+        energy system designed for extreme environments.
+    </p>
+
+    <a href="admin.html" class="btn btn-main">
+        Open Control Center
+    </a>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div>
+        © 2026 POLARIS • Smart Energy Management
+    </div>
+
+    <div>
+        Polar Research Station • Renewable Fleet
+    </div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   THREE DASH MENU
+========================= */
+
+const menuBtn = document.getElementById("menuBtn");
+const sideMenu = document.getElementById("sideMenu");
+
+menuBtn.addEventListener("click", () => {
+
+    sideMenu.classList.toggle("active");
+
+});
+
+
+/* Close menu after clicking link */
+
+document.querySelectorAll(".side-menu a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        sideMenu.classList.remove("active");
+
+    });
+
+});
+
+
+
+
+/* =========================
+   24 HOUR CHART
+========================= */
+
+const chart =
+    document.getElementById("chart");
+
+const values = [
+    310,280,260,245,
+    275,320,430,590,
+    720,810,850,900,
+    870,830,760,650,
+    580,520,490,450,
+    410,370,340,325
+];
+
+
+function renderFleetChart(valuesList) {
+    if (!chart) return;
+    chart.innerHTML = "";
+    valuesList.forEach(value => {
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.height = Math.min(100, Math.max(5, (value / 500 * 100))) + "%";
+        bar.title = value.toFixed(1) + " kW";
+        chart.appendChild(bar);
+    });
+}
+
+// Initial render
+renderFleetChart(values);
+
+async function updateFleet(){
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+
+        const output = Math.round(d.total_generation_kw || 160);
+        const demand = Math.round(d.total_station_load_kw || 65);
+        const availability = (d.integration_metrics ? d.integration_metrics.twin_health_score : 99);
+        const share = Math.min(100, Math.round(d.renewable_percentage || 85));
+
+        const elCore = document.getElementById("coreOutput");
+        if (elCore) elCore.textContent = output + " kW";
+
+        const elLive = document.getElementById("liveGeneration");
+        if (elLive) elLive.textContent = output;
+
+        const elAvail = document.getElementById("availability");
+        if (elAvail) elAvail.textContent = availability;
+
+        const elShare = document.getElementById("renewableShare");
+        if (elShare) elShare.textContent = share;
+
+        if (d.station && d.station.name) {
+            const elSt = document.getElementById("fleetStationBadge");
+            if (elSt) elSt.textContent = "NCPOR // " + d.station.name.toUpperCase() + " • " + (d.station.location || "ANTARCTICA").toUpperCase();
+        }
+
+        // Dynamically update 24-hour fleet profile bars with actual predictions
+        const fc = (d.ai_forecast && d.ai_forecast.forecast) ? d.ai_forecast.forecast : null;
+        if (fc && fc.length > 0) {
+            const dynamicPoints = fc.map(entry => {
+                const genObj = entry.predicted_generation_kw || {};
+                return Object.values(genObj).reduce((a, b) => a + (Number(b) || 0), 0);
+            });
+            renderFleetChart(dynamicPoints);
+        }
+    } catch (e) {
+        console.warn("Fleet update notice:", e);
+    }
+}
+
+setInterval(updateFleet,2000);
+
+
+/* =========================
+   SMALL FLEET PULSE
+========================= */
+
+setInterval(() => {
+
+    const dots =
+        document.querySelectorAll(".source-dot");
+
+    const random =
+        Math.floor(Math.random() * dots.length);
+
+    dots.forEach(dot => {
+
+        dot.style.borderColor =
+            "rgba(255,255,255,.15)";
+
+    });
+
+    dots[random].style.borderColor =
+        "#72f4ff";
+
+},1800);
+
+</script>
+
+</body>
+</html>

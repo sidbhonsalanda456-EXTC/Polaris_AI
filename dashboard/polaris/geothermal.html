@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLARIS | Geothermal Energy</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#090506;
+    color:#f7eee8;
+    overflow-x:hidden;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:72px;
+    background:rgba(9,5,6,.88);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,120,65,.18);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    z-index:1000;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:800;
+    letter-spacing:4px;
+    color:#ff9a62;
+}
+
+.logo span{
+    color:#e8c2ae;
+}
+
+.menu-btn{
+    width:46px;
+    height:46px;
+    border:1px solid rgba(255,154,98,.4);
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    background:#ff7b45;
+    transform:rotate(4deg);
+}
+
+.menu-btn span{
+    width:20px;
+    height:2px;
+    background:#f7eee8;
+}
+
+.side-menu{
+    position:fixed;
+    top:0;
+    right:-320px;
+    width:320px;
+    height:100vh;
+    background:#11090a;
+    border-left:1px solid rgba(255,120,65,.3);
+    padding:100px 35px;
+    z-index:999;
+    transition:.4s ease;
+}
+
+.side-menu.active{
+    right:0;
+}
+
+.side-menu h3{
+    color:#ff9a62;
+    margin-bottom:30px;
+    letter-spacing:2px;
+}
+
+.side-menu a{
+    display:block;
+    text-decoration:none;
+    color:#e8d8d0;
+    padding:15px 0;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:#ff9a62;
+    padding-left:10px;
+}
+
+/* ================= PAGE NAV ================= */
+
+.page-nav{
+    position:sticky;
+    top:72px;
+    z-index:800;
+    background:rgba(13,7,8,.9);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid rgba(255,154,98,.12);
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    padding:15px;
+}
+
+.page-nav a{
+    color:#a99b96;
+    text-decoration:none;
+    font-size:13px;
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:#ff9a62;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    min-height:90vh;
+    padding:150px 8% 80px;
+    position:relative;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    gap:60px;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    background:radial-gradient(circle,rgba(255,84,35,.22),transparent 65%);
+    left:-200px;
+    bottom:-250px;
+    filter:blur(20px);
+}
+
+.hero-text{
+    position:relative;
+    z-index:2;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 15px;
+    border:1px solid rgba(255,154,98,.4);
+    border-radius:30px;
+    color:#ff9a62;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:clamp(48px,6vw,82px);
+    line-height:.95;
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    color:#ff814c;
+}
+
+.hero p{
+    max-width:570px;
+    color:#b8aaa5;
+    font-size:17px;
+    line-height:1.8;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:35px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 22px;
+    border-radius:12px;
+    text-decoration:none;
+    transition:.3s;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:#ff7540;
+    color:#160907;
+}
+
+.btn-primary:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(255,117,64,.25);
+}
+
+.btn-outline{
+    border:1px solid #68453a;
+    color:#eadbd4;
+}
+
+.btn-outline:hover{
+    border-color:#ff7540;
+    color:#ff9a62;
+}
+
+/* ================= EARTH VISUAL ================= */
+
+.earth-visual{
+    height:500px;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+}
+
+.ground{
+    width:520px;
+    height:220px;
+    border-radius:50% 50% 15% 15%;
+    background:
+        radial-gradient(circle at 30% 30%,#59352d,transparent 15%),
+        radial-gradient(circle at 70% 40%,#44221e,transparent 18%),
+        linear-gradient(#3b211d,#170b0b);
+    position:absolute;
+    bottom:20px;
+    border-top:8px solid #a95b3e;
+    box-shadow:0 -15px 50px rgba(255,87,35,.18);
+}
+
+.heat-core{
+    position:absolute;
+    bottom:75px;
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    background:radial-gradient(circle,#ffd28b,#ff6335 35%,#741d18 65%,transparent 70%);
+    filter:blur(2px);
+    animation:pulseHeat 2s infinite alternate;
+}
+
+@keyframes pulseHeat{
+    from{transform:scale(.95);opacity:.75}
+    to{transform:scale(1.08);opacity:1}
+}
+
+.heat-line{
+    position:absolute;
+    width:5px;
+    height:220px;
+    background:linear-gradient(transparent,#ff8b55,#ffd19e);
+    bottom:130px;
+    border-radius:10px;
+    animation:heatRise 2s infinite;
+}
+
+.heat-line:nth-child(2){
+    margin-left:-80px;
+    animation-delay:.5s;
+}
+
+.heat-line:nth-child(3){
+    margin-left:80px;
+    animation-delay:1s;
+}
+
+@keyframes heatRise{
+    0%{transform:translateY(60px);opacity:0}
+    40%{opacity:1}
+    100%{transform:translateY(-80px);opacity:0}
+}
+
+.turbine{
+    position:absolute;
+    bottom:235px;
+    width:125px;
+    height:125px;
+    border:8px solid #d6c1b8;
+    border-radius:50%;
+    background:#211213;
+    box-shadow:0 0 30px rgba(255,130,75,.25);
+    animation:spin 7s linear infinite;
+}
+
+.turbine::before,
+.turbine::after{
+    content:"";
+    position:absolute;
+    width:95px;
+    height:7px;
+    background:#ff8750;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    border-radius:20px;
+}
+
+.turbine::after{
+    transform:translate(-50%,-50%) rotate(90deg);
+}
+
+.turbine-center{
+    position:absolute;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:#f7d2b9;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+.power{
+    position:absolute;
+    bottom:295px;
+    right:35px;
+    width:130px;
+    height:4px;
+    background:#ff9a62;
+    animation:powerFlow 1.3s linear infinite;
+}
+
+@keyframes powerFlow{
+    from{transform:translateX(-100px);opacity:0}
+    30%{opacity:1}
+    to{transform:translateX(0);opacity:0}
+}
+
+/* ================= METRICS ================= */
+
+.metrics{
+    padding:40px 8% 80px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.metric{
+    padding:28px;
+    border:1px solid rgba(255,154,98,.13);
+    border-radius:20px;
+    background:linear-gradient(145deg,#160b0c,#0e0708);
+    transition:.35s;
+}
+
+.metric:hover{
+    transform:translateY(-8px);
+    border-color:#ff7540;
+    box-shadow:0 20px 50px rgba(255,90,40,.1);
+}
+
+.metric small{
+    color:#91847f;
+}
+
+.metric strong{
+    display:block;
+    font-size:32px;
+    margin-top:12px;
+    color:#ff9a62;
+}
+
+/* ================= SECTION ================= */
+
+.section{
+    padding:90px 8%;
+}
+
+.section-title{
+    margin-bottom:45px;
+}
+
+.section-title span{
+    color:#ff7540;
+    font-size:12px;
+    letter-spacing:3px;
+}
+
+.section-title h2{
+    font-size:42px;
+    margin-top:10px;
+}
+
+/* ================= PROCESS ================= */
+
+.process{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.process-card{
+    min-height:230px;
+    padding:28px;
+    background:#12090a;
+    border:1px solid #3a2220;
+    border-radius:20px;
+    transition:.35s;
+    position:relative;
+    overflow:hidden;
+}
+
+.process-card:hover{
+    transform:translateY(-10px);
+    border-color:#ff7540;
+}
+
+.process-card::after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    background:#ff7540;
+    opacity:.06;
+    border-radius:50%;
+    right:-30px;
+    bottom:-30px;
+}
+
+.number{
+    font-size:42px;
+    color:#ff7540;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.process-card h3{
+    margin-bottom:12px;
+}
+
+.process-card p{
+    color:#998d88;
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* ================= GRAPH ================= */
+
+.graph-box{
+    padding:35px;
+    border-radius:25px;
+    background:#100809;
+    border:1px solid #38211f;
+}
+
+.chart{
+    height:280px;
+    display:flex;
+    align-items:flex-end;
+    gap:10px;
+    padding-top:40px;
+}
+
+.bar{
+    flex:1;
+    background:linear-gradient(to top,#8e2f20,#ff9a62);
+    border-radius:7px 7px 0 0;
+    min-height:20px;
+    transition:.4s;
+    position:relative;
+}
+
+.bar:hover{
+    transform:scaleY(1.08);
+    filter:brightness(1.25);
+}
+
+.bar span{
+    position:absolute;
+    top:-25px;
+    font-size:10px;
+    color:#8f817c;
+}
+
+/* ================= AI ================= */
+
+.ai-box{
+    padding:40px;
+    border-radius:28px;
+    background:
+        radial-gradient(circle at 100% 0%,rgba(255,100,50,.15),transparent 40%),
+        #140a0b;
+    border:1px solid #5a2d25;
+}
+
+.ai-box h2{
+    color:#ff9a62;
+    margin-bottom:15px;
+}
+
+.ai-box p{
+    color:#afa09a;
+    line-height:1.8;
+    max-width:800px;
+}
+
+.ai-list{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.ai-item{
+    padding:20px;
+    background:#0e0708;
+    border-radius:15px;
+    border:1px solid #32201d;
+    transition:.3s;
+}
+
+.ai-item:hover{
+    border-color:#ff7540;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    padding:45px 8%;
+    border-top:1px solid #291818;
+    color:#716662;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+    .hero{
+        grid-template-columns:1fr;
+    }
+
+    .metrics{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .process{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .ai-list{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    .navbar{
+        padding:0 18px;
+    }
+
+    .page-nav{
+        overflow-x:auto;
+        justify-content:flex-start;
+        white-space:nowrap;
+    }
+
+    .hero{
+        padding:130px 5% 50px;
+    }
+
+    .earth-visual{
+        transform:scale(.75);
+        margin-top:-40px;
+    }
+
+    .metrics,
+    .process{
+        grid-template-columns:1fr;
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    .section{
+        padding:65px 5%;
+    }
+
+    .section-title h2{
+        font-size:32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">POLARIS <span>/ GEOTHERMAL</span></div>
+
+    <div class="menu-btn" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</nav>
+
+<!-- SIDE MENU -->
+<div class="side-menu" id="sideMenu">
+    <h3>POLARIS NAVIGATION</h3>
+
+    <a href="index.html">⌂ Home</a>
+    <a href="renewable.html">☀ Renewable Energy</a>
+    <a href="nonrenewable.html">⚡ Backup & Energy Support</a>
+    <a href="solar.html">Solar Energy</a>
+    <a href="wind.html">Wind Energy</a>
+    <a href="hydro.html">Hydropower</a>
+    <a href="geothermal.html">Geothermal Energy</a>
+    <a href="marine.html">Marine Energy</a>
+    <a href="admin.html">Admin Dashboard</a>
+</div>
+
+<!-- PAGE NAV -->
+<div class="page-nav">
+    <a href="#overview">Overview</a>
+    <a href="#process">How It Works</a>
+    <a href="#analytics">Analytics</a>
+    <a href="#ai">AI Intelligence</a>
+    <a href="renewable.html">← Renewable</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+
+    <div class="hero-text">
+
+        <div class="badge">RENEWABLE SOURCE #04</div>
+
+        <h1>
+            Energy from<br>
+            <span>Earth's Heat.</span>
+        </h1>
+
+        <p>
+            Geothermal energy uses natural heat stored beneath the Earth
+            to provide a stable and reliable energy source for the polar
+            research station.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#process" class="btn btn-primary">Explore System</a>
+            <a href="#analytics" class="btn btn-outline">View Analytics</a>
+        </div>
+
+    </div>
+
+    <div class="earth-visual">
+
+        <div class="ground"></div>
+
+        <div class="heat-core"></div>
+
+        <div class="heat-line"></div>
+        <div class="heat-line"></div>
+        <div class="heat-line"></div>
+
+        <div class="turbine">
+            <div class="turbine-center"></div>
+        </div>
+
+        <div class="power"></div>
+
+    </div>
+
+</section>
+
+<!-- METRICS -->
+<section class="metrics">
+
+    <div class="metric">
+        <small>INSTALLED CAPACITY</small>
+        <strong>100 kW</strong>
+    </div>
+
+    <div class="metric">
+        <small>AVERAGE OUTPUT</small>
+        <strong>95 kW</strong>
+    </div>
+
+    <div class="metric">
+        <small>PRIORITY</small>
+        <strong>#04</strong>
+    </div>
+
+    <div class="metric">
+        <small>SYSTEM STATUS</small>
+        <strong>ONLINE</strong>
+    </div>
+
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process">
+
+    <div class="section-title">
+        <span>ENERGY JOURNEY</span>
+        <h2>From Earth → Electricity</h2>
+    </div>
+
+    <div class="process">
+
+        <div class="process-card">
+            <div class="number">01</div>
+            <h3>Underground Heat</h3>
+            <p>
+                Heat naturally stored beneath the Earth's surface
+                provides the energy source.
+            </p>
+        </div>
+
+        <div class="process-card">
+            <div class="number">02</div>
+            <h3>Heat Transfer</h3>
+            <p>
+                Underground heat is transferred into the geothermal
+                energy system.
+            </p>
+        </div>
+
+        <div class="process-card">
+            <div class="number">03</div>
+            <h3>Turbine</h3>
+            <p>
+                Heat produces steam which drives a turbine connected
+                to an electrical generator.
+            </p>
+        </div>
+
+        <div class="process-card">
+            <div class="number">04</div>
+            <h3>Station Power</h3>
+            <p>
+                Generated electricity is supplied to the station
+                through the intelligent energy network.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ANALYTICS -->
+<section class="section" id="analytics">
+
+    <div class="section-title">
+        <span>LIVE PERFORMANCE</span>
+        <h2>24-Hour Generation</h2>
+    </div>
+
+    <div class="graph-box">
+
+        <div class="chart" id="chart">
+
+            <div class="bar" style="height:82%"><span>00</span></div>
+            <div class="bar" style="height:86%"><span>02</span></div>
+            <div class="bar" style="height:90%"><span>04</span></div>
+            <div class="bar" style="height:95%"><span>06</span></div>
+            <div class="bar" style="height:94%"><span>08</span></div>
+            <div class="bar" style="height:97%"><span>10</span></div>
+            <div class="bar" style="height:92%"><span>12</span></div>
+            <div class="bar" style="height:96%"><span>14</span></div>
+            <div class="bar" style="height:93%"><span>16</span></div>
+            <div class="bar" style="height:91%"><span>18</span></div>
+            <div class="bar" style="height:88%"><span>20</span></div>
+            <div class="bar" style="height:84%"><span>22</span></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- AI -->
+<section class="section" id="ai">
+
+    <div class="ai-box">
+
+        <h2>✦ AI Geothermal Intelligence</h2>
+
+        <p>
+            The POLARIS optimizer treats geothermal generation as a
+            stable renewable source and coordinates it with solar,
+            wind, hydro, storage and backup resources.
+        </p>
+
+        <div class="ai-list">
+
+            <div class="ai-item">
+                <strong>Stable Supply</strong>
+                <p>Supports continuous station demand.</p>
+            </div>
+
+            <div class="ai-item">
+                <strong>Auto Optimization</strong>
+                <p>Energy is automatically balanced.</p>
+            </div>
+
+            <div class="ai-item">
+                <strong>Backup Coordination</strong>
+                <p>Battery and generator activate when required.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    <div>POLARIS Smart Energy Management</div>
+    <div>Geothermal Resource • 100 kW</div>
+</footer>
+
+<script>
+
+function toggleMenu(){
+    document.getElementById("sideMenu").classList.toggle("active");
+}
+
+/* Dynamic geothermal output */
+async function updateGeothermal(){
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+        const resources = d.modeled_resources_12 || [];
+        const geo = resources.find(r => r.id === "geothermal") || {};
+
+        const output = geo.output_kw !== undefined ? geo.output_kw : 95;
+        const capacity = geo.capacity_kw || 100;
+        const basePct = Math.min(100, Math.max(10, Math.round((output / capacity) * 100)));
+
+        const bars = document.querySelectorAll(".bar");
+        bars.forEach((bar, i) => {
+            const variance = Math.sin(i + Date.now() / 3000) * 4;
+            const val = Math.min(100, Math.max(10, Math.round(basePct + variance)));
+            bar.style.height = val + "%";
+        });
+    } catch(e) {
+        console.warn("Geothermal telemetry notice:", e);
+    }
+}
+
+updateGeothermal();
+setInterval(updateGeothermal, 2500);
+
+</script>
+
+</body>
+</html>

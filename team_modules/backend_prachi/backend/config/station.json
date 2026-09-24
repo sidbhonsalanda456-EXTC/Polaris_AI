@@ -1,0 +1,172 @@
+{
+  "station": {
+    "name": "NCPOR Bharati Research Station (Larsemann Hills, Antarctica)",
+    "agency": "National Centre for Polar and Ocean Research (NCPOR), MoES, India",
+    "location": {
+      "latitude": -69.408,
+      "longitude": 76.187
+    }
+  },
+  "sensor_read_interval_seconds": 1,
+  "physical_limits": {
+    "temperature_c": [
+      -80.0,
+      30.0
+    ],
+    "humidity_pct": [
+      0.0,
+      100.0
+    ],
+    "wind_speed_mps": [
+      0.0,
+      60.0
+    ],
+    "wind_direction_deg": [
+      0.0,
+      360.0
+    ],
+    "solar_irradiance_wm2": [
+      0.0,
+      1200.0
+    ],
+    "solar_generation_kw": [
+      0.0,
+      9999.0
+    ],
+    "wind_generation_kw": [
+      0.0,
+      9999.0
+    ],
+    "energy_demand_kw": [
+      0.0,
+      9999.0
+    ],
+    "battery_soc_pct": [
+      0.0,
+      100.0
+    ]
+  },
+  "ai_models": {
+    "solar": {
+      "modeled": true,
+      "model": "solar_generation_kw"
+    },
+    "wind": {
+      "modeled": true,
+      "model": "wind_generation_kw"
+    },
+    "demand": {
+      "modeled": true,
+      "model": "energy_demand_kw"
+    }
+  },
+  "resource_catalog": {
+    "renewable_generation": [
+      {
+        "id": "solar_pv",
+        "name": "Solar PV",
+        "enabled": true,
+        "status": "ONLINE",
+        "capacity_kw": 300,
+        "ai_modeled": true,
+        "online": true,
+        "output_kw": 180.0,
+        "condition": "GOOD"
+      },
+      {
+        "id": "wind",
+        "name": "Wind",
+        "enabled": true,
+        "status": "ONLINE",
+        "capacity_kw": 600,
+        "ai_modeled": true
+      },
+      {
+        "id": "hydropower",
+        "name": "Hydropower",
+        "enabled": false,
+        "status": "OFFLINE",
+        "capacity_kw": 0,
+        "ai_modeled": false
+      },
+      {
+        "id": "geothermal",
+        "name": "Geothermal",
+        "enabled": false,
+        "status": "OFFLINE",
+        "capacity_kw": 0,
+        "ai_modeled": false
+      },
+      {
+        "id": "marine",
+        "name": "Marine Energy",
+        "enabled": false,
+        "status": "OFFLINE",
+        "capacity_kw": 0,
+        "ai_modeled": false
+      },
+      {
+        "id": "biomass",
+        "name": "Biomass/Biogas",
+        "enabled": false,
+        "status": "OFFLINE",
+        "capacity_kw": 0,
+        "ai_modeled": false
+      },
+      {
+        "id": "solar_thermal",
+        "name": "Solar Thermal",
+        "enabled": false,
+        "status": "OFFLINE",
+        "capacity_kw": 0,
+        "ai_modeled": false
+      }
+    ],
+    "storage": [
+      {
+        "id": "battery",
+        "name": "Battery Energy Storage",
+        "enabled": true,
+        "status": "CHARGING",
+        "capacity_kwh": 1000,
+        "soc_percent": 78.0,
+        "ai_modeled": false
+      },
+      {
+        "id": "hydrogen",
+        "name": "Hydrogen Storage + Fuel Cell",
+        "enabled": false,
+        "status": "OFFLINE",
+        "capacity_kwh": 0,
+        "ai_modeled": false
+      }
+    ],
+    "backup_generation": [
+      {
+        "id": "backup_generator",
+        "name": "Diesel/Fuel Generator",
+        "enabled": true,
+        "status": "AVAILABLE",
+        "capacity_kw": 500,
+        "ai_modeled": false
+      },
+      {
+        "id": "chp",
+        "name": "CHP/Cogeneration",
+        "enabled": false,
+        "status": "UNAVAILABLE",
+        "capacity_kw": 0,
+        "ai_modeled": false
+      }
+    ],
+    "efficiency": [
+      {
+        "id": "passive_solar",
+        "name": "Passive Solar / Building Energy Efficiency",
+        "enabled": true,
+        "status": "ACTIVE",
+        "ai_modeled": false
+      }
+    ]
+  }
+}

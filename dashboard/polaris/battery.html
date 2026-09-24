@@ -1,0 +1,2798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Battery Energy Storage | POLARIS</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#0b0704;
+    color:#fff7eb;
+    overflow-x:hidden;
+}
+
+:root{
+    --bg:#0b0704;
+    --bg2:#120b06;
+    --panel:#191009;
+    --panel2:#21140a;
+
+    --amber:#ffb13b;
+    --gold:#ffd36a;
+    --cream:#fff0c9;
+    --warm:#e88a32;
+
+    --muted:#a9957d;
+    --line:rgba(255,177,59,.16);
+}
+
+
+/* =================================
+   BACKGROUND
+================================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            circle at 75% 15%,
+            rgba(255,177,59,.11),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 15% 85%,
+            rgba(232,138,50,.07),
+            transparent 30%
+        );
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:.12;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.05) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.05) 1px,
+            transparent 1px
+        );
+
+    background-size:55px 55px;
+
+    mask-image:linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+
+/* =================================
+   NAVBAR
+================================= */
+
+.navbar{
+    height:72px;
+    width:100%;
+
+    position:fixed;
+    top:0;
+    left:0;
+
+    z-index:1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 35px;
+
+    background:rgba(11,7,4,.82);
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+
+.logo-icon{
+    width:35px;
+    height:35px;
+
+    border-radius:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:var(--amber);
+
+    border:1px solid rgba(255,177,59,.45);
+
+    background:#160d06;
+
+    box-shadow:
+        0 0 22px rgba(255,177,59,.12);
+}
+
+
+/* =================================
+   THREE DASH MENU
+================================= */
+
+.menu-btn{
+    width:45px;
+    height:45px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    background:#150c06;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:5px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.menu-btn span{
+    width:20px;
+    height:2px;
+
+    background:#fff0d0;
+
+    border-radius:4px;
+
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    border-color:var(--amber);
+
+    box-shadow:
+        0 0 25px rgba(255,177,59,.15);
+}
+
+
+/* =================================
+   SIDE MENU
+================================= */
+
+.side-menu{
+    position:fixed;
+
+    top:72px;
+    right:-320px;
+
+    width:310px;
+    min-height:calc(100vh - 72px);
+
+    z-index:999;
+
+    padding:35px 25px;
+
+    background:rgba(15,9,5,.98);
+
+    backdrop-filter:blur(20px);
+
+    border-left:1px solid rgba(255,177,59,.18);
+
+    transition:.45s cubic-bezier(.77,0,.18,1);
+}
+
+.side-menu.active{
+    right:0;
+}
+
+.side-menu h3{
+    color:var(--amber);
+
+    font-size:13px;
+
+    letter-spacing:2px;
+
+    margin-bottom:25px;
+}
+
+.side-menu a{
+    display:block;
+
+    text-decoration:none;
+
+    color:#cbb9a3;
+
+    padding:15px;
+
+    margin:7px 0;
+
+    border-radius:10px;
+
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:var(--gold);
+
+    background:rgba(255,177,59,.07);
+
+    transform:translateX(7px);
+}
+
+
+/* =================================
+   PAGE NAV
+================================= */
+
+.page-nav{
+    position:sticky;
+
+    top:72px;
+
+    z-index:800;
+
+    height:55px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:32px;
+
+    background:rgba(12,8,5,.9);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.page-nav a{
+    color:#9f8c76;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:var(--amber);
+}
+
+
+/* =================================
+   HERO
+================================= */
+
+.hero{
+    min-height:730px;
+
+    padding:
+        150px
+        7%
+        90px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    align-items:center;
+
+    gap:70px;
+}
+
+.badge{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:9px 14px;
+
+    border-radius:100px;
+
+    background:rgba(255,177,59,.06);
+
+    border:1px solid rgba(255,177,59,.22);
+
+    color:var(--amber);
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:22px;
+}
+
+.badge-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--amber);
+
+    box-shadow:
+        0 0 12px var(--amber);
+
+    animation:pulse 1.5s infinite;
+}
+
+.hero h1{
+    font-size:clamp(
+        48px,
+        6vw,
+        82px
+    );
+
+    line-height:.98;
+
+    letter-spacing:-4px;
+}
+
+.hero h1 span{
+    color:var(--amber);
+
+    text-shadow:
+        0 0 35px rgba(255,177,59,.18);
+}
+
+.hero-text{
+    color:var(--muted);
+
+    max-width:600px;
+
+    font-size:14px;
+
+    line-height:1.85;
+
+    margin-top:25px;
+}
+
+.hero-buttons{
+    display:flex;
+
+    gap:13px;
+
+    margin-top:30px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+    text-decoration:none;
+
+    padding:14px 21px;
+
+    border-radius:11px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.btn-main{
+    color:#1b0e03;
+
+    background:var(--amber);
+
+    box-shadow:
+        0 0 25px rgba(255,177,59,.13);
+}
+
+.btn-main:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 12px 35px rgba(255,177,59,.2);
+}
+
+.btn-outline{
+    color:#ead9c1;
+
+    background:#140c06;
+
+    border:1px solid rgba(255,255,255,.14);
+}
+
+.btn-outline:hover{
+    color:var(--amber);
+
+    border-color:var(--amber);
+}
+
+
+/* =================================
+   BATTERY VISUAL
+================================= */
+
+.battery-stage{
+    height:490px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+}
+
+.battery{
+    width:270px;
+    height:420px;
+
+    border:2px solid rgba(255,177,59,.45);
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #21140a,
+            #0e0905
+        );
+
+    position:relative;
+
+    box-shadow:
+        0 0 55px rgba(255,177,59,.08),
+        inset 0 0 45px rgba(255,177,59,.04);
+
+    overflow:hidden;
+}
+
+.battery::before{
+    content:"";
+
+    position:absolute;
+
+    top:-24px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:100px;
+    height:27px;
+
+    border:2px solid rgba(255,177,59,.45);
+
+    border-bottom:none;
+
+    border-radius:12px 12px 0 0;
+
+    background:#130b05;
+}
+
+.battery-shell{
+    position:absolute;
+
+    inset:18px;
+
+    border-radius:17px;
+
+    border:1px solid rgba(255,255,255,.07);
+
+    overflow:hidden;
+
+    background:#0d0805;
+}
+
+.battery-fill{
+    position:absolute;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    height:70%;
+
+    background:
+        linear-gradient(
+            to top,
+            #a95d17,
+            #ffb13b,
+            #ffe19a
+        );
+
+    box-shadow:
+        0 -10px 35px rgba(255,177,59,.18);
+
+    transition:
+        height 1s ease;
+}
+
+.battery-fill::before{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:0;
+
+    height:2px;
+
+    background:#fff2cc;
+
+    box-shadow:
+        0 0 15px #fff2cc;
+}
+
+.battery-content{
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:3;
+
+    text-align:center;
+}
+
+.battery-symbol{
+    font-size:55px;
+
+    filter:
+        drop-shadow(
+            0 0 18px
+            rgba(255,177,59,.5)
+        );
+
+    margin-bottom:14px;
+}
+
+.soc-value{
+    font-size:48px;
+
+    font-weight:800;
+
+    color:#fff6df;
+}
+
+.soc-label{
+    color:#b9a58c;
+
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    margin-top:4px;
+}
+
+.energy-particle{
+    position:absolute;
+
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:var(--gold);
+
+    box-shadow:
+        0 0 12px var(--amber);
+
+    animation:particle 3s linear infinite;
+}
+
+.p1{
+    left:15%;
+    top:70%;
+
+    animation-delay:.2s;
+}
+
+.p2{
+    left:30%;
+    top:85%;
+
+    animation-delay:1s;
+}
+
+.p3{
+    right:25%;
+    top:65%;
+
+    animation-delay:1.7s;
+}
+
+.p4{
+    right:12%;
+    top:80%;
+
+    animation-delay:2.3s;
+}
+
+.ring{
+    position:absolute;
+
+    width:430px;
+    height:430px;
+
+    border-radius:50%;
+
+    border:1px dashed rgba(255,177,59,.15);
+
+    animation:spin 25s linear infinite;
+}
+
+.ring::after{
+    content:"";
+
+    position:absolute;
+
+    top:-5px;
+    left:50%;
+
+    width:9px;
+    height:9px;
+
+    border-radius:50%;
+
+    background:var(--amber);
+
+    box-shadow:
+        0 0 20px var(--amber);
+}
+
+
+/* =================================
+   METRICS
+================================= */
+
+.metrics{
+    padding:
+        20px
+        7%
+        75px;
+}
+
+.metric-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:16px;
+}
+
+.metric{
+    padding:24px;
+
+    min-height:150px;
+
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1a1008,
+            #0e0905
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.metric:hover{
+    transform:translateY(-7px);
+
+    border-color:
+        rgba(255,177,59,.3);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.35);
+}
+
+.metric::after{
+    content:"";
+
+    position:absolute;
+
+    width:100px;
+    height:100px;
+
+    right:-55px;
+    top:-55px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,177,59,.15);
+}
+
+.metric-title{
+    color:#9c8972;
+
+    font-size:10px;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+}
+
+.metric-value{
+    font-size:33px;
+
+    font-weight:800;
+
+    margin-top:10px;
+
+    color:#fff1d1;
+}
+
+.metric-value span{
+    color:#9e8b76;
+
+    font-size:13px;
+
+    font-weight:500;
+}
+
+.metric-description{
+    color:#6f6050;
+
+    font-size:10px;
+
+    margin-top:7px;
+}
+
+
+/* =================================
+   SECTIONS
+================================= */
+
+.section{
+    padding:
+        90px
+        7%;
+}
+
+.section-head{
+    margin-bottom:35px;
+}
+
+.eyebrow{
+    color:var(--amber);
+
+    text-transform:uppercase;
+
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+}
+
+.section h2{
+    font-size:39px;
+
+    letter-spacing:-1.5px;
+}
+
+.section-intro{
+    color:#887662;
+
+    max-width:650px;
+
+    line-height:1.7;
+
+    font-size:13px;
+
+    margin-top:12px;
+}
+
+
+/* =================================
+   BATTERY STATES
+================================= */
+
+.state-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+}
+
+.state-card{
+    padding:28px;
+
+    border-radius:18px;
+
+    background:#140c06;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+}
+
+.state-card:hover{
+    transform:translateY(-8px);
+
+    border-color:
+        rgba(255,177,59,.3);
+}
+
+.state-icon{
+    width:55px;
+    height:55px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:15px;
+
+    background:#211309;
+
+    border:1px solid rgba(255,177,59,.16);
+
+    color:var(--amber);
+
+    font-size:25px;
+
+    margin-bottom:20px;
+}
+
+.state-card h3{
+    font-size:17px;
+}
+
+.state-card p{
+    color:#81705e;
+
+    font-size:12px;
+
+    line-height:1.7;
+
+    margin-top:9px;
+}
+
+.state-tag{
+    display:inline-block;
+
+    margin-top:18px;
+
+    padding:6px 9px;
+
+    border-radius:7px;
+
+    background:rgba(255,177,59,.07);
+
+    color:var(--gold);
+
+    font-size:9px;
+
+    letter-spacing:1px;
+
+    font-weight:700;
+}
+
+
+/* =================================
+   BATTERY INTELLIGENCE
+================================= */
+
+.intelligence{
+    display:grid;
+
+    grid-template-columns:
+        .8fr
+        1.2fr;
+
+    gap:22px;
+}
+
+.health-box{
+    padding:30px;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1a0f07,
+            #0d0805
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.health-ring{
+    width:190px;
+    height:190px;
+
+    border-radius:50%;
+
+    margin:20px auto 25px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        conic-gradient(
+            var(--amber) 0 80%,
+            #2b1b0d 80% 100%
+        );
+
+    position:relative;
+}
+
+.health-ring::after{
+    content:"";
+
+    position:absolute;
+
+    inset:12px;
+
+    border-radius:50%;
+
+    background:#100905;
+}
+
+.health-ring-content{
+    position:relative;
+
+    z-index:2;
+
+    text-align:center;
+}
+
+.health-ring-content strong{
+    display:block;
+
+    font-size:38px;
+}
+
+.health-ring-content span{
+    color:#8d7861;
+
+    font-size:9px;
+
+    letter-spacing:1.5px;
+}
+
+.health-info{
+    text-align:center;
+}
+
+.health-info h3{
+    font-size:16px;
+}
+
+.health-info p{
+    color:#7e6c58;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+    margin-top:7px;
+}
+
+
+/* =================================
+   AI PANEL
+================================= */
+
+.ai-box{
+    padding:32px;
+
+    border-radius:20px;
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(255,177,59,.1),
+            transparent 35%
+        ),
+        #130b06;
+
+    border:1px solid rgba(255,177,59,.2);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.ai-top{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.ai-icon{
+    width:58px;
+    height:58px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:25px;
+
+    color:var(--amber);
+
+    background:#211309;
+
+    border:1px solid rgba(255,177,59,.22);
+}
+
+.ai-top h3{
+    font-size:18px;
+}
+
+.ai-status{
+    color:var(--amber);
+
+    font-size:9px;
+
+    letter-spacing:1.5px;
+
+    margin-top:5px;
+}
+
+.ai-box > p{
+    color:#8b7760;
+
+    font-size:12px;
+
+    line-height:1.8;
+
+    margin-top:25px;
+}
+
+.ai-steps{
+    margin-top:25px;
+
+    display:grid;
+
+    gap:11px;
+}
+
+.ai-step{
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.025);
+
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.ai-step-number{
+    width:27px;
+    height:27px;
+
+    border-radius:8px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,177,59,.08);
+
+    color:var(--amber);
+
+    font-size:10px;
+
+    font-weight:700;
+}
+
+.ai-step span{
+    color:#a89277;
+
+    font-size:11px;
+}
+
+
+/* =================================
+   SOC CONTROL
+================================= */
+
+.soc-section{
+    background:#100905;
+
+    border-top:1px solid rgba(255,255,255,.05);
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.soc-panel{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:30px;
+}
+
+.soc-card{
+    padding:30px;
+
+    border-radius:19px;
+
+    background:#170d06;
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.soc-header{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.soc-header h3{
+    font-size:16px;
+}
+
+.soc-header span{
+    color:var(--amber);
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+.progress{
+    height:14px;
+
+    border-radius:20px;
+
+    margin:28px 0 15px;
+
+    background:#2a1a0d;
+
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+
+    width:70%;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #9b5817,
+            var(--amber),
+            var(--gold)
+        );
+
+    box-shadow:
+        0 0 18px rgba(255,177,59,.2);
+
+    transition:width 1s ease;
+}
+
+.soc-scale{
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#6f5d4b;
+
+    font-size:9px;
+}
+
+.warning{
+    margin-top:25px;
+
+    padding:13px;
+
+    border-radius:10px;
+
+    background:rgba(255,177,59,.05);
+
+    border:1px solid rgba(255,177,59,.12);
+
+    color:#ad977c;
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+
+/* =================================
+   LIVE STATUS
+================================= */
+
+.live-status{
+    display:grid;
+
+    gap:14px;
+}
+
+.status-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:17px;
+
+    border-radius:12px;
+
+    background:#120a05;
+
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.status-left{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+}
+
+.status-light{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--amber);
+
+    box-shadow:
+        0 0 12px var(--amber);
+
+    animation:pulse 1.6s infinite;
+}
+
+.status-row span{
+    color:#a68e73;
+
+    font-size:11px;
+}
+
+.status-row strong{
+    font-size:11px;
+
+    color:#f3dec0;
+}
+
+
+/* =================================
+   ENERGY FLOW
+================================= */
+
+.flow{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    margin-top:40px;
+}
+
+.flow-node{
+    width:170px;
+
+    min-height:120px;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    background:#160d06;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+}
+
+.flow-node:hover{
+    transform:translateY(-8px);
+
+    border-color:
+        rgba(255,177,59,.3);
+}
+
+.flow-icon{
+    font-size:25px;
+
+    color:var(--amber);
+}
+
+.flow-node h4{
+    margin-top:10px;
+
+    font-size:13px;
+}
+
+.flow-node p{
+    color:#74624f;
+
+    font-size:9px;
+
+    line-height:1.5;
+
+    margin-top:6px;
+}
+
+.flow-arrow{
+    color:var(--amber);
+
+    font-size:25px;
+
+    padding:0 10px;
+
+    animation:arrow 1.4s infinite;
+}
+
+
+/* =================================
+   TERMINAL
+================================= */
+
+.terminal{
+    margin-top:25px;
+
+    padding:24px;
+
+    border-radius:17px;
+
+    background:#080504;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    font-family:monospace;
+}
+
+.terminal-head{
+    display:flex;
+
+    gap:6px;
+
+    margin-bottom:16px;
+}
+
+.term-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:#6b5845;
+}
+
+.terminal-line{
+    color:#796652;
+
+    font-size:10px;
+
+    line-height:2.1;
+}
+
+.terminal-line span{
+    color:var(--amber);
+}
+
+
+/* =================================
+   CTA
+================================= */
+
+.cta{
+    margin:
+        40px
+        7%
+        90px;
+
+    padding:55px;
+
+    text-align:center;
+
+    border-radius:23px;
+
+    border:1px solid rgba(255,177,59,.18);
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,177,59,.08),
+            transparent 60%
+        ),
+        #120a05;
+}
+
+.cta h2{
+    font-size:37px;
+
+    letter-spacing:-1.5px;
+}
+
+.cta p{
+    max-width:620px;
+
+    margin:15px auto 25px;
+
+    color:#88735d;
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+
+/* =================================
+   FOOTER
+================================= */
+
+footer{
+    padding:30px 7%;
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#655444;
+
+    font-size:10px;
+}
+
+
+/* =================================
+   ANIMATIONS
+================================= */
+
+@keyframes pulse{
+
+    0%,100%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    50%{
+        opacity:.4;
+        transform:scale(.7);
+    }
+}
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes particle{
+
+    0%{
+        transform:
+            translateY(80px)
+            scale(.5);
+
+        opacity:0;
+    }
+
+    30%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateY(-180px)
+            scale(1.1);
+
+        opacity:0;
+    }
+}
+
+@keyframes arrow{
+
+    0%,100%{
+        opacity:.35;
+    }
+
+    50%{
+        opacity:1;
+
+        transform:translateX(4px);
+    }
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media(max-width:1000px){
+
+    .hero{
+        grid-template-columns:1fr;
+
+        text-align:center;
+    }
+
+    .hero-text{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .metric-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .intelligence{
+        grid-template-columns:1fr;
+    }
+
+    .soc-panel{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:0 18px;
+    }
+
+    .page-nav{
+        justify-content:flex-start;
+
+        overflow-x:auto;
+
+        padding:0 20px;
+
+        gap:22px;
+    }
+
+    .hero{
+        padding:
+            125px
+            5%
+            60px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .battery-stage{
+        transform:scale(.78);
+
+        height:420px;
+    }
+
+    .metric-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .state-grid{
+        grid-template-columns:1fr;
+    }
+
+    .section{
+        padding:
+            65px 5%;
+    }
+
+    .flow{
+        flex-direction:column;
+    }
+
+    .flow-arrow{
+        transform:rotate(90deg);
+
+        padding:8px;
+    }
+
+    .cta{
+        margin:
+            30px 5% 70px;
+
+        padding:40px 20px;
+    }
+
+    .cta h2{
+        font-size:28px;
+    }
+
+    footer{
+        flex-direction:column;
+
+        gap:10px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="grid"></div>
+
+
+<!-- =================================
+     NAVBAR
+================================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ⚡
+        </div>
+
+        POLARIS
+
+    </div>
+
+
+    <!-- THREE DASH BUTTON -->
+
+    <button class="menu-btn" id="menuBtn">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+</nav>
+
+
+<!-- =================================
+     SIDE MENU
+================================= -->
+
+<div class="side-menu" id="sideMenu">
+
+    <h3>POLARIS MENU</h3>
+
+    <a href="index.html">
+        ⌂ Home
+    </a>
+
+    <a href="renewable.html">
+        ◈ Renewable Energy
+    </a>
+
+    <a href="nonrenewable.html">
+        ◉ Backup & Energy Support
+    </a>
+
+    <a href="admin.html">
+        ⚙ Admin Dashboard
+    </a>
+
+    <a href="disaster.html">
+        ⚠ Disaster Management
+    </a>
+
+</div>
+
+
+<!-- =================================
+     PAGE NAVIGATION
+================================= -->
+
+<div class="page-nav">
+
+    <a href="#overview">
+        Overview
+    </a>
+
+    <a href="#states">
+        Battery States
+    </a>
+
+    <a href="#intelligence">
+        AI Intelligence
+    </a>
+
+    <a href="#status">
+        Live Status
+    </a>
+
+    <a href="nonrenewable.html">
+        ← Backup Energy
+    </a>
+
+</div>
+
+
+<!-- =================================
+     HERO
+================================= -->
+
+<section class="hero" id="overview">
+
+    <div>
+
+        <div class="badge">
+
+            <span class="badge-dot"></span>
+
+            ENERGY STORAGE • ONLINE
+
+        </div>
+
+
+        <h1>
+
+            Store Energy.<br>
+
+            <span>Use It When Needed.</span>
+
+        </h1>
+
+
+        <p class="hero-text">
+
+            The POLARIS battery energy storage system stores
+            surplus renewable electricity and releases it when
+            renewable generation is insufficient. It helps maintain
+            reliable power for the polar research station while
+            reducing unnecessary generator use.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+                href="#status"
+                class="btn btn-main"
+            >
+                View Live Battery
+            </a>
+
+            <a
+                href="nonrenewable.html"
+                class="btn btn-outline"
+            >
+                ← Backup Energy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- BATTERY VISUAL -->
+
+    <div class="battery-stage">
+
+        <div class="ring"></div>
+
+
+        <div class="battery">
+
+            <div class="battery-shell">
+
+                <div
+                    class="battery-fill"
+                    id="batteryFill"
+                ></div>
+
+            </div>
+
+
+            <div class="battery-content">
+
+                <div class="battery-symbol">
+                    🔋
+                </div>
+
+                <div
+                    class="soc-value"
+                    id="socValue"
+                >
+                    70%
+                </div>
+
+                <div class="soc-label">
+                    STATE OF CHARGE
+                </div>
+
+            </div>
+
+
+            <div class="energy-particle p1"></div>
+            <div class="energy-particle p2"></div>
+            <div class="energy-particle p3"></div>
+            <div class="energy-particle p4"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     METRICS
+================================= -->
+
+<section class="metrics">
+
+    <div class="metric-grid">
+
+
+        <div class="metric">
+
+            <div class="metric-title">
+                Storage Capacity
+            </div>
+
+            <div class="metric-value">
+                2,000
+                <span>kWh</span>
+            </div>
+
+            <div class="metric-description">
+                Total battery storage capacity
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-title">
+                Effective Capacity
+            </div>
+
+            <div class="metric-value">
+                1,600
+                <span>kWh</span>
+            </div>
+
+            <div class="metric-description">
+                Based on current 80% SOH
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-title">
+                Max Power
+            </div>
+
+            <div class="metric-value">
+                100
+                <span>kW</span>
+            </div>
+
+            <div class="metric-description">
+                Maximum charge or discharge rate
+            </div>
+
+        </div>
+
+
+        <div class="metric">
+
+            <div class="metric-title">
+                Battery Health
+            </div>
+
+            <div class="metric-value">
+                80
+                <span>% SOH</span>
+            </div>
+
+            <div class="metric-description">
+                State of health
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     BATTERY STATES
+================================= -->
+
+<section
+    class="section"
+    id="states"
+>
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Battery Operation
+        </div>
+
+        <h2>
+            Three Operating States
+        </h2>
+
+        <p class="section-intro">
+
+            The optimizer continuously decides whether the battery
+            should store energy, release energy, or remain ready.
+
+        </p>
+
+    </div>
+
+
+    <div class="state-grid">
+
+
+        <!-- CHARGING -->
+
+        <div class="state-card">
+
+            <div class="state-icon">
+                ↑
+            </div>
+
+            <h3>
+                Charging
+            </h3>
+
+            <p>
+
+                When renewable generation exceeds station demand,
+                surplus energy can be directed into the battery.
+
+            </p>
+
+            <div class="state-tag">
+                SURPLUS ENERGY
+            </div>
+
+        </div>
+
+
+        <!-- DISCHARGING -->
+
+        <div class="state-card">
+
+            <div class="state-icon">
+                ↓
+            </div>
+
+            <h3>
+                Discharging
+            </h3>
+
+            <p>
+
+                When renewable generation cannot cover demand,
+                the battery can supply power within its operating limits.
+
+            </p>
+
+            <div class="state-tag">
+                ENERGY SUPPORT
+            </div>
+
+        </div>
+
+
+        <!-- IDLE -->
+
+        <div class="state-card">
+
+            <div class="state-icon">
+                ◌
+            </div>
+
+            <h3>
+                Idle
+            </h3>
+
+            <p>
+
+                When charging or discharging is not required,
+                the battery remains available for future energy needs.
+
+            </p>
+
+            <div class="state-tag">
+                READY
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     AI INTELLIGENCE
+================================= -->
+
+<section
+    class="section"
+    id="intelligence"
+>
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Predictive Energy Management
+        </div>
+
+        <h2>
+            AI Pre-Charge Intelligence
+        </h2>
+
+        <p class="section-intro">
+
+            POLARIS can look ahead and prepare the battery before
+            predicted renewable shortages or source interruptions.
+
+        </p>
+
+    </div>
+
+
+    <div class="intelligence">
+
+
+        <!-- HEALTH -->
+
+        <div class="health-box">
+
+            <div class="eyebrow">
+                Battery Health
+            </div>
+
+            <div class="health-ring">
+
+                <div class="health-ring-content">
+
+                    <strong>
+                        80%
+                    </strong>
+
+                    <span>
+                        SOH
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-info">
+
+                <h3>
+                    Operational Condition
+                </h3>
+
+                <p>
+
+                    The battery currently has an effective
+                    usable capacity of approximately 1,600 kWh
+                    based on its 80% state of health.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- AI -->
+
+        <div class="ai-box">
+
+            <div class="ai-top">
+
+                <div class="ai-icon">
+                    ✦
+                </div>
+
+                <div>
+
+                    <h3>
+                        AI Pre-Charge
+                    </h3>
+
+                    <div class="ai-status">
+                        PREDICTIVE MODE ACTIVE
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p>
+
+                The energy optimizer uses a lookahead window
+                to anticipate upcoming source shortages,
+                unavailable renewable resources and predicted
+                energy deficits. When surplus renewable energy
+                is available, the system can pre-charge the battery
+                while preserving a reserve for future demand.
+
+            </p>
+
+
+            <div class="ai-steps">
+
+
+                <div class="ai-step">
+
+                    <div class="ai-step-number">
+                        01
+                    </div>
+
+                    <span>
+                        Forecast renewable generation
+                    </span>
+
+                </div>
+
+
+                <div class="ai-step">
+
+                    <div class="ai-step-number">
+                        02
+                    </div>
+
+                    <span>
+                        Predict upcoming energy deficits
+                    </span>
+
+                </div>
+
+
+                <div class="ai-step">
+
+                    <div class="ai-step-number">
+                        03
+                    </div>
+
+                    <span>
+                        Charge using available renewable surplus
+                    </span>
+
+                </div>
+
+
+                <div class="ai-step">
+
+                    <div class="ai-step-number">
+                        04
+                    </div>
+
+                    <span>
+                        Preserve battery reserve for critical loads
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     SOC SECTION
+================================= -->
+
+<section
+    class="section soc-section"
+    id="status"
+>
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Live Battery Monitoring
+        </div>
+
+        <h2>
+            Battery Status
+        </h2>
+
+        <p class="section-intro">
+
+            Demonstration values update automatically on the frontend.
+            These values can later be replaced directly with backend API data.
+
+        </p>
+
+    </div>
+
+
+    <div class="soc-panel">
+
+
+        <!-- SOC -->
+
+        <div class="soc-card">
+
+            <div class="soc-header">
+
+                <h3>
+                    Current State of Charge
+                </h3>
+
+                <span id="socText">
+                    70%
+                </span>
+
+            </div>
+
+
+            <div class="progress">
+
+                <div
+                    class="progress-fill"
+                    id="progressFill"
+                ></div>
+
+            </div>
+
+
+            <div class="soc-scale">
+
+                <span>
+                    0%
+                </span>
+
+                <span>
+                    MIN 20%
+                </span>
+
+                <span>
+                    START 70%
+                </span>
+
+                <span>
+                    MAX 100%
+                </span>
+
+            </div>
+
+
+            <div class="warning">
+
+                ⚠ Battery protection logic keeps the simulated
+                SOC above the configured minimum operating level
+                of 20%.
+
+            </div>
+
+        </div>
+
+
+        <!-- LIVE STATUS -->
+
+        <div class="soc-card">
+
+            <div class="soc-header">
+
+                <h3>
+                    System Telemetry
+                </h3>
+
+                <span>
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div class="live-status">
+
+
+                <div class="status-row">
+
+                    <div class="status-left">
+
+                        <div class="status-light"></div>
+
+                        <span>
+                            Operating State
+                        </span>
+
+                    </div>
+
+                    <strong id="batteryState">
+                        IDLE
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+                    <div class="status-left">
+                        <div class="status-light"></div>
+                        <span>Power Flow</span>
+                    </div>
+                    <strong id="powerFlow">0 kW</strong>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-left">
+                        <div class="status-light"></div>
+                        <span>Stored Energy</span>
+                    </div>
+                    <strong id="batteryStoredKwh">140.0 kWh</strong>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-left">
+                        <div class="status-light"></div>
+                        <span>Total Capacity</span>
+                    </div>
+                    <strong id="batteryCapacityKwh">200 kWh</strong>
+                </div>
+
+                <div class="status-row">
+                    <div class="status-left">
+                        <div class="status-light"></div>
+                        <span>SOH</span>
+                    </div>
+                    <strong id="batterySoh">98%</strong>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TERMINAL -->
+
+    <div class="terminal">
+
+        <div class="terminal-head">
+
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[BATTERY]</span>
+            Storage system connected...
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[SOC]</span>
+            Monitoring state of charge...
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[SOH]</span>
+            Battery health = 80%
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[OPTIMIZER]</span>
+            Battery dispatch available
+
+        </div>
+
+
+        <div class="terminal-line">
+
+            <span>[AI]</span>
+            Pre-charge intelligence ready
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     ENERGY FLOW
+================================= -->
+
+<section class="section">
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Energy Movement
+        </div>
+
+        <h2>
+            Where Battery Energy Goes
+        </h2>
+
+    </div>
+
+
+    <div class="flow">
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                ⚡
+            </div>
+
+            <h4>
+                Renewable Surplus
+            </h4>
+
+            <p>
+                Excess renewable generation becomes available.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                🔋
+            </div>
+
+            <h4>
+                Battery
+            </h4>
+
+            <p>
+                Energy is stored within operating limits.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                🏠
+            </div>
+
+            <h4>
+                Station Loads
+            </h4>
+
+            <p>
+                Stored energy supports station demand.
+            </p>
+
+        </div>
+
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+
+        <div class="flow-node">
+
+            <div class="flow-icon">
+                🛡
+            </div>
+
+            <h4>
+                Critical Loads
+            </h4>
+
+            <p>
+                Heating, communication and medical loads are prioritized.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================
+     CTA
+================================= -->
+
+<section class="cta">
+
+    <h2>
+        Energy Stored Today.
+        Reliability Tomorrow.
+    </h2>
+
+    <p>
+
+        The battery acts as the station's flexible energy buffer,
+        absorbing renewable surplus and providing support when
+        generation temporarily falls short.
+
+    </p>
+
+    <a
+        href="admin.html"
+        class="btn btn-main"
+    >
+        Open Control Center
+    </a>
+
+</section>
+
+
+<!-- =================================
+     FOOTER
+================================= -->
+
+<footer>
+
+    <div>
+        © 2026 POLARIS • Smart Energy Management
+    </div>
+
+    <div>
+        Battery Energy Storage • Polar Research Station
+    </div>
+
+</footer>
+
+
+<script>
+
+/* =================================
+   THREE DASH MENU
+================================= */
+
+const menuBtn =
+    document.getElementById("menuBtn");
+
+const sideMenu =
+    document.getElementById("sideMenu");
+
+
+menuBtn.addEventListener(
+    "click",
+    () => {
+
+        sideMenu.classList.toggle("active");
+
+    }
+);
+
+
+/* Close menu after navigation */
+
+document
+    .querySelectorAll(".side-menu a")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                sideMenu.classList.remove("active");
+
+            }
+        );
+
+    });
+
+
+/* =================================
+   BATTERY LIVE SIMULATION
+================================= */
+
+let soc = 70;
+
+let direction = 0;
+
+
+async function updateBattery(){
+
+    /*
+        POLARIS Live Battery Telemetry & State.
+        Synchronized with backend /api/status and /battery/status.
+    */
+
+    try {
+        const res = await fetch('/api/status');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data || {};
+
+        soc = d.battery_soc_pct !== undefined ? Number(d.battery_soc_pct) : null;
+        if (soc !== null) {
+            soc = Math.max(0, Math.min(100, Math.round(soc * 10) / 10));
+        }
+
+        let power = Math.round(Math.abs(d.battery_power_kw || 0));
+        let state = "STANDBY";
+        if (d.battery_power_kw > 0.1) {
+            state = "CHARGING";
+        } else if (d.battery_power_kw < -0.1) {
+            state = "DISCHARGING";
+        }
+
+        const storedKwh = d.battery_stored_kwh !== undefined ? Number(d.battery_stored_kwh).toFixed(1) : (soc !== null ? (soc * 2.0).toFixed(1) : "--");
+        const capKwh = (d.battery_capacity_kwh || 200).toFixed(0);
+        const sohPct = Math.round(d.part_1_renewable?.battery_health_pct || 98);
+
+        /* Update visual */
+        const elVal = document.getElementById("socValue");
+        if (elVal) elVal.textContent = soc !== null ? Math.round(soc) + "%" : "--%";
+
+        const elText = document.getElementById("socText");
+        if (elText) elText.textContent = soc !== null ? Math.round(soc) + "%" : "--%";
+
+        const elProg = document.getElementById("progressFill");
+        if (elProg && soc !== null) elProg.style.width = soc + "%";
+
+        const elBat = document.getElementById("batteryFill");
+        if (elBat && soc !== null) elBat.style.height = soc + "%";
+
+        const elState = document.getElementById("batteryState");
+        if (elState) elState.textContent = state;
+
+        const elFlow = document.getElementById("powerFlow");
+        if (elFlow) elFlow.textContent = (d.battery_power_kw ? (d.battery_power_kw >= 0 ? "+" : "-") : "") + power + " kW";
+
+        const elStored = document.getElementById("batteryStoredKwh");
+        if (elStored) elStored.textContent = storedKwh + " kWh";
+
+        const elCap = document.getElementById("batteryCapacityKwh");
+        if (elCap) elCap.textContent = capKwh + " kWh";
+
+        const elSoh = document.getElementById("batterySoh");
+        if (elSoh) elSoh.textContent = sohPct + "%";
+
+    } catch (e) {
+        console.warn("Battery telemetry notice:", e);
+    }
+}
+
+/* Start telemetry sync */
+updateBattery();
+
+setInterval(
+    updateBattery,
+    2000
+);
+
+</script>
+
+</body>
+</html>

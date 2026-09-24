@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLARIS | Solar Thermal Energy</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#070707;
+    color:#f5f0ed;
+    overflow-x:hidden;
+}
+
+::selection{
+    background:#e05b91;
+    color:white;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 38px;
+
+    background:rgba(7,7,7,.90);
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid rgba(224,91,145,.18);
+
+    z-index:1000;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+
+    letter-spacing:4px;
+
+    color:#e05b91;
+}
+
+.logo span{
+    color:#ded4ce;
+    font-weight:500;
+}
+
+
+/* =========================================================
+   THREE DASH BUTTON
+========================================================= */
+
+.menu-btn{
+    width:46px;
+    height:46px;
+
+    border:1px solid rgba(224,91,145,.45);
+
+    border-radius:12px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    gap:5px;
+
+    cursor:pointer;
+
+    transition:.35s;
+}
+
+.menu-btn span{
+    width:20px;
+    height:2px;
+
+    background:#f5f0ed;
+
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    background:#e05b91;
+    transform:rotate(-4deg);
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.side-menu{
+    position:fixed;
+
+    top:0;
+    right:-330px;
+
+    width:330px;
+    height:100vh;
+
+    padding:105px 35px;
+
+    background:#100d0f;
+
+    border-left:1px solid rgba(224,91,145,.30);
+
+    box-shadow:-25px 0 70px rgba(0,0,0,.6);
+
+    z-index:999;
+
+    transition:.45s cubic-bezier(.77,0,.18,1);
+}
+
+.side-menu.active{
+    right:0;
+}
+
+.side-menu h3{
+    color:#e05b91;
+
+    font-size:14px;
+
+    letter-spacing:2px;
+
+    margin-bottom:28px;
+}
+
+.side-menu a{
+    display:block;
+
+    padding:15px 0;
+
+    color:#a59b9d;
+
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    transition:.3s;
+}
+
+.side-menu a:hover{
+    color:#e05b91;
+    padding-left:12px;
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+.page-nav{
+    position:sticky;
+
+    top:72px;
+
+    z-index:800;
+
+    display:flex;
+    justify-content:center;
+
+    gap:32px;
+
+    padding:15px;
+
+    background:rgba(7,7,7,.93);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid rgba(224,91,145,.12);
+}
+
+.page-nav a{
+    color:#7d7578;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    transition:.3s;
+}
+
+.page-nav a:hover{
+    color:#e05b91;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:92vh;
+
+    padding:145px 8% 80px;
+
+    display:grid;
+
+    grid-template-columns:.9fr 1.1fr;
+
+    gap:70px;
+
+    align-items:center;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+    height:700px;
+
+    right:-300px;
+    top:-350px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(224,91,145,.15),
+            transparent 68%
+        );
+}
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+    height:500px;
+
+    left:-300px;
+    bottom:-300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(222,212,206,.06),
+            transparent 70%
+        );
+}
+
+.hero-text{
+    position:relative;
+    z-index:5;
+}
+
+.badge{
+    display:inline-block;
+
+    padding:8px 16px;
+
+    border:1px solid rgba(224,91,145,.45);
+
+    border-radius:30px;
+
+    color:#e05b91;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:clamp(48px,6vw,84px);
+
+    line-height:.94;
+
+    letter-spacing:-3px;
+
+    margin-bottom:28px;
+}
+
+.hero h1 span{
+    color:#e05b91;
+}
+
+.hero p{
+    max-width:570px;
+
+    color:#a59d9e;
+
+    font-size:17px;
+
+    line-height:1.8;
+}
+
+.hero-buttons{
+    display:flex;
+
+    gap:15px;
+
+    margin-top:35px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 23px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.35s;
+}
+
+.btn-primary{
+    background:#e05b91;
+
+    color:#17070e;
+}
+
+.btn-primary:hover{
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 18px 45px rgba(224,91,145,.25);
+}
+
+.btn-outline{
+    color:#ded4ce;
+
+    border:1px solid #40383b;
+}
+
+.btn-outline:hover{
+    border-color:#e05b91;
+    color:#e05b91;
+}
+
+
+/* =========================================================
+   SOLAR THERMAL VISUAL
+========================================================= */
+
+.thermal-scene{
+
+    height:500px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:35px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 25%,
+            rgba(224,91,145,.12),
+            transparent 30%
+        ),
+
+        linear-gradient(
+            180deg,
+            #111011,
+            #080808
+        );
+
+    border:1px solid #312b2d;
+
+    box-shadow:
+        inset 0 0 100px rgba(0,0,0,.55);
+}
+
+
+/* =========================================================
+   SUN
+========================================================= */
+
+.sun{
+
+    position:absolute;
+
+    width:115px;
+    height:115px;
+
+    border-radius:50%;
+
+    top:55px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            #fff5ed 0%,
+            #e9c9d5 35%,
+            #e05b91 70%,
+            #8e3158 100%
+        );
+
+    box-shadow:
+        0 0 35px rgba(224,91,145,.4),
+        0 0 100px rgba(224,91,145,.15);
+
+    animation:
+        sunPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes sunPulse{
+
+    from{
+        transform:
+            translateX(-50%)
+            scale(.96);
+    }
+
+    to{
+        transform:
+            translateX(-50%)
+            scale(1.06);
+    }
+}
+
+
+/* =========================================================
+   SUN RAYS
+========================================================= */
+
+.ray{
+
+    position:absolute;
+
+    width:100px;
+    height:2px;
+
+    background:#e05b91;
+
+    left:50%;
+    top:112px;
+
+    transform-origin:left center;
+
+    opacity:.45;
+
+    animation:
+        rayPulse 2.5s ease-in-out infinite;
+}
+
+.r1{
+    transform:rotate(0deg);
+}
+
+.r2{
+    transform:rotate(45deg);
+}
+
+.r3{
+    transform:rotate(90deg);
+}
+
+.r4{
+    transform:rotate(135deg);
+}
+
+.r5{
+    transform:rotate(180deg);
+}
+
+.r6{
+    transform:rotate(225deg);
+}
+
+.r7{
+    transform:rotate(270deg);
+}
+
+.r8{
+    transform:rotate(315deg);
+}
+
+@keyframes rayPulse{
+
+    0%,100%{
+        opacity:.15;
+        width:80px;
+    }
+
+    50%{
+        opacity:.55;
+        width:125px;
+    }
+}
+
+
+/* =========================================================
+   SOLAR COLLECTOR
+========================================================= */
+
+.collector{
+
+    position:absolute;
+
+    width:270px;
+    height:135px;
+
+    left:50%;
+
+    bottom:75px;
+
+    transform:
+        translateX(-50%)
+        perspective(500px)
+        rotateX(55deg)
+        rotateZ(-4deg);
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #171416 0px,
+            #171416 25px,
+            #40353a 26px,
+            #40353a 28px
+        );
+
+    border:3px solid #c7b8b3;
+
+    border-radius:8px;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.6),
+        0 0 30px rgba(224,91,145,.12);
+}
+
+.collector::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 23px,
+            rgba(224,91,145,.22) 24px,
+            rgba(224,91,145,.22) 26px
+        );
+}
+
+
+/* =========================================================
+   HEAT PARTICLES
+========================================================= */
+
+.heat-particle{
+
+    position:absolute;
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#e05b91;
+
+    box-shadow:
+        0 0 12px rgba(224,91,145,.6);
+
+    animation:
+        heatTravel 3.5s infinite;
+}
+
+.hp1{
+    left:37%;
+    bottom:115px;
+}
+
+.hp2{
+    left:44%;
+    bottom:105px;
+    animation-delay:.8s;
+}
+
+.hp3{
+    left:55%;
+    bottom:115px;
+    animation-delay:1.5s;
+}
+
+.hp4{
+    left:62%;
+    bottom:105px;
+    animation-delay:2.2s;
+}
+
+@keyframes heatTravel{
+
+    0%{
+        transform:
+            translateY(30px)
+            scale(.5);
+
+        opacity:0;
+    }
+
+    25%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateY(-155px)
+            scale(1.2);
+
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   THERMAL STORAGE TANK
+========================================================= */
+
+.storage{
+
+    position:absolute;
+
+    width:105px;
+    height:175px;
+
+    right:45px;
+
+    bottom:48px;
+
+    border-radius:
+        52px 52px 20px 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #262124,
+            #8e7b7f,
+            #30292d
+        );
+
+    border:2px solid #b9a9a5;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.5);
+}
+
+.storage::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:90px;
+    height:25px;
+
+    top:-12px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    border-radius:50%;
+
+    background:#55484d;
+
+    border:2px solid #b9a9a5;
+}
+
+.storage-fill{
+
+    position:absolute;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+    height:65%;
+
+    border-radius:
+        0 0 48px 48px;
+
+    background:
+        linear-gradient(
+            to top,
+            #7b294d,
+            #e05b91
+        );
+
+    opacity:.75;
+
+    animation:
+        storagePulse 3s infinite alternate;
+}
+
+@keyframes storagePulse{
+
+    from{
+        height:55%;
+    }
+
+    to{
+        height:75%;
+    }
+}
+
+
+/* =========================================================
+   ENERGY CONNECTION
+========================================================= */
+
+.energy-line{
+
+    position:absolute;
+
+    left:58%;
+
+    bottom:170px;
+
+    width:190px;
+
+    height:3px;
+
+    background:#e05b91;
+
+    animation:
+        energyFlow 1.8s linear infinite;
+}
+
+@keyframes energyFlow{
+
+    0%{
+        transform:
+            translateX(-100px);
+
+        opacity:0;
+    }
+
+    30%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateX(100px);
+
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics{
+
+    padding:40px 8% 85px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:18px;
+}
+
+.metric{
+
+    padding:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #131112,
+            #0b0a0a
+        );
+
+    border:1px solid #2c2628;
+
+    border-radius:20px;
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.metric::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:90px;
+    height:90px;
+
+    right:-40px;
+    top:-40px;
+
+    border-radius:50%;
+
+    background:#e05b91;
+
+    opacity:.05;
+}
+
+.metric:hover{
+
+    transform:
+        translateY(-9px);
+
+    border-color:#e05b91;
+
+    box-shadow:
+        0 20px 55px rgba(224,91,145,.10);
+}
+
+.metric small{
+
+    color:#7d7477;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+.metric strong{
+
+    display:block;
+
+    margin-top:12px;
+
+    color:#e05b91;
+
+    font-size:31px;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section{
+
+    padding:90px 8%;
+}
+
+.section-title{
+
+    margin-bottom:45px;
+}
+
+.section-title span{
+
+    color:#e05b91;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+}
+
+.section-title h2{
+
+    font-size:42px;
+
+    margin-top:10px;
+}
+
+
+/* =========================================================
+   ENERGY PROCESS
+========================================================= */
+
+.process{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:18px;
+}
+
+.process-card{
+
+    min-height:245px;
+
+    padding:30px;
+
+    background:#100e0f;
+
+    border:1px solid #2b2527;
+
+    border-radius:23px;
+
+    transition:.4s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.process-card:hover{
+
+    transform:
+        translateY(-10px)
+        scale(1.01);
+
+    border-color:#e05b91;
+
+    box-shadow:
+        0 25px 60px rgba(224,91,145,.08);
+}
+
+.process-number{
+
+    font-size:45px;
+
+    font-weight:900;
+
+    color:#55494e;
+
+    margin-bottom:20px;
+
+    transition:.3s;
+}
+
+.process-card:hover .process-number{
+
+    color:#e05b91;
+}
+
+.process-card h3{
+
+    margin-bottom:12px;
+}
+
+.process-card p{
+
+    color:#81787b;
+
+    line-height:1.7;
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   ANALYTICS
+========================================================= */
+
+.analytics{
+
+    display:grid;
+
+    grid-template-columns:
+        1.25fr .75fr;
+
+    gap:25px;
+}
+
+.chart-box,
+.output-box{
+
+    padding:30px;
+
+    background:#0e0c0d;
+
+    border:1px solid #2b2527;
+
+    border-radius:25px;
+}
+
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chart{
+
+    height:275px;
+
+    margin-top:30px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:9px;
+}
+
+.bar{
+
+    flex:1;
+
+    min-height:20px;
+
+    border-radius:
+        7px 7px 0 0;
+
+    background:
+        linear-gradient(
+            to top,
+            #722e4b,
+            #e05b91
+        );
+
+    position:relative;
+
+    transition:.45s;
+}
+
+.bar:hover{
+
+    transform:
+        scaleY(1.08);
+
+    filter:brightness(1.25);
+}
+
+.bar span{
+
+    position:absolute;
+
+    top:-24px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    color:#756c70;
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   OUTPUT DISPLAY
+========================================================= */
+
+.output-circle{
+
+    width:210px;
+    height:210px;
+
+    margin:28px auto;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            #e05b91 0 83%,
+            #33282d 83% 100%
+        );
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+        0 0 50px rgba(224,91,145,.08);
+}
+
+.output-inner{
+
+    width:140px;
+    height:140px;
+
+    border-radius:50%;
+
+    background:#0e0c0d;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+}
+
+.output-inner strong{
+
+    font-size:30px;
+
+    color:#ded4ce;
+}
+
+.output-inner small{
+
+    color:#756b6e;
+}
+
+
+/* =========================================================
+   THERMAL STATUS
+========================================================= */
+
+.status-box{
+
+    margin-top:25px;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    border:1px solid rgba(224,91,145,.28);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(224,91,145,.08),
+            rgba(222,212,206,.03)
+        );
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.status-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.status-icon{
+
+    width:45px;
+    height:45px;
+
+    border-radius:12px;
+
+    background:#e05b91;
+
+    color:#18070e;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-weight:900;
+}
+
+.status-box p{
+
+    color:#81787b;
+
+    font-size:13px;
+
+    margin-top:5px;
+}
+
+
+/* =========================================================
+   AI
+========================================================= */
+
+.ai-box{
+
+    padding:42px;
+
+    border-radius:30px;
+
+    border:1px solid #392b31;
+
+    background:
+
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(224,91,145,.13),
+            transparent 35%
+        ),
+
+        #110e10;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.ai-box::before{
+
+    content:"THERMAL";
+
+    position:absolute;
+
+    right:-15px;
+    top:15px;
+
+    font-size:90px;
+
+    font-weight:900;
+
+    color:white;
+
+    opacity:.025;
+}
+
+.ai-box h2{
+
+    color:#e05b91;
+
+    margin-bottom:15px;
+}
+
+.ai-box > p{
+
+    color:#a0989a;
+
+    line-height:1.8;
+
+    max-width:850px;
+}
+
+.ai-grid{
+
+    margin-top:28px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+}
+
+.ai-item{
+
+    padding:22px;
+
+    background:#090808;
+
+    border:1px solid #292326;
+
+    border-radius:17px;
+
+    transition:.35s;
+}
+
+.ai-item:hover{
+
+    transform:
+        translateY(-6px);
+
+    border-color:#e05b91;
+}
+
+.ai-item strong{
+
+    display:block;
+
+    color:#ded4ce;
+
+    margin-bottom:8px;
+}
+
+.ai-item p{
+
+    color:#756d70;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:45px 8%;
+
+    border-top:1px solid #241e20;
+
+    color:#625a5d;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:950px){
+
+    .hero{
+
+        grid-template-columns:1fr;
+    }
+
+    .metrics{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .process{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .analytics{
+
+        grid-template-columns:1fr;
+    }
+
+    .ai-grid{
+
+        grid-template-columns:1fr;
+    }
+}
+
+
+@media(max-width:600px){
+
+    .navbar{
+
+        padding:0 18px;
+    }
+
+    .logo{
+
+        font-size:17px;
+
+        letter-spacing:2px;
+    }
+
+    .page-nav{
+
+        justify-content:flex-start;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+    }
+
+    .hero{
+
+        padding:
+            125px 5% 55px;
+    }
+
+    .hero h1{
+
+        font-size:52px;
+    }
+
+    .thermal-scene{
+
+        height:390px;
+    }
+
+    .sun{
+
+        width:85px;
+        height:85px;
+
+        top:45px;
+    }
+
+    .collector{
+
+        width:220px;
+        height:110px;
+    }
+
+    .storage{
+
+        transform:scale(.75);
+
+        right:15px;
+        bottom:35px;
+    }
+
+    .metrics{
+
+        grid-template-columns:1fr;
+
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    .process{
+
+        grid-template-columns:1fr;
+    }
+
+    .section{
+
+        padding:
+            65px 5%;
+    }
+
+    .section-title h2{
+
+        font-size:32px;
+    }
+
+    .ai-box{
+
+        padding:28px;
+    }
+
+    footer{
+
+        padding:
+            35px 5%;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        POLARIS
+        <span>/ SOLAR THERMAL</span>
+
+    </div>
+
+
+    <!-- THREE DASH MENU -->
+
+    <div
+        class="menu-btn"
+        onclick="toggleMenu()"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+    class="side-menu"
+    id="sideMenu"
+>
+
+    <h3>
+        POLARIS NAVIGATION
+    </h3>
+
+
+    <a href="index.html">
+        ⌂ Home
+    </a>
+
+
+    <a href="renewable.html">
+        ☀ Renewable Energy
+    </a>
+
+
+    <a href="nonrenewable.html">
+        ⚡ Backup & Energy Support
+    </a>
+
+
+    <a href="solar.html">
+        Solar Energy
+    </a>
+
+
+    <a href="wind.html">
+        Wind Energy
+    </a>
+
+
+    <a href="hydro.html">
+        Hydropower
+    </a>
+
+
+    <a href="geothermal.html">
+        Geothermal Energy
+    </a>
+
+
+    <a href="marine.html">
+        Marine Energy
+    </a>
+
+
+    <a href="biomass.html">
+        Biomass Energy
+    </a>
+
+
+    <a href="solarthermal.html">
+        Solar Thermal
+    </a>
+
+
+    <a href="admin.html">
+        Admin Dashboard
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     PAGE NAVIGATION
+===================================================== -->
+
+<div class="page-nav">
+
+    <a href="#overview">
+        Overview
+    </a>
+
+    <a href="#process">
+        Energy Flow
+    </a>
+
+    <a href="#analytics">
+        Analytics
+    </a>
+
+    <a href="#ai">
+        AI Intelligence
+    </a>
+
+    <a href="renewable.html">
+        ← Renewable
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="overview"
+>
+
+
+    <div class="hero-text">
+
+
+        <div class="badge">
+
+            RENEWABLE SOURCE #07
+
+        </div>
+
+
+        <h1>
+
+            Sunlight
+            <br>
+
+            <span>Becomes Heat.</span>
+
+        </h1>
+
+
+        <p>
+
+            Solar thermal technology captures sunlight as heat
+            instead of directly converting it into electricity.
+            POLARIS uses this thermal resource as part of its
+            intelligent renewable energy system.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+
+            <a
+                href="#process"
+                class="btn btn-primary"
+            >
+
+                Explore Energy Flow
+
+            </a>
+
+
+            <a
+                href="#analytics"
+                class="btn btn-outline"
+            >
+
+                View Analytics
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         THERMAL VISUAL
+    ================================================= -->
+
+    <div class="thermal-scene">
+
+
+        <!-- SUN -->
+
+        <div class="sun"></div>
+
+
+        <!-- RAYS -->
+
+        <div class="ray r1"></div>
+        <div class="ray r2"></div>
+        <div class="ray r3"></div>
+        <div class="ray r4"></div>
+        <div class="ray r5"></div>
+        <div class="ray r6"></div>
+        <div class="ray r7"></div>
+        <div class="ray r8"></div>
+
+
+        <!-- COLLECTOR -->
+
+        <div class="collector"></div>
+
+
+        <!-- HEAT PARTICLES -->
+
+        <div class="heat-particle hp1"></div>
+        <div class="heat-particle hp2"></div>
+        <div class="heat-particle hp3"></div>
+        <div class="heat-particle hp4"></div>
+
+
+        <!-- STORAGE -->
+
+        <div class="storage">
+
+            <div class="storage-fill"></div>
+
+        </div>
+
+
+        <!-- ENERGY LINE -->
+
+        <div class="energy-line"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     METRICS
+========================================================= -->
+
+<section class="metrics">
+
+
+    <div class="metric">
+
+        <small>
+            INSTALLED CAPACITY
+        </small>
+
+        <strong>
+            30 kW
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            RESOURCE TYPE
+        </small>
+
+        <strong>
+            THERMAL
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            ENERGY PRIORITY
+        </small>
+
+        <strong>
+            #07
+        </strong>
+
+    </div>
+
+
+    <div class="metric">
+
+        <small>
+            SYSTEM STATUS
+        </small>
+
+        <strong>
+            ONLINE
+        </strong>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     ENERGY FLOW
+========================================================= -->
+
+<section
+    class="section"
+    id="process"
+>
+
+
+    <div class="section-title">
+
+        <span>
+            THERMAL ENERGY JOURNEY
+        </span>
+
+        <h2>
+            Sunlight → Heat → Useful Energy
+        </h2>
+
+    </div>
+
+
+    <div class="process">
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                01
+            </div>
+
+            <h3>
+                Capture Sunlight
+            </h3>
+
+            <p>
+                Solar collectors capture incoming sunlight
+                and concentrate or absorb its thermal energy.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                02
+            </div>
+
+            <h3>
+                Generate Heat
+            </h3>
+
+            <p>
+                The captured solar radiation is transformed
+                into useful thermal energy.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                03
+            </div>
+
+            <h3>
+                Thermal Storage
+            </h3>
+
+            <p>
+                Heat can be retained in a thermal storage
+                system so energy can remain useful later.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <div class="process-number">
+                04
+            </div>
+
+            <h3>
+                Station Use
+            </h3>
+
+            <p>
+                The resulting thermal energy can support
+                heating and other station energy requirements.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ANALYTICS
+========================================================= -->
+
+<section
+    class="section"
+    id="analytics"
+>
+
+
+    <div class="section-title">
+
+        <span>
+            RESOURCE ANALYTICS
+        </span>
+
+        <h2>
+            Solar Thermal Performance
+        </h2>
+
+    </div>
+
+
+    <div class="analytics">
+
+
+        <!-- CHART -->
+
+        <div class="chart-box">
+
+            <h3>
+                24-Hour Thermal Output
+            </h3>
+
+
+            <div class="chart">
+
+
+                <div
+                    class="bar"
+                    style="height:18%"
+                >
+                    <span>00</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:15%"
+                >
+                    <span>02</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:12%"
+                >
+                    <span>04</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:25%"
+                >
+                    <span>06</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:58%"
+                >
+                    <span>08</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:79%"
+                >
+                    <span>10</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:94%"
+                >
+                    <span>12</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:87%"
+                >
+                    <span>14</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:65%"
+                >
+                    <span>16</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:34%"
+                >
+                    <span>18</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:18%"
+                >
+                    <span>20</span>
+                </div>
+
+
+                <div
+                    class="bar"
+                    style="height:13%"
+                >
+                    <span>22</span>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- OUTPUT -->
+
+        <div class="output-box">
+
+            <h3>
+                Maximum Output
+            </h3>
+
+
+            <div class="output-circle">
+
+                <div class="output-inner">
+
+                    <div>
+
+                        <strong>
+                            30 kW
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            INSTALLED
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p
+                style="
+                text-align:center;
+                color:#756c70;
+                font-size:13px;
+                "
+            >
+                Solar thermal generation capacity
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div class="status-box">
+
+
+        <div class="status-left">
+
+
+            <div class="status-icon">
+                ☀
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Thermal Collection Active
+                </strong>
+
+                <p>
+                    Solar thermal resource is available
+                    for energy optimization.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <strong
+            style="
+            color:#e05b91;
+            "
+        >
+            ONLINE
+        </strong>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     AI INTELLIGENCE
+========================================================= -->
+
+<section
+    class="section"
+    id="ai"
+>
+
+
+    <div class="ai-box">
+
+
+        <h2>
+            ✦ AI Solar Thermal Intelligence
+        </h2>
+
+
+        <p>
+
+            POLARIS considers solar thermal generation while
+            balancing station demand. Thermal energy can be
+            coordinated with solar PV, wind, hydro, geothermal,
+            marine, biomass and storage resources to improve
+            the overall energy strategy.
+
+        </p>
+
+
+        <div class="ai-grid">
+
+
+            <div class="ai-item">
+
+                <strong>
+                    Solar Forecast
+                </strong>
+
+                <p>
+                    Expected solar availability helps the
+                    optimizer plan future thermal generation.
+                </p>
+
+            </div>
+
+
+            <div class="ai-item">
+
+                <strong>
+                    Thermal Storage
+                </strong>
+
+                <p>
+                    Available thermal energy can be considered
+                    when planning station heating requirements.
+                </p>
+
+            </div>
+
+
+            <div class="ai-item">
+
+                <strong>
+                    AUTO MODE
+                </strong>
+
+                <p>
+                    POLARIS automatically coordinates thermal
+                    energy with the rest of the station fleet.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div>
+        POLARIS Smart Energy Management
+    </div>
+
+    <div>
+        Solar Thermal • 30 kW
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   THREE DASH MENU
+========================================================= */
+
+function toggleMenu(){
+
+    const menu =
+        document.getElementById("sideMenu");
+
+    menu.classList.toggle("active");
+
+}
+
+
+/* =========================================================
+   CLOSE MENU OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const menu =
+            document.getElementById("sideMenu");
+
+        const button =
+            document.querySelector(".menu-btn");
+
+        if(
+            menu.classList.contains("active") &&
+            !menu.contains(event.target) &&
+            !button.contains(event.target)
+        ){
+
+            menu.classList.remove("active");
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DYNAMIC THERMAL GRAPH
+========================================================= */
+
+setInterval(function(){
+
+    const bars =
+        document.querySelectorAll(".bar");
+
+    bars.forEach(function(bar,index){
+
+        let value;
+
+        /*
+           Keep nighttime lower and daytime higher
+        */
+
+        if(index < 4 || index > 9){
+
+            value =
+                10 + Math.random() * 20;
+
+        }else{
+
+            value =
+                50 + Math.random() * 45;
+
+        }
+
+        bar.style.height =
+            value + "%";
+
+    });
+
+},3000);
+
+
+/* =========================================================
+   DYNAMIC THERMAL STORAGE
+========================================================= */
+
+setInterval(function(){
+
+    const fill =
+        document.querySelector(".storage-fill");
+
+    const level =
+        50 + Math.random() * 28;
+
+    fill.style.height =
+        level + "%";
+
+},2500);
+
+
+/* =========================================================
+   DYNAMIC OUTPUT RING
+========================================================= */
+
+setInterval(function(){
+
+    const ring =
+        document.querySelector(".output-circle");
+
+    const percentage =
+        70 + Math.random() * 18;
+
+    ring.style.background =
+        `conic-gradient(
+            #e05b91 0 ${percentage}%,
+            #33282d ${percentage}% 100%
+        )`;
+
+},4000);
+
+</script>
+
+</body>
+</html>

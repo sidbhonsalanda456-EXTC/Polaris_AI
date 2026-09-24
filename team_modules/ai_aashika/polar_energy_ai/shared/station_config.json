@@ -1,0 +1,109 @@
+{
+  "timezone": "Asia/Kolkata",
+
+  "station": {
+    "name": "Polar Research Station",
+    "latitude": -77.8419,
+    "longitude": 166.6863
+  },
+
+  "resources": {
+    "solar_pv": {
+      "capacity_kw": 300,
+      "active_hours_ist": "08:00-16:00"
+    },
+
+    "wind": {
+      "capacity_kw": 300,
+      "cut_in_mps": 3,
+      "rated_mps": 12,
+      "cut_out_mps": 25
+    },
+
+    "hydropower": {
+      "capacity_kw": 200,
+      "average_kw": 90
+    },
+
+    "geothermal": {
+      "capacity_kw": 100,
+      "average_kw": 95
+    },
+
+    "marine_energy": {
+      "capacity_kw": 50
+    },
+
+    "biomass_biogas": {
+      "capacity_kw": 60,
+      "average_kw": 55
+    },
+
+    "solar_thermal": {
+      "capacity_kw": 30,
+      "active_hours_ist": "09:00-16:00"
+    },
+
+    "hydrogen_fuel_cell": {
+      "capacity_kw": 50,
+      "storage_kwh": 200
+    },
+
+    "battery": {
+      "capacity_kwh": 2000,
+      "soh_percent": 80,
+      "effective_capacity_kwh": 1600,
+      "initial_soc_percent": 70,
+      "min_soc_percent": 20,
+      "max_charge_discharge_kw": 100
+    },
+
+    "diesel_generator": {
+      "min_kw": 20,
+      "max_kw": 100
+    },
+
+    "chp": {
+      "capacity_kw": 60
+    },
+
+    "passive_solar_efficiency": {
+      "demand_reduction_percent": 10
+    }
+  },
+
+  "loads": {
+    "heating_kw": 40,
+    "communication_kw": 10,
+    "medical_kw": 5,
+    "laboratory_kw": 25,
+    "water_heating_kw": 20,
+    "base_total_demand_kw": 100,
+    "critical_total_kw": 55
+  },
+
+  "fault_windows_ist": {
+    "wind_unavailable": "02:00-03:59",
+    "hydro_unavailable": "05:00-05:59",
+    "diesel_unavailable": "21:00-22:59"
+  },
+
+  "disaster_windows_ist": {
+    "flood": {
+      "time": "04:00-04:59",
+      "hydropower_derate_percent": 10
+    },
+
+    "tsunami": {
+      "time": "08:00-08:59",
+      "marine_derate_percent": 0,
+      "wind_derate_percent": 15
+    },
+
+    "storm": {
+      "time": "15:00-15:59",
+      "wind_derate_percent": 15,
+      "solar_derate_percent": 40
+    }
+  }
+}
