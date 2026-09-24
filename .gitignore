@@ -22,9 +22,10 @@ data/*.db-journal
 # Logs
 *.log
 
-# Operating System files
+# Operating System & Binary files
 .DS_Store
 Thumbs.db
+*.exe
 
 # IDE configuration
 .vscode/
